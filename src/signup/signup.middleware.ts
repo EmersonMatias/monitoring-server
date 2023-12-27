@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { signupVigilantSchema } from "../models/usersSchema.js";
 import { SignUp } from "./signup.types.js";
 
-
+ 
 export function validateSignUpData(req: Request, res: Response, next: NextFunction){
     const signupData = req.body as SignUp
 

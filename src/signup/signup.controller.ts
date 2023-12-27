@@ -1,15 +1,21 @@
 import { Request, Response } from "express";
 import { SignUp } from "./signup.types";
-import { createNewUser } from "./signup.repository.js";
+import { signupServices } from "./signup.services.js";
 
 
 export async function registerVigilant(req: Request, res: Response){
     const signupData = req.body as SignUp
 
 
-    const sucess = await createNewUser(signupData)
-
-    console.log("Conta criada")
-    res.send("OK")
-
+    try{
+        const sucess = await signupServices.registerVigilant(signupData)
+        console.log(sucess)
+        return res.status(201).send("Conta craida com sucesso!")
+    }catch(error){
+        console.log(error)
+        res.status(400).send(error)
+    }
+     
 }
+
+

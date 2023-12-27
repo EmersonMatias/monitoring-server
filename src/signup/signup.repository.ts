@@ -2,13 +2,32 @@
 import { database } from "../../prisma/index.js";
 import { SignUp } from "./signup.types.js";
 
-
 export async function createNewUser(signupData: SignUp ){
-    const {name, password, login, rg, cpf, hour, agency, account_type} = signupData
-
-    return await database.user.create({
+    const {name, password, login, rg, cpf, dateofbirth,departureTime,entryTime, agency} = signupData
+   
+    return await database.user.create({ 
         data:{
-            name
+          name,
+          dateofbirth,
+          login,
+          password,
+          rg,
+          cpf,
+          agency,
+          entryTime,
+          departureTime
         }
     })
+}
+
+export async function findAllUsers(){
+  return await database.user.findMany()
+}
+
+export async function findUserByLogin(login: string){
+  return await database.user.findUnique({
+    where: {
+      login
+    }
+  })
 }
