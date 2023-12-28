@@ -21,10 +21,12 @@ async function connectUser(signinData: TSignInData) {
 
     const userData = {
         name: loginExist.name,
+        userId: loginExist.id,
+        accountType: loginExist.accountType,
         entryTime: loginExist.entryTime,
         token: acessToken
     }
-
+ 
     return userData
 }
 

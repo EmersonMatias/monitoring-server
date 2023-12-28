@@ -14,5 +14,5 @@ route.get("/teste",async (req:Request, res: Response) => {
     
     res.send(sucess)
 })
-
+ 
 export default route

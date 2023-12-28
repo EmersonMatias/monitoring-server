@@ -8,5 +8,5 @@ export type SignUp = {
     cpf: string,
     entryTime: string,
     departureTime: string,
-    account_type: "admin" | "user"
+    accountType: "admin" | "user"
 }

@@ -10,7 +10,7 @@ export async function registerVigilant(req: Request, res: Response){
     try{
         const sucess = await signupServices.registerVigilant(signupData)
         console.log(sucess)
-        return res.status(201).send("Conta craida com sucesso!")
+        return res.status(201).send({userId: sucess.id})
     }catch(error){
         console.log(error)
         res.status(400).send(error)

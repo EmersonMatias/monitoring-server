@@ -11,25 +11,31 @@ datasource db {
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
+enum AccountType {
+  user
+  admin
+}
+
 model User {
-  id            Int    @id @default(autoincrement())
-  name          String @db.VarChar(150)
-  dateofbirth   String @db.VarChar(10)
-  login         String @unique @db.VarChar(150)
-  password      String @db.VarChar(150)
-  rg            String @db.VarChar(9)
-  cpf           String @db.VarChar(11)
-  agency        String @db.VarChar(150)
-  entryTime     String @db.VarChar(5)
-  departureTime String @db.VarChar(5)
-  checkpoint Checkpoint[] @relation("UserCheckPoint")
+  id            Int          @id @default(autoincrement())
+  name          String       @db.VarChar(150)
+  dateofbirth   String       @db.VarChar(10)
+  login         String       @unique @db.VarChar(150)
+  password      String       @db.VarChar(150)
+  rg            String       @db.VarChar(9)
+  cpf           String       @db.VarChar(11)
+  agency        String       @db.VarChar(150)
+  entryTime     String       @db.VarChar(5)
+  departureTime String       @db.VarChar(5)
+  accountType   AccountType
+  checkpoint    Checkpoint[] @relation("UserCheckPoint")
 }
 
 model Checkpoint {
-  id Int @id @default(autoincrement())
-  date String @db.VarChar(10)
-  arrived Boolean? @default(false)
-  arrivalTime String? @db.VarChar(5) @default("null")
-  user User @relation("UserCheckPoint", fields:[userId], references: [id])
-  userId Int
+  id          Int      @id @default(autoincrement())
+  date        String   @db.VarChar(10)
+  arrived     Boolean? @default(false)
+  arrivalTime String?  @default("null") @db.VarChar(5)
+  user        User     @relation("UserCheckPoint", fields: [userId], references: [id])
+  userId      Int
 }

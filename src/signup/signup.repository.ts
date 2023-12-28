@@ -3,7 +3,7 @@ import { database } from "../../prisma/index.js";
 import { SignUp } from "./signup.types.js";
 
 export async function createNewUser(signupData: SignUp ){
-    const {name, password, login, rg, cpf, dateofbirth,departureTime,entryTime, agency} = signupData
+    const {name, password, login, rg, cpf, dateofbirth,departureTime,entryTime, agency, accountType} = signupData
    
     return await database.user.create({ 
         data:{
@@ -15,7 +15,8 @@ export async function createNewUser(signupData: SignUp ){
           cpf,
           agency,
           entryTime,
-          departureTime
+          departureTime,
+          accountType
         }
     })
 }
