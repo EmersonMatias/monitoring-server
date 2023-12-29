@@ -45,7 +45,7 @@ export function createMessage(_a) {
                 case 0:
                     _b = todaysDate(), day = _b.day, month = _b.month, year = _b.year;
                     _c = currentTime(), hours = _c.hours, minutes = _c.minutes;
-                    return [4 /*yield*/, database.alertMessages.create({
+                    return [4 /*yield*/, database.alertmessages.create({
                             data: {
                                 date: "".concat(day, "/").concat(month, "/").concat(year),
                                 hour: "".concat(hours, ":").concat(minutes),
@@ -63,7 +63,7 @@ export function viewedMessage(_a) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_b) {
             switch (_b.label) {
-                case 0: return [4 /*yield*/, database.alertMessages.update({
+                case 0: return [4 /*yield*/, database.alertmessages.update({
                         where: {
                             id: messageId
                         }, data: {
@@ -80,7 +80,7 @@ export function findAllMensagens() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, database.alertMessages.findMany({
+                case 0: return [4 /*yield*/, database.alertmessages.findMany({
                         select: {
                             id: true,
                             date: true,

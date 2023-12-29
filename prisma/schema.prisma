@@ -29,7 +29,7 @@ model User {
   departureTime String          @db.VarChar(5)
   accountType   AccountType
   checkpoint    Checkpoint[]    @relation("UserCheckPoint")
-  AlertMessages AlertMessages[] @relation("UserMessage")
+  AlertMessages Alertmessages[] @relation("UserMessage")
 }
 
 model Checkpoint {
@@ -41,7 +41,7 @@ model Checkpoint {
   userId      Int
 }
 
-model AlertMessages {
+model Alertmessages {
   id       Int     @id @default(autoincrement())
   date     String  @db.VarChar(10)
   hour     String  @db.VarChar(5)
