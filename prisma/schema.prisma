@@ -29,7 +29,7 @@ model User {
   departureTime String          @db.VarChar(5)
   accountType   AccountType
   checkpoint    Checkpoint[]    @relation("UserCheckPoint")
-  AlertMessages Alertmessages[] @relation("UserMessage")
+  alertmessages Alertmessages[] @relation("UserMessage")
 }
 
 model Checkpoint {
