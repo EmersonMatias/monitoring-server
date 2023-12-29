@@ -17,18 +17,19 @@ enum AccountType {
 }
 
 model User {
-  id            Int          @id @default(autoincrement())
-  name          String       @db.VarChar(150)
-  dateofbirth   String       @db.VarChar(10)
-  login         String       @unique @db.VarChar(150)
-  password      String       @db.VarChar(150)
-  rg            String       @db.VarChar(9)
-  cpf           String       @db.VarChar(11)
-  agency        String       @db.VarChar(150)
-  entryTime     String       @db.VarChar(5)
-  departureTime String       @db.VarChar(5)
+  id            Int             @id @default(autoincrement())
+  name          String          @db.VarChar(150)
+  dateofbirth   String          @db.VarChar(10)
+  login         String          @unique @db.VarChar(150)
+  password      String          @db.VarChar(150)
+  rg            String          @db.VarChar(9)
+  cpf           String          @db.VarChar(11)
+  agency        String          @db.VarChar(150)
+  entryTime     String          @db.VarChar(5)
+  departureTime String          @db.VarChar(5)
   accountType   AccountType
-  checkpoint    Checkpoint[] @relation("UserCheckPoint")
+  checkpoint    Checkpoint[]    @relation("UserCheckPoint")
+  AlertMessages AlertMessages[] @relation("UserMessage")
 }
 
 model Checkpoint {
@@ -38,4 +39,15 @@ model Checkpoint {
   arrivalTime String?  @default("null") @db.VarChar(5)
   user        User     @relation("UserCheckPoint", fields: [userId], references: [id])
   userId      Int
+}
+
+model AlertMessages {
+  id       Int     @id @default(autoincrement())
+  date     String  @db.VarChar(10)
+  hour     String  @db.VarChar(5)
+  message  String? @default("null")
+  response String? @default("null")
+  viewed   Boolean? @default(false)
+  user     User    @relation("UserMessage", fields: [userId], references: [id])
+  userId   Int
 }

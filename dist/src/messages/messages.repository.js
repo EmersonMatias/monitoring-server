@@ -34,40 +34,70 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { compareSync } from "bcrypt";
-import { Errors } from "../errors.js";
-import { findUserByLogin } from "../signup/signup.repository.js";
-import jwt from "jsonwebtoken";
-function connectUser(signinData) {
+import { database } from "../../prisma/index.js";
+import { currentTime, todaysDate } from "../functions.js";
+export function createMessage(_a) {
+    var message = _a.message, userId = _a.userId;
     return __awaiter(this, void 0, void 0, function () {
-        var loginExist, passwordIsCorrect, dataToken, acessToken, userData;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, findUserByLogin(signinData.login)];
-                case 1:
-                    loginExist = _a.sent();
-                    if (!loginExist)
-                        throw Errors.EmailDoesntExist;
-                    passwordIsCorrect = compareSync(signinData.password, loginExist.password);
-                    if (!passwordIsCorrect)
-                        throw Errors.IncorrectPassword;
-                    dataToken = {
-                        userId: loginExist.id,
-                    };
-                    acessToken = jwt.sign(dataToken, process.env.ACESS_TOKEN_SECRET);
-                    userData = {
-                        name: loginExist.name,
-                        userId: loginExist.id,
-                        accountType: loginExist.accountType,
-                        entryTime: loginExist.entryTime,
-                        agency: loginExist.agency,
-                        token: acessToken
-                    };
-                    return [2 /*return*/, userData];
+        var _b, day, month, year, _c, hours, minutes;
+        return __generator(this, function (_d) {
+            switch (_d.label) {
+                case 0:
+                    _b = todaysDate(), day = _b.day, month = _b.month, year = _b.year;
+                    _c = currentTime(), hours = _c.hours, minutes = _c.minutes;
+                    return [4 /*yield*/, database.alertMessages.create({
+                            data: {
+                                date: "".concat(day, "/").concat(month, "/").concat(year),
+                                hour: "".concat(hours, ":").concat(minutes),
+                                userId: userId,
+                                message: message
+                            }
+                        })];
+                case 1: return [2 /*return*/, _d.sent()];
             }
         });
     });
 }
-export var signinServices = {
-    connectUser: connectUser
-};
+export function viewedMessage(_a) {
+    var response = _a.response, messageId = _a.messageId;
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0: return [4 /*yield*/, database.alertMessages.update({
+                        where: {
+                            id: messageId
+                        }, data: {
+                            viewed: true,
+                            response: response
+                        }
+                    })];
+                case 1: return [2 /*return*/, _b.sent()];
+            }
+        });
+    });
+}
+export function findAllMensagens() {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, database.alertMessages.findMany({
+                        select: {
+                            id: true,
+                            date: true,
+                            hour: true,
+                            message: true,
+                            response: true,
+                            viewed: true,
+                            user: {
+                                select: {
+                                    name: true,
+                                    agency: true
+                                }
+                            }
+                        }
+                    })];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
