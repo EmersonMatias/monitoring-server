@@ -34,6 +34,21 @@ export async function viewedMessage({ response, messageId }: { response: string,
 }
 
 
-export async function findAllMensagens() {
-    return await database.messages.findMany({})
+export async function findAllMensagens(){
+    return await database.messages.findMany({
+        select: {
+            id: true,
+            date: true,
+            hour: true,
+            message: true,
+            response: true,
+            viewed: true,
+            user: {
+                select: {
+                    name: true,
+                    agency: true
+                }
+            }
+        }
+    })
 }
