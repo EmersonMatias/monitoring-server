@@ -80,22 +80,7 @@ export function findAllMensagens() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, database.messages.findMany({
-                        select: {
-                            id: true,
-                            date: true,
-                            hour: true,
-                            message: true,
-                            response: true,
-                            viewed: true,
-                            user: {
-                                select: {
-                                    name: true,
-                                    agency: true
-                                }
-                            }
-                        }
-                    })];
+                case 0: return [4 /*yield*/, database.messages.findMany({})];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         });

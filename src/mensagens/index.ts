@@ -1,9 +1,7 @@
 import { Request, Response, Router } from "express";
 import { createMessage, findAllMensagens, viewedMessage } from "./messages.repository.js";
 
-
 const route = Router()
-
 
 route.post("/criarmensagem", async (req: Request, res: Response) => {
     const { userId, message } = req.body
