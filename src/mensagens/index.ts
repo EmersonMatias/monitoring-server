@@ -36,7 +36,7 @@ route.put("/visualizarmensagem", async (req: Request, res: Response) => {
     }
 })
 
-route.get("/getmessages", async (req: Request, res: Response) => {
+route.get("/messages", async (req: Request, res: Response) => {
 
     try {
         const sucess = await findAllMensagens()

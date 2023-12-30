@@ -11,8 +11,7 @@ export async function createMessage({ message, userId }: TMessage) {
     const { day, month, year } = todaysDate()
     const { hours, minutes } = currentTime()
 
-
-    return await database.alertmessages.create({
+    return await database.messages.create({
         data: {
             date: `${day}/${month}/${year}`,
             hour: `${hours}:${minutes}`,
@@ -21,10 +20,10 @@ export async function createMessage({ message, userId }: TMessage) {
         }
     })
 }
-
+ 
 export async function viewedMessage({ response, messageId }: { response: string, messageId: number }) {
 
-    return await database.alertmessages.update({
+    return await database.messages.update({
         where: {
             id: messageId
         }, data: {
@@ -36,8 +35,7 @@ export async function viewedMessage({ response, messageId }: { response: string,
 
 
 export async function findAllMensagens() {
-
-    return await database.alertmessages.findMany({
+    return await database.messages.findMany({
         select: {
             id: true,
             date: true,
