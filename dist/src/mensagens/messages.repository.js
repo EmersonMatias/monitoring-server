@@ -35,16 +35,18 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { database } from "../../prisma/index.js";
-import { currentTime, todaysDate } from "../functions.js";
+import { todaysDate } from "../functions.js";
 export function createMessage(_a) {
     var message = _a.message, userId = _a.userId;
     return __awaiter(this, void 0, void 0, function () {
-        var _b, day, month, year, _c, hours, minutes;
-        return __generator(this, function (_d) {
-            switch (_d.label) {
+        var _b, day, month, year, currentDate, hours, minutes;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
                     _b = todaysDate(), day = _b.day, month = _b.month, year = _b.year;
-                    _c = currentTime(), hours = _c.hours, minutes = _c.minutes;
+                    currentDate = new Date;
+                    hours = currentDate.getHours().toString().padStart(2, "0");
+                    minutes = currentDate.getMinutes().toString().padStart(2, "0");
                     return [4 /*yield*/, database.messages.create({
                             data: {
                                 date: "".concat(day, "/").concat(month, "/").concat(year),
@@ -53,7 +55,7 @@ export function createMessage(_a) {
                                 message: message
                             }
                         })];
-                case 1: return [2 /*return*/, _d.sent()];
+                case 1: return [2 /*return*/, _c.sent()];
             }
         });
     });

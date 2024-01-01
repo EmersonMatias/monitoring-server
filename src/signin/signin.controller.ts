@@ -14,6 +14,6 @@ export async function connectUser(req: Request, res: Response) {
         if (error.message) return res.status(400).send(error.message)
 
         return res.sendStatus(400)
-    }
+    } 
 
-}
+} 

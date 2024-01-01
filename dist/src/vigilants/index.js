@@ -116,8 +116,8 @@ route.put("/checkpoint", function (req, res) { return __awaiter(void 0, void 0, 
             case 0:
                 checkpointId = req.body.checkpointId;
                 currentDate = new Date;
-                hour = currentDate.getHours();
-                minutes = currentDate.getMinutes();
+                hour = currentDate.getHours().toString().padStart(2, "0");
+                minutes = currentDate.getMinutes().toString().padStart(2, "0");
                 markCheckPointData = {
                     checkpointId: checkpointId,
                     arrived: true,

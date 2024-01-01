@@ -56,8 +56,9 @@ route.post("/createcheckpoint", async (req: Request, res: Response) => {
 route.put("/checkpoint", async (req: Request, res: Response) => {
     const { checkpointId } = req.body
     const currentDate = new Date
-    const hour = currentDate.getHours()
-    const minutes = currentDate.getMinutes()
+    const hour = currentDate.getHours().toString().padStart(2,"0")
+    const minutes = currentDate.getMinutes().toString().padStart(2,"0")
+
 
     const markCheckPointData = {
         checkpointId,
@@ -78,7 +79,7 @@ route.get("/checkpoints/:userId", async (req: Request, res: Response) => {
     console.log(sucess)
     res.send(sucess)
 })
-    
+
 
 route.get("/vigilants", async (req: Request, res: Response) => {
     const sucess = await findAllUsers()
