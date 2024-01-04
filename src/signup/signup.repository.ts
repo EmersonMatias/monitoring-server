@@ -22,7 +22,18 @@ export async function createNewUser(signupData: SignUp ){
 }
 
 export async function findAllUsers(){
-  return await database.user.findMany()
+  return await database.user.findMany({
+    where: {
+      accountType: "user",
+    },
+    select: {
+      id: true,
+      name: true,
+      entryTime: true,
+      departureTime: true,
+      agency: true
+    }
+  })
 }
 
 export async function findUserByLogin(login: string){

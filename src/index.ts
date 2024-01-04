@@ -3,7 +3,8 @@ import cors from "cors"
 import signupRoute from "./signup/index.js"
 import usersRoute from "./vigilants/index.js"
 import signinRoute from "./signin/index.js"
-import messagesRoute from "./mensagens/index.js"
+import messagesRoute from "./messages/index.js"
+import checkpointsRoute from "./checkpoints/index.js"
 
 const server = express()
  
@@ -17,6 +18,7 @@ server.use(signupRoute)
 server.use(usersRoute)
 server.use(signinRoute)
 server.use(messagesRoute)
+server.use(checkpointsRoute)
 
 const port = process.env.PORT || 4000
 

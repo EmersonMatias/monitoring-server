@@ -36,117 +36,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { Router } from "express";
 import { findAllUsers } from "../signup/signup.repository.js";
-import { createCheckPoint, createCheckPoints, getAllCheckpoints, getUserCheckpoints, markCheckPoint } from "./vigilants.repository.js";
+import { deleteMessages, deleteVigilant } from "./vigilants.repository.js";
+import { deleteCheckpoints } from "../checkpoints/checkpoints.repository.js";
 var route = Router();
-//Criar todos os checkpoints dos vigilantes
-route.post("/createcheckpoints", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var dates, day, month, year, date, allUsers, checkpointData, error_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                dates = new Date();
-                day = dates.getDate();
-                month = dates.getMonth() + 1;
-                year = dates.getFullYear();
-                date = "".concat(day, "/").concat(month, "/").concat(year);
-                return [4 /*yield*/, findAllUsers()];
-            case 1:
-                allUsers = _a.sent();
-                checkpointData = allUsers.map(function (user) {
-                    return {
-                        userId: user.id,
-                        date: date
-                    };
-                });
-                _a.label = 2;
-            case 2:
-                _a.trys.push([2, 4, , 5]);
-                return [4 /*yield*/, createCheckPoints(checkpointData)];
-            case 3:
-                _a.sent();
-                res.status(200).send("Checkpoints Created");
-                return [3 /*break*/, 5];
-            case 4:
-                error_1 = _a.sent();
-                console.log(error_1);
-                res.send(error_1);
-                return [3 /*break*/, 5];
-            case 5: return [2 /*return*/];
-        }
-    });
-}); });
-//Criar apenas checkpoint do vigilante que foi criado apos todos os checkpoints terem sido criados
-route.post("/createcheckpoint", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var userId, dates, day, month, year, date, checkpointData, error_2;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                userId = req.body.userId;
-                dates = new Date();
-                day = dates.getDate();
-                month = dates.getMonth() + 1;
-                year = dates.getFullYear();
-                date = "".concat(day, "/").concat(month, "/").concat(year);
-                checkpointData = {
-                    userId: userId,
-                    date: date
-                };
-                _a.label = 1;
-            case 1:
-                _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, createCheckPoint(checkpointData)];
-            case 2:
-                _a.sent();
-                res.status(200).send("Checkpoint Created");
-                return [3 /*break*/, 4];
-            case 3:
-                error_2 = _a.sent();
-                console.log(error_2);
-                res.send(error_2);
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
-        }
-    });
-}); });
-//Atualizar o checkpoint do dia
-route.put("/checkpoint", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var checkpointId, currentDate, hour, minutes, markCheckPointData, sucess;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                checkpointId = req.body.checkpointId;
-                currentDate = new Date;
-                hour = currentDate.getHours().toString().padStart(2, "0");
-                minutes = currentDate.getMinutes().toString().padStart(2, "0");
-                markCheckPointData = {
-                    checkpointId: checkpointId,
-                    arrived: true,
-                    arrivalTime: "".concat(hour, ":").concat(minutes)
-                };
-                return [4 /*yield*/, markCheckPoint(markCheckPointData)];
-            case 1:
-                sucess = _a.sent();
-                res.sendStatus(200);
-                return [2 /*return*/];
-        }
-    });
-}); });
-//Pegar os checkpoints do vigilante
-route.get("/checkpoints/:userId", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var userId, sucess;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                userId = req.params.userId;
-                return [4 /*yield*/, getUserCheckpoints(Number(userId))];
-            case 1:
-                sucess = _a.sent();
-                console.log(sucess);
-                res.send(sucess);
-                return [2 /*return*/];
-        }
-    });
-}); });
 route.get("/vigilants", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var sucess;
     return __generator(this, function (_a) {
@@ -158,12 +50,23 @@ route.get("/vigilants", function (req, res) { return __awaiter(void 0, void 0, v
         }
     });
 }); });
-route.get("/checkpoints", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var sucess;
+route.delete("/vigilants/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, userId, sucessM, sucessC, sucess;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, getAllCheckpoints()];
+            case 0:
+                id = req.params.id;
+                userId = Number(id);
+                if (isNaN(userId))
+                    return [2 /*return*/, (res.status(400).send("String is invalid!"))];
+                return [4 /*yield*/, deleteMessages(userId)];
             case 1:
+                sucessM = _a.sent();
+                return [4 /*yield*/, deleteCheckpoints(userId)];
+            case 2:
+                sucessC = _a.sent();
+                return [4 /*yield*/, deleteVigilant(userId)];
+            case 3:
                 sucess = _a.sent();
                 console.log(sucess);
                 res.send(sucess);

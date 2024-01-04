@@ -1,7 +1,7 @@
 
 import { Errors } from "../errors.js";
 import { createNewUser, findUserByLogin } from "./signup.repository.js";
-import { SignUp } from "./signup.types";
+import { SignUp } from "./signup.types.js";
 import { hashSync } from "bcrypt"
 
 

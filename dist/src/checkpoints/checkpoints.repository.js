@@ -35,13 +35,62 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { database } from "../../prisma/index.js";
-export function deleteMessages(id) {
+//Criar todos os checkpoints dos usuários
+export function createCheckPoints(checkpointData) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, database.messages.deleteMany({
+                case 0: return [4 /*yield*/, database.checkpoint.createMany({
+                        data: checkpointData
+                    })];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+//Criar apenas o checkpoint de um usuário
+export function createCheckPoint(checkpointData) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, database.checkpoint.create({
+                        data: checkpointData
+                    })];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+//Marcar o checkpoint
+export function markCheckPoint(markCheckPointData) {
+    return __awaiter(this, void 0, void 0, function () {
+        var arrivalTime, arrived, checkpointId;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    arrivalTime = markCheckPointData.arrivalTime, arrived = markCheckPointData.arrived, checkpointId = markCheckPointData.checkpointId;
+                    return [4 /*yield*/, database.checkpoint.update({
+                            where: {
+                                id: checkpointId
+                            },
+                            data: {
+                                arrivalTime: arrivalTime,
+                                arrived: arrived
+                            }
+                        })];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+//Pegar o checkpoint do usuário
+export function getUserCheckpoints(userId) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, database.checkpoint.findMany({
                         where: {
-                            userId: id
+                            userId: userId
                         }
                     })];
                 case 1: return [2 /*return*/, _a.sent()];
@@ -49,13 +98,38 @@ export function deleteMessages(id) {
         });
     });
 }
-export function deleteVigilant(id) {
+//Pegar todos os checkpoints
+export function getAllCheckpoints() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, database.user.delete({
+                case 0: return [4 /*yield*/, database.checkpoint.findMany({
+                        select: {
+                            arrived: true,
+                            arrivalTime: true,
+                            date: true,
+                            user: {
+                                select: {
+                                    name: true,
+                                    agency: true,
+                                    entryTime: true
+                                }
+                            }
+                        }
+                    })];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+//Excluir um checkpoint
+export function deleteCheckpoints(id) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, database.checkpoint.deleteMany({
                         where: {
-                            id: id
+                            userId: id
                         }
                     })];
                 case 1: return [2 /*return*/, _a.sent()];
