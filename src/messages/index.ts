@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { createMessage, findAllMensagens, viewedMessage } from "./messages.repository.js";
+import { createMessage, findAllMensagens, getMessagesAgency, viewedMessage } from "./messages.repository.js";
 
 const route = Router()
 
@@ -43,6 +43,14 @@ route.get("/mensagens", async (req: Request, res: Response) => {
         console.log(error)
         res.send(error)
     }
+})
+
+route.get("/messages/:agency", async  (req: Request, res: Response) => {
+    const {agency} = req.params
+
+    const sucess = await getMessagesAgency(agency)
+    return res.send(sucess)
+
 })
 
 

@@ -63,3 +63,46 @@ export function deleteVigilant(id) {
         });
     });
 }
+export function vigilantComplete(id) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, database.user.findUnique({
+                        where: {
+                            id: id
+                        }, select: {
+                            checkpoint: true,
+                            messages: true,
+                            name: true,
+                            agency: true,
+                            entryTime: true,
+                            departureTime: true
+                        }
+                    })];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+export function getAgencies(agency) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, database.user.findMany({
+                        where: {
+                            agency: agency
+                        },
+                        select: {
+                            name: true,
+                            agency: true,
+                            entryTime: true,
+                            departureTime: true,
+                            checkpoint: true,
+                            messages: true
+                        }
+                    })];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}

@@ -15,3 +15,34 @@ export async function deleteVigilant(id: number){
         }
     })
 }
+
+export async function vigilantComplete(id: number){
+    return await database.user.findUnique({
+        where: {
+            id
+        }, select: {
+            checkpoint: true,
+            messages: true,
+            name: true,
+            agency: true,
+            entryTime: true,
+            departureTime: true
+        }
+    })
+}
+
+export async function getAgencies(agency: string){
+    return await database.user.findMany({
+        where:{
+            agency
+        },
+        select:{
+            name: true,
+            agency: true,
+            entryTime: true,
+            departureTime: true,
+            checkpoint: true,
+            messages: true
+        }
+    })
+}

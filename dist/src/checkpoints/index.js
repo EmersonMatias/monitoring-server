@@ -35,7 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { Router } from "express";
-import { createCheckPoint, createCheckPoints, getAllCheckpoints, getUserCheckpoints, markCheckPoint } from "./checkpoints.repository.js";
+import { createCheckPoint, createCheckPoints, getAllCheckpoints, getCheckpointAgency, getUserCheckpoints, markCheckPoint } from "./checkpoints.repository.js";
 import { findAllUsers } from "../signup/signup.repository.js";
 var route = Router();
 //Criar todos os checkpoints dos vigilantes
@@ -156,6 +156,21 @@ route.get("/checkpoints", function (req, res) { return __awaiter(void 0, void 0,
             case 1:
                 sucess = _a.sent();
                 console.log(sucess);
+                res.send(sucess);
+                return [2 /*return*/];
+        }
+    });
+}); });
+//Pegar os checkpoints por agência
+route.get("/checkpointss/:agency", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var agency, sucess;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                agency = req.params.agency;
+                return [4 /*yield*/, getCheckpointAgency(agency)];
+            case 1:
+                sucess = _a.sent();
                 res.send(sucess);
                 return [2 /*return*/];
         }

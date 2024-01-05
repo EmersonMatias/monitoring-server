@@ -1,5 +1,5 @@
-import {Request, Response, Router} from "express"
-import { createCheckPoint, createCheckPoints, getAllCheckpoints, getUserCheckpoints, markCheckPoint } from "./checkpoints.repository.js"
+import { Request, Response, Router } from "express"
+import { createCheckPoint, createCheckPoints, getAllCheckpoints, getCheckpointAgency, getUserCheckpoints, markCheckPoint } from "./checkpoints.repository.js"
 import { findAllUsers } from "../signup/signup.repository.js"
 
 const route = Router()
@@ -88,7 +88,16 @@ route.get("/checkpoints", async (req: Request, res: Response) => {
 
     res.send(sucess)
 })
- 
+
+//Pegar os checkpoints por agência
+route.get("/checkpointss/:agency", async (req: Request, res: Response) => {
+    const { agency } = req.params
+
+
+    const sucess = await getCheckpointAgency(agency)
+    res.send(sucess)
+})
+
 
 
 export default route

@@ -35,7 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { Router } from "express";
-import { createMessage, findAllMensagens, viewedMessage } from "./messages.repository.js";
+import { createMessage, findAllMensagens, getMessagesAgency, viewedMessage } from "./messages.repository.js";
 var route = Router();
 route.post("/criarmensagem", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, userId, message, sucess, error_1;
@@ -106,6 +106,19 @@ route.get("/mensagens", function (req, res) { return __awaiter(void 0, void 0, v
                 res.send(error_3);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
+        }
+    });
+}); });
+route.get("/messages/:agency", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var agency, sucess;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                agency = req.params.agency;
+                return [4 /*yield*/, getMessagesAgency(agency)];
+            case 1:
+                sucess = _a.sent();
+                return [2 /*return*/, res.send(sucess)];
         }
     });
 }); });

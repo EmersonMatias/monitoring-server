@@ -78,3 +78,22 @@ export async function deleteCheckpoints(id: number){
         }
     })
 }
+
+export async function getCheckpointAgency(agency: string){
+    return await database.checkpoint.findMany({
+        where:{
+          user: {
+            agency
+          }
+        },
+        include: {
+            user: {
+                select: {
+                    name: true,
+                    entryTime: true,
+                    departureTime: true
+                }
+            }
+        }
+    })
+}

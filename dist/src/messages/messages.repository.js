@@ -103,3 +103,28 @@ export function findAllMensagens() {
         });
     });
 }
+export function getMessagesAgency(agency) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, database.messages.findMany({
+                        where: {
+                            user: {
+                                agency: agency
+                            }
+                        },
+                        include: {
+                            user: {
+                                select: {
+                                    name: true,
+                                    entryTime: true,
+                                    departureTime: true
+                                }
+                            }
+                        }
+                    })];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}

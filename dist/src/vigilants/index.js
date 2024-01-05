@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { Router } from "express";
 import { findAllUsers } from "../signup/signup.repository.js";
-import { deleteMessages, deleteVigilant } from "./vigilants.repository.js";
+import { deleteMessages, deleteVigilant, getAgencies, vigilantComplete } from "./vigilants.repository.js";
 import { deleteCheckpoints } from "../checkpoints/checkpoints.repository.js";
 var route = Router();
 route.get("/vigilants", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
@@ -69,6 +69,37 @@ route.delete("/vigilants/:id", function (req, res) { return __awaiter(void 0, vo
             case 3:
                 sucess = _a.sent();
                 console.log(sucess);
+                res.send(sucess);
+                return [2 /*return*/];
+        }
+    });
+}); });
+route.get("/vigilants/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, userId, sucess;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                id = req.params.id;
+                userId = Number(id);
+                if (isNaN(userId))
+                    return [2 /*return*/, (res.status(400).send("String is invalid!"))];
+                return [4 /*yield*/, vigilantComplete(userId)];
+            case 1:
+                sucess = _a.sent();
+                res.send(sucess);
+                return [2 /*return*/];
+        }
+    });
+}); });
+route.get("/agency/:agency", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var agency, sucess;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                agency = req.params.agency;
+                return [4 /*yield*/, getAgencies(agency)];
+            case 1:
+                sucess = _a.sent();
                 res.send(sucess);
                 return [2 /*return*/];
         }

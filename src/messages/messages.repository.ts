@@ -54,3 +54,22 @@ export async function findAllMensagens(){
         }
     })
 }
+
+export async function getMessagesAgency(agency: string){
+    return await database.messages.findMany({
+        where:{
+          user: {
+            agency
+          }
+        },
+        include: {
+            user: {
+                select: {
+                    name: true,
+                    entryTime: true,
+                    departureTime: true
+                }
+            }
+        }
+    })
+}
