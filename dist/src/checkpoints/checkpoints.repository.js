@@ -35,6 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { database } from "../../prisma/index.js";
+import { todaysDate } from "../functions.js";
 //Criar todos os checkpoints dos usuários
 export function createCheckPoints(checkpointData) {
     return __awaiter(this, void 0, void 0, function () {
@@ -94,6 +95,44 @@ export function getUserCheckpoints(userId) {
                         }
                     })];
                 case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+//Pegar o checkpoint do usuário pelo dia atual
+export function findCheckpointByIdByCurrentDate(userId) {
+    return __awaiter(this, void 0, void 0, function () {
+        var _a, day, year, month, currentDate;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    _a = todaysDate(), day = _a.day, year = _a.year, month = _a.month;
+                    currentDate = "".concat(day, "/").concat(month, "/").concat(year);
+                    return [4 /*yield*/, database.checkpoint.findFirst({
+                            where: {
+                                userId: userId,
+                                date: currentDate
+                            }
+                        })];
+                case 1: return [2 /*return*/, _b.sent()];
+            }
+        });
+    });
+}
+export function findCheckpointdByCurrentDate() {
+    return __awaiter(this, void 0, void 0, function () {
+        var _a, day, year, month, currentDate;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    _a = todaysDate(), day = _a.day, year = _a.year, month = _a.month;
+                    currentDate = "".concat(day, "/").concat(month, "/").concat(year);
+                    return [4 /*yield*/, database.checkpoint.findFirst({
+                            where: {
+                                date: currentDate
+                            }
+                        })];
+                case 1: return [2 /*return*/, _b.sent()];
             }
         });
     });

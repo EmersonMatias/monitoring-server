@@ -35,27 +35,39 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { signupServices } from "./signup.services.js";
+import { createCheckPoint } from "../checkpoints/checkpoints.repository.js";
 export function registerVigilant(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var signupData, sucess, error_1;
+        var signupData, sucess, dates, day, month, year, date, checkpointData, response, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     signupData = req.body;
                     _a.label = 1;
                 case 1:
-                    _a.trys.push([1, 3, , 4]);
+                    _a.trys.push([1, 4, , 5]);
                     return [4 /*yield*/, signupServices.registerVigilant(signupData)];
                 case 2:
                     sucess = _a.sent();
-                    console.log(sucess);
-                    return [2 /*return*/, res.status(201).send({ userId: sucess.id })];
+                    dates = new Date();
+                    day = dates.getDate();
+                    month = dates.getMonth() + 1;
+                    year = dates.getFullYear();
+                    date = "".concat(day, "/").concat(month, "/").concat(year);
+                    checkpointData = {
+                        userId: sucess.id,
+                        date: date
+                    };
+                    return [4 /*yield*/, createCheckPoint(checkpointData)];
                 case 3:
+                    response = _a.sent();
+                    return [2 /*return*/, res.status(201).send({ userId: sucess.id })];
+                case 4:
                     error_1 = _a.sent();
                     console.log(error_1);
                     res.status(400).send(error_1);
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
+                    return [3 /*break*/, 5];
+                case 5: return [2 /*return*/];
             }
         });
     });

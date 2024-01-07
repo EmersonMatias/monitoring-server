@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express"
-import { createCheckPoint, createCheckPoints, getAllCheckpoints, getCheckpointAgency, getUserCheckpoints, markCheckPoint } from "./checkpoints.repository.js"
+import { createCheckPoint, createCheckPoints, findCheckpointByIdByCurrentDate, findCheckpointdByCurrentDate, getAllCheckpoints, getCheckpointAgency, getUserCheckpoints, markCheckPoint } from "./checkpoints.repository.js"
 import { findAllUsers } from "../signup/signup.repository.js"
 
 const route = Router()
@@ -11,6 +11,10 @@ route.post("/createcheckpoints", async (req: Request, res: Response) => {
     const month = dates.getMonth() + 1
     const year = dates.getFullYear()
     const date = `${day}/${month}/${year}`
+
+    const checkpointsExist = await findCheckpointdByCurrentDate()
+  
+    if(checkpointsExist) return res.sendStatus(400)
 
     const allUsers = await findAllUsers()
     const checkpointData = allUsers.map((user) => {
@@ -95,6 +99,14 @@ route.get("/checkpointss/:agency", async (req: Request, res: Response) => {
 
 
     const sucess = await getCheckpointAgency(agency)
+    res.send(sucess)
+})
+
+//Pegar o checkpoint do usuario do dia atual
+route.get("/checkpoints/currentday/:userId", async (req: Request, res: Response) => {
+    const userId = req.params.userId
+
+    const sucess = await findCheckpointByIdByCurrentDate(Number(userId))
     res.send(sucess)
 })
 

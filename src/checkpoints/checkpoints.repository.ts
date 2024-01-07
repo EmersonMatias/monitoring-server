@@ -1,4 +1,5 @@
 import { database } from "../../prisma/index.js"
+import { todaysDate } from "../functions.js"
 
 type TCheckpointData = {
     userId: number
@@ -9,8 +10,8 @@ type TMarkCheckPointData = {
     checkpointId: number
     arrived: boolean
     arrivalTime: string
-} 
- 
+}
+
 //Criar todos os checkpoints dos usuários
 export async function createCheckPoints(checkpointData: TCheckpointData[]) {
 
@@ -49,10 +50,36 @@ export async function getUserCheckpoints(userId: number) {
             userId
         }
     })
-}  
- 
+}
+
+//Pegar o checkpoint do usuário pelo dia atual
+export async function findCheckpointByIdByCurrentDate(userId: number) {
+    const { day, year, month } = todaysDate()
+    const currentDate = `${day}/${month}/${year}`
+
+    return await database.checkpoint.findFirst({
+        where:{
+            userId,
+            date: currentDate
+        }
+    })
+
+}
+
+export async function findCheckpointdByCurrentDate() {
+    const { day, year, month } = todaysDate()
+    const currentDate = `${day}/${month}/${year}`
+
+    return await database.checkpoint.findFirst({
+        where:{
+            date: currentDate
+        }
+    })
+
+}
+
 //Pegar todos os checkpoints
-export async function getAllCheckpoints(){
+export async function getAllCheckpoints() {
 
     return await database.checkpoint.findMany({
         select: {
@@ -71,20 +98,20 @@ export async function getAllCheckpoints(){
 }
 
 //Excluir um checkpoint
-export async function deleteCheckpoints(id: number){
+export async function deleteCheckpoints(id: number) {
     return await database.checkpoint.deleteMany({
-        where:{
+        where: {
             userId: id
         }
     })
 }
 
-export async function getCheckpointAgency(agency: string){
+export async function getCheckpointAgency(agency: string) {
     return await database.checkpoint.findMany({
-        where:{
-          user: {
-            agency
-          }
+        where: {
+            user: {
+                agency
+            }
         },
         include: {
             user: {

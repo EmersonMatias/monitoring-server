@@ -35,12 +35,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { Router } from "express";
-import { createCheckPoint, createCheckPoints, getAllCheckpoints, getCheckpointAgency, getUserCheckpoints, markCheckPoint } from "./checkpoints.repository.js";
+import { createCheckPoint, createCheckPoints, findCheckpointByIdByCurrentDate, findCheckpointdByCurrentDate, getAllCheckpoints, getCheckpointAgency, getUserCheckpoints, markCheckPoint } from "./checkpoints.repository.js";
 import { findAllUsers } from "../signup/signup.repository.js";
 var route = Router();
 //Criar todos os checkpoints dos vigilantes
 route.post("/createcheckpoints", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var dates, day, month, year, date, allUsers, checkpointData, error_1;
+    var dates, day, month, year, date, checkpointsExist, allUsers, checkpointData, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -49,8 +49,13 @@ route.post("/createcheckpoints", function (req, res) { return __awaiter(void 0, 
                 month = dates.getMonth() + 1;
                 year = dates.getFullYear();
                 date = "".concat(day, "/").concat(month, "/").concat(year);
-                return [4 /*yield*/, findAllUsers()];
+                return [4 /*yield*/, findCheckpointdByCurrentDate()];
             case 1:
+                checkpointsExist = _a.sent();
+                if (checkpointsExist)
+                    return [2 /*return*/, res.sendStatus(400)];
+                return [4 /*yield*/, findAllUsers()];
+            case 2:
                 allUsers = _a.sent();
                 checkpointData = allUsers.map(function (user) {
                     return {
@@ -58,20 +63,20 @@ route.post("/createcheckpoints", function (req, res) { return __awaiter(void 0, 
                         date: date
                     };
                 });
-                _a.label = 2;
-            case 2:
-                _a.trys.push([2, 4, , 5]);
-                return [4 /*yield*/, createCheckPoints(checkpointData)];
+                _a.label = 3;
             case 3:
+                _a.trys.push([3, 5, , 6]);
+                return [4 /*yield*/, createCheckPoints(checkpointData)];
+            case 4:
                 _a.sent();
                 res.status(200).send("Checkpoints Created");
-                return [3 /*break*/, 5];
-            case 4:
+                return [3 /*break*/, 6];
+            case 5:
                 error_1 = _a.sent();
                 console.log(error_1);
                 res.send(error_1);
-                return [3 /*break*/, 5];
-            case 5: return [2 /*return*/];
+                return [3 /*break*/, 6];
+            case 6: return [2 /*return*/];
         }
     });
 }); });
@@ -169,6 +174,21 @@ route.get("/checkpointss/:agency", function (req, res) { return __awaiter(void 0
             case 0:
                 agency = req.params.agency;
                 return [4 /*yield*/, getCheckpointAgency(agency)];
+            case 1:
+                sucess = _a.sent();
+                res.send(sucess);
+                return [2 /*return*/];
+        }
+    });
+}); });
+//Pegar o checkpoint do usuario do dia atual
+route.get("/checkpoints/currentday/:userId", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var userId, sucess;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                userId = req.params.userId;
+                return [4 /*yield*/, findCheckpointByIdByCurrentDate(Number(userId))];
             case 1:
                 sucess = _a.sent();
                 res.send(sucess);
