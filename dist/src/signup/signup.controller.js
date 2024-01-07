@@ -36,34 +36,32 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { signupServices } from "./signup.services.js";
 import { createCheckPoint } from "../checkpoints/checkpoints.repository.js";
+import { todaysDate } from "../functions.js";
 export function registerVigilant(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var signupData, sucess, dates, day, month, year, date, checkpointData, response, error_1;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var signupData, sucess, _a, day, monthc, year, date, checkpointData, response, error_1;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
                     signupData = req.body;
-                    _a.label = 1;
+                    _b.label = 1;
                 case 1:
-                    _a.trys.push([1, 4, , 5]);
+                    _b.trys.push([1, 4, , 5]);
                     return [4 /*yield*/, signupServices.registerVigilant(signupData)];
                 case 2:
-                    sucess = _a.sent();
-                    dates = new Date();
-                    day = dates.getDate();
-                    month = dates.getMonth() + 1;
-                    year = dates.getFullYear();
-                    date = "".concat(day, "/").concat(month, "/").concat(year);
+                    sucess = _b.sent();
+                    _a = todaysDate(), day = _a.day, monthc = _a.monthc, year = _a.year;
+                    date = "".concat(day, "/").concat(monthc, "/").concat(year);
                     checkpointData = {
                         userId: sucess.id,
                         date: date
                     };
                     return [4 /*yield*/, createCheckPoint(checkpointData)];
                 case 3:
-                    response = _a.sent();
+                    response = _b.sent();
                     return [2 /*return*/, res.status(201).send({ userId: sucess.id })];
                 case 4:
-                    error_1 = _a.sent();
+                    error_1 = _b.sent();
                     console.log(error_1);
                     res.status(400).send(error_1);
                     return [3 /*break*/, 5];

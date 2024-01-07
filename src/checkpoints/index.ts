@@ -1,20 +1,18 @@
 import { Request, Response, Router } from "express"
-import { createCheckPoint, createCheckPoints, findCheckpointByIdByCurrentDate, findCheckpointdByCurrentDate, getAllCheckpoints, getCheckpointAgency, getUserCheckpoints, markCheckPoint } from "./checkpoints.repository.js"
+import {createCheckPoints, findCheckpointByDay, findCheckpointByIdByCurrentDate, findCheckpointdByCurrentDate, getAllCheckpoints, getCheckpointAgency, getUserCheckpoints, markCheckPoint } from "./checkpoints.repository.js"
 import { findAllUsers } from "../signup/signup.repository.js"
+import { todaysDate } from "../functions.js"
 
 const route = Router()
 
 //Criar todos os checkpoints dos vigilantes
 route.post("/createcheckpoints", async (req: Request, res: Response) => {
-    const dates = new Date()
-    const day = dates.getDate()
-    const month = dates.getMonth() + 1
-    const year = dates.getFullYear()
-    const date = `${day}/${month}/${year}`
+    const { day, monthc,year} = todaysDate()
+    const date = `${day}/${monthc}/${year}`
 
     const checkpointsExist = await findCheckpointdByCurrentDate()
-  
-    if(checkpointsExist) return res.sendStatus(400)
+
+    if (checkpointsExist) return res.sendStatus(400)
 
     const allUsers = await findAllUsers()
     const checkpointData = allUsers.map((user) => {
@@ -33,14 +31,14 @@ route.post("/createcheckpoints", async (req: Request, res: Response) => {
     }
 })
 
+/*
+
 //Criar apenas checkpoint do vigilante que foi criado apos todos os checkpoints terem sido criados
 route.post("/createcheckpoint", async (req: Request, res: Response) => {
     const { userId } = req.body
-    const dates = new Date()
-    const day = dates.getDate()
-    const month = dates.getMonth() + 1
-    const year = dates.getFullYear()
-    const date = `${day}/${month}/${year}`
+    const { day, monthc, year } = todaysDate()
+    const date = `${day}/${monthc}/${year}`
+    console.log(day, monthc, year)
 
     const checkpointData = {
         userId,
@@ -55,6 +53,9 @@ route.post("/createcheckpoint", async (req: Request, res: Response) => {
         res.send(error)
     }
 })
+
+*/
+
 
 //Atualizar o checkpoint do dia
 route.put("/checkpoint", async (req: Request, res: Response) => {
@@ -108,6 +109,12 @@ route.get("/checkpoints/currentday/:userId", async (req: Request, res: Response)
 
     const sucess = await findCheckpointByIdByCurrentDate(Number(userId))
     res.send(sucess)
+})
+
+//PEGAR TODOS OS CHECKPOINTS DO DIA ATUAL
+route.get("/checkpoints=today", async (req: Request, res: Response) => {
+    const response = await findCheckpointByDay()
+    res.send(response)
 })
 
 

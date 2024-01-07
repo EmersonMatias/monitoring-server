@@ -39,17 +39,17 @@ import { todaysDate } from "../functions.js";
 export function createMessage(_a) {
     var message = _a.message, userId = _a.userId;
     return __awaiter(this, void 0, void 0, function () {
-        var _b, day, month, year, currentDate, hours, minutes;
+        var _b, day, monthc, year, currentDate, hours, minutes;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
-                    _b = todaysDate(), day = _b.day, month = _b.month, year = _b.year;
+                    _b = todaysDate(), day = _b.day, monthc = _b.monthc, year = _b.year;
                     currentDate = new Date;
                     hours = currentDate.getHours().toString().padStart(2, "0");
                     minutes = currentDate.getMinutes().toString().padStart(2, "0");
                     return [4 /*yield*/, database.messages.create({
                             data: {
-                                date: "".concat(day, "/").concat(month, "/").concat(year),
+                                date: "".concat(day, "/").concat(monthc, "/").concat(year),
                                 hour: "".concat(hours, ":").concat(minutes),
                                 userId: userId,
                                 message: message

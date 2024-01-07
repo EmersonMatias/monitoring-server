@@ -43,7 +43,6 @@ route.post("/criarmensagem", function (req, res) { return __awaiter(void 0, void
         switch (_b.label) {
             case 0:
                 _a = req.body, userId = _a.userId, message = _a.message;
-                console.log(userId, message);
                 _b.label = 1;
             case 1:
                 _b.trys.push([1, 3, , 4]);

@@ -102,12 +102,12 @@ export function getUserCheckpoints(userId) {
 //Pegar o checkpoint do usuário pelo dia atual
 export function findCheckpointByIdByCurrentDate(userId) {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, day, year, month, currentDate;
+        var _a, day, year, monthc, currentDate;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    _a = todaysDate(), day = _a.day, year = _a.year, month = _a.month;
-                    currentDate = "".concat(day, "/").concat(month, "/").concat(year);
+                    _a = todaysDate(), day = _a.day, year = _a.year, monthc = _a.monthc;
+                    currentDate = "".concat(day, "/").concat(monthc, "/").concat(year);
                     return [4 /*yield*/, database.checkpoint.findFirst({
                             where: {
                                 userId: userId,
@@ -121,15 +121,46 @@ export function findCheckpointByIdByCurrentDate(userId) {
 }
 export function findCheckpointdByCurrentDate() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, day, year, month, currentDate;
+        var _a, day, year, monthc, currentDate;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    _a = todaysDate(), day = _a.day, year = _a.year, month = _a.month;
-                    currentDate = "".concat(day, "/").concat(month, "/").concat(year);
+                    _a = todaysDate(), day = _a.day, year = _a.year, monthc = _a.monthc;
+                    currentDate = "".concat(day, "/").concat(monthc, "/").concat(year);
                     return [4 /*yield*/, database.checkpoint.findFirst({
                             where: {
                                 date: currentDate
+                            }
+                        })];
+                case 1: return [2 /*return*/, _b.sent()];
+            }
+        });
+    });
+}
+// PEGAR TODOS OS CHECKPOINTS DO DIA
+export function findCheckpointByDay() {
+    return __awaiter(this, void 0, void 0, function () {
+        var _a, day, year, monthc, currentDate;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    _a = todaysDate(), day = _a.day, year = _a.year, monthc = _a.monthc;
+                    currentDate = "".concat(day, "/").concat(monthc, "/").concat(year);
+                    return [4 /*yield*/, database.checkpoint.findMany({
+                            where: {
+                                date: currentDate
+                            },
+                            select: {
+                                arrivalTime: true,
+                                arrived: true,
+                                date: true,
+                                user: {
+                                    select: {
+                                        name: true,
+                                        agency: true,
+                                        entryTime: true
+                                    }
+                                }
                             }
                         })];
                 case 1: return [2 /*return*/, _b.sent()];

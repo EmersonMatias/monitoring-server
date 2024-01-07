@@ -54,11 +54,11 @@ export async function getUserCheckpoints(userId: number) {
 
 //Pegar o checkpoint do usuário pelo dia atual
 export async function findCheckpointByIdByCurrentDate(userId: number) {
-    const { day, year, month } = todaysDate()
-    const currentDate = `${day}/${month}/${year}`
+    const { day, year, monthc } = todaysDate()
+    const currentDate = `${day}/${monthc}/${year}`
 
     return await database.checkpoint.findFirst({
-        where:{
+        where: {
             userId,
             date: currentDate
         }
@@ -67,12 +67,38 @@ export async function findCheckpointByIdByCurrentDate(userId: number) {
 }
 
 export async function findCheckpointdByCurrentDate() {
-    const { day, year, month } = todaysDate()
-    const currentDate = `${day}/${month}/${year}`
+    const { day, year, monthc } = todaysDate()
+    const currentDate = `${day}/${monthc}/${year}`
 
     return await database.checkpoint.findFirst({
-        where:{
+        where: {
             date: currentDate
+        }
+    })
+
+}
+
+
+// PEGAR TODOS OS CHECKPOINTS DO DIA
+export async function findCheckpointByDay() {
+    const { day, year, monthc } = todaysDate()
+    const currentDate = `${day}/${monthc}/${year}`
+
+    return await database.checkpoint.findMany({
+        where: {
+            date: currentDate
+        },
+        select: {
+            arrivalTime: true,
+            arrived: true,
+            date: true,
+            user: {
+                select: {
+                    name: true,
+                    agency: true,
+                    entryTime: true
+                }
+            }
         }
     })
 

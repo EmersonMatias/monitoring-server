@@ -5,7 +5,6 @@ const route = Router()
 
 route.post("/criarmensagem", async (req: Request, res: Response) => {
     const { userId, message } = req.body
-    console.log(userId, message)
 
     try {
         const sucess = await createMessage({ userId, message })

@@ -8,14 +8,14 @@ type TMessage = {
 }
 
 export async function createMessage({ message, userId }: TMessage) {
-    const { day, month, year } = todaysDate()
+    const { day, monthc, year } = todaysDate()
     const currentDate = new Date
     const hours = currentDate.getHours().toString().padStart(2,"0")
     const minutes = currentDate.getMinutes().toString().padStart(2,"0")
 
     return await database.messages.create({
         data: {
-            date: `${day}/${month}/${year}`,
+            date: `${day}/${monthc}/${year}`,
             hour: `${hours}:${minutes}`,
             userId,
             message

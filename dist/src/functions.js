@@ -1,11 +1,12 @@
 var date = new Date();
 export function todaysDate() {
-    var day = date.getDate();
+    var day = date.getDate().toString().padStart(2, "0");
     var month = date.getMonth() + 1;
+    var monthc = month.toString().padStart(2, "0");
     var year = date.getFullYear();
     var todaysDate = {
         day: day,
-        month: month,
+        monthc: monthc,
         year: year
     };
     return todaysDate;

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { SignUp } from "./signup.types";
 import { signupServices } from "./signup.services.js";
 import { createCheckPoint } from "../checkpoints/checkpoints.repository.js";
+import { todaysDate } from "../functions.js";
 
 
 export async function registerVigilant(req: Request, res: Response) {
@@ -11,11 +12,8 @@ export async function registerVigilant(req: Request, res: Response) {
     try {
         const sucess = await signupServices.registerVigilant(signupData)
 
-        const dates = new Date()
-        const day = dates.getDate()
-        const month = dates.getMonth() + 1
-        const year = dates.getFullYear()
-        const date = `${day}/${month}/${year}`
+        const { day, monthc, year } = todaysDate()
+        const date = `${day}/${monthc}/${year}`
 
         const checkpointData = {
             userId: sucess.id, 
