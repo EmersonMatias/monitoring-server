@@ -81,7 +81,8 @@ export async function findCheckpointdByCurrentDate() {
 
 // PEGAR TODOS OS CHECKPOINTS DO DIA
 export async function findCheckpointByDay() {
-    const currantDate = new Date()
+    const { day, year, monthc } = todaysDate()
+    const currantDate = `${year}-${monthc}-${day}`
 
     return await database.checkpoint.findMany({
         where: {
