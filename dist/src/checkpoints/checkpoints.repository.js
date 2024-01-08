@@ -140,12 +140,11 @@ export function findCheckpointdByCurrentDate() {
 // PEGAR TODOS OS CHECKPOINTS DO DIA
 export function findCheckpointByDay() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, day, year, monthc, currantDate;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var currantDate;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
                 case 0:
-                    _a = todaysDate(), day = _a.day, year = _a.year, monthc = _a.monthc;
-                    currantDate = new Date("".concat(year, "-").concat(monthc, "-").concat(day));
+                    currantDate = new Date();
                     return [4 /*yield*/, database.checkpoint.findMany({
                             where: {
                                 date: currantDate
@@ -163,7 +162,7 @@ export function findCheckpointByDay() {
                                 }
                             }
                         })];
-                case 1: return [2 /*return*/, _b.sent()];
+                case 1: return [2 /*return*/, _a.sent()];
             }
         });
     });
