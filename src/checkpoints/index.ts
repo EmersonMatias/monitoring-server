@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express"
-import {createCheckPoints, findCheckpointByDay, findCheckpointByIdByCurrentDate, findCheckpointdByCurrentDate, getAllCheckpoints, getCheckpointAgency, getUserCheckpoints, markCheckPoint } from "./checkpoints.repository.js"
+import { createCheckPoints, findCheckpointByDay, findCheckpointByIdByCurrentDate, findCheckpointdByCurrentDate, getAllCheckpoints, getCheckpointAgency, getUserCheckpoints, markCheckPoint } from "./checkpoints.repository.js"
 import { findAllUsers } from "../signup/signup.repository.js"
 import { todaysDate } from "../functions.js"
 
@@ -7,8 +7,9 @@ const route = Router()
 
 //Criar todos os checkpoints dos vigilantes
 route.post("/createcheckpoints", async (req: Request, res: Response) => {
-    const { day, monthc,year} = todaysDate()
-    const date = `${day}/${monthc}/${year}`
+    const { day, year, monthc } = todaysDate()
+    const currantDate = new Date(`${year}-${monthc}-${day}`)
+
 
     const checkpointsExist = await findCheckpointdByCurrentDate()
 
@@ -18,7 +19,7 @@ route.post("/createcheckpoints", async (req: Request, res: Response) => {
     const checkpointData = allUsers.map((user) => {
         return {
             userId: user.id,
-            date
+            date: currantDate
         }
     })
 
@@ -116,7 +117,5 @@ route.get("/checkpoints=today", async (req: Request, res: Response) => {
     const response = await findCheckpointByDay()
     res.send(response)
 })
-
-
 
 export default route

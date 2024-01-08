@@ -41,12 +41,12 @@ import { todaysDate } from "../functions.js";
 var route = Router();
 //Criar todos os checkpoints dos vigilantes
 route.post("/createcheckpoints", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, day, monthc, year, date, checkpointsExist, allUsers, checkpointData, error_1;
+    var _a, day, year, monthc, currantDate, checkpointsExist, allUsers, checkpointData, error_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                _a = todaysDate(), day = _a.day, monthc = _a.monthc, year = _a.year;
-                date = "".concat(day, "/").concat(monthc, "/").concat(year);
+                _a = todaysDate(), day = _a.day, year = _a.year, monthc = _a.monthc;
+                currantDate = new Date("".concat(year, "-").concat(monthc, "-").concat(day));
                 return [4 /*yield*/, findCheckpointdByCurrentDate()];
             case 1:
                 checkpointsExist = _b.sent();
@@ -58,7 +58,7 @@ route.post("/createcheckpoints", function (req, res) { return __awaiter(void 0, 
                 checkpointData = allUsers.map(function (user) {
                     return {
                         userId: user.id,
-                        date: date
+                        date: currantDate
                     };
                 });
                 _b.label = 3;

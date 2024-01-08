@@ -50,7 +50,7 @@ import { createNewUser, findUserByLogin } from "./signup.repository.js";
 import { hashSync } from "bcrypt";
 export function registerVigilant(signupData) {
     return __awaiter(this, void 0, void 0, function () {
-        var loginExist, encryptedPassword, newSignupData;
+        var loginExist, encryptedPassword, newSignupData, newUser;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, findUserByLogin(signupData.login)];
@@ -61,7 +61,9 @@ export function registerVigilant(signupData) {
                     encryptedPassword = hashSync(signupData.password, 10);
                     newSignupData = __assign(__assign({}, signupData), { password: encryptedPassword });
                     return [4 /*yield*/, createNewUser(newSignupData)];
-                case 2: return [2 /*return*/, _a.sent()];
+                case 2:
+                    newUser = _a.sent();
+                    return [2 /*return*/, newUser];
             }
         });
     });

@@ -102,16 +102,16 @@ export function getUserCheckpoints(userId) {
 //Pegar o checkpoint do usuário pelo dia atual
 export function findCheckpointByIdByCurrentDate(userId) {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, day, year, monthc, currentDate;
+        var _a, day, year, monthc, currantDate;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _a = todaysDate(), day = _a.day, year = _a.year, monthc = _a.monthc;
-                    currentDate = "".concat(day, "/").concat(monthc, "/").concat(year);
+                    currantDate = new Date("".concat(year, "-").concat(monthc, "-").concat(day));
                     return [4 /*yield*/, database.checkpoint.findFirst({
                             where: {
                                 userId: userId,
-                                date: currentDate
+                                date: currantDate
                             }
                         })];
                 case 1: return [2 /*return*/, _b.sent()];
@@ -121,15 +121,15 @@ export function findCheckpointByIdByCurrentDate(userId) {
 }
 export function findCheckpointdByCurrentDate() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, day, year, monthc, currentDate;
+        var _a, day, year, monthc, currantDate;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _a = todaysDate(), day = _a.day, year = _a.year, monthc = _a.monthc;
-                    currentDate = "".concat(day, "/").concat(monthc, "/").concat(year);
+                    currantDate = new Date("".concat(year, "-").concat(monthc, "-").concat(day));
                     return [4 /*yield*/, database.checkpoint.findFirst({
                             where: {
-                                date: currentDate
+                                date: currantDate
                             }
                         })];
                 case 1: return [2 /*return*/, _b.sent()];
@@ -140,15 +140,15 @@ export function findCheckpointdByCurrentDate() {
 // PEGAR TODOS OS CHECKPOINTS DO DIA
 export function findCheckpointByDay() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, day, year, monthc, currentDate;
+        var _a, day, year, monthc, currantDate;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _a = todaysDate(), day = _a.day, year = _a.year, monthc = _a.monthc;
-                    currentDate = "".concat(day, "/").concat(monthc, "/").concat(year);
+                    currantDate = new Date("".concat(year, "-").concat(monthc, "-").concat(day));
                     return [4 /*yield*/, database.checkpoint.findMany({
                             where: {
-                                date: currentDate
+                                date: currantDate
                             },
                             select: {
                                 arrivalTime: true,

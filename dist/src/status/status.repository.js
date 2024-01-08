@@ -35,61 +35,35 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { database } from "../../prisma/index.js";
-export function createMessage(_a) {
-    var message = _a.message, userId = _a.userId;
+export function createStatus(userId) {
     return __awaiter(this, void 0, void 0, function () {
-        var currentDate, hours, minutes;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var status;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
                 case 0:
-                    currentDate = new Date;
-                    hours = currentDate.getHours().toString().padStart(2, "0");
-                    minutes = currentDate.getMinutes().toString().padStart(2, "0");
-                    return [4 /*yield*/, database.messages.create({
+                    status = "OK";
+                    return [4 /*yield*/, database.status.create({
                             data: {
-                                hour: "".concat(hours, ":").concat(minutes),
-                                userId: userId,
-                                message: message
+                                status: status,
+                                userId: userId
                             }
                         })];
-                case 1: return [2 /*return*/, _b.sent()];
+                case 1: return [2 /*return*/, _a.sent()];
             }
         });
     });
 }
-export function viewedMessage(_a) {
-    var response = _a.response, messageId = _a.messageId;
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0: return [4 /*yield*/, database.messages.update({
-                        where: {
-                            id: messageId
-                        }, data: {
-                            viewed: true,
-                            response: response
-                        }
-                    })];
-                case 1: return [2 /*return*/, _b.sent()];
-            }
-        });
-    });
-}
-export function findAllMensagens() {
+export function findAllStatus() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, database.messages.findMany({
-                        select: {
-                            id: true,
-                            date: true,
-                            hour: true,
-                            message: true,
-                            response: true,
-                            viewed: true,
+                case 0: return [4 /*yield*/, database.status.findMany({
+                        include: {
                             user: {
                                 select: {
                                     name: true,
+                                    entryTime: true,
+                                    departureTime: true,
                                     agency: true
                                 }
                             }
@@ -100,24 +74,44 @@ export function findAllMensagens() {
         });
     });
 }
-export function getMessagesAgency(agency) {
+export function findStatusById(userId) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, database.messages.findMany({
+                case 0: return [4 /*yield*/, database.status.findMany({
                         where: {
-                            user: {
-                                agency: agency
-                            }
-                        },
-                        include: {
-                            user: {
-                                select: {
-                                    name: true,
-                                    entryTime: true,
-                                    departureTime: true
-                                }
-                            }
+                            userId: userId
+                        }
+                    })];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+export function updateById(id, status) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, database.status.update({
+                        where: {
+                            id: id
+                        }, data: {
+                            status: status,
+                            time: new Date()
+                        }
+                    })];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+export function deleteStatus(userId) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, database.status.deleteMany({
+                        where: {
+                            userId: userId
                         }
                     })];
                 case 1: return [2 /*return*/, _a.sent()];

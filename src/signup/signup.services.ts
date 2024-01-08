@@ -14,7 +14,10 @@ export async function registerVigilant(signupData: SignUp) {
 
     const newSignupData = { ...signupData, password: encryptedPassword }
 
-    return await createNewUser(newSignupData)
+
+    const newUser =  await createNewUser(newSignupData)
+
+    return newUser
 }
 
 

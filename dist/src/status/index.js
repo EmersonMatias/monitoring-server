@@ -34,43 +34,74 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { signupServices } from "./signup.services.js";
-import { createCheckPoint } from "../checkpoints/checkpoints.repository.js";
-import { todaysDate } from "../functions.js";
-import { createStatus } from "../status/status.repository.js";
-export function registerVigilant(req, res) {
-    return __awaiter(this, void 0, void 0, function () {
-        var signupData, sucess, _a, day, monthc, year, date, checkpointData, response, statusCreate, error_1;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    signupData = req.body;
-                    _b.label = 1;
-                case 1:
-                    _b.trys.push([1, 5, , 6]);
-                    return [4 /*yield*/, signupServices.registerVigilant(signupData)];
-                case 2:
-                    sucess = _b.sent();
-                    _a = todaysDate(), day = _a.day, monthc = _a.monthc, year = _a.year;
-                    date = new Date("".concat(year, "-").concat(monthc, "-").concat(day));
-                    checkpointData = {
-                        userId: sucess.id,
-                        date: date
-                    };
-                    return [4 /*yield*/, createCheckPoint(checkpointData)];
-                case 3:
-                    response = _b.sent();
-                    return [4 /*yield*/, createStatus(sucess.id)];
-                case 4:
-                    statusCreate = _b.sent();
-                    return [2 /*return*/, res.status(201).send({ userId: sucess.id })];
-                case 5:
-                    error_1 = _b.sent();
-                    console.log(error_1);
-                    res.status(400).send(error_1);
-                    return [3 /*break*/, 6];
-                case 6: return [2 /*return*/];
-            }
-        });
+import { Router } from "express";
+import { findAllStatus, findStatusById, updateById } from "./status.repository.js";
+var route = Router();
+route.get("/status/findbyid=:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, sucess, error_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                id = req.params.id;
+                console.log(id);
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, findStatusById(Number(id))];
+            case 2:
+                sucess = _a.sent();
+                res.send(sucess[0]);
+                return [3 /*break*/, 4];
+            case 3:
+                error_1 = _a.sent();
+                console.log(error_1);
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
     });
-}
+}); });
+//PEGA TODOS OS STATUS
+route.get("/status/getall", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var sucess, error_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, findAllStatus()];
+            case 1:
+                sucess = _a.sent();
+                res.send(sucess);
+                return [3 /*break*/, 3];
+            case 2:
+                error_2 = _a.sent();
+                console.log(error_2);
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
+route.post("/status/updatebyid=:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, newStatus, sucess, error_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                id = req.params.id;
+                newStatus = req.body.newStatus;
+                console.log(id, newStatus);
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, updateById(Number(id), newStatus)];
+            case 2:
+                sucess = _a.sent();
+                res.send(sucess);
+                return [3 /*break*/, 4];
+            case 3:
+                error_3 = _a.sent();
+                console.log(error_3);
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); });
+export default route;

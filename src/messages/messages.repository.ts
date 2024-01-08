@@ -1,5 +1,4 @@
 import { database } from "../../prisma/index.js";
-import { todaysDate } from "../functions.js";
 
 
 type TMessage = {
@@ -8,14 +7,12 @@ type TMessage = {
 }
 
 export async function createMessage({ message, userId }: TMessage) {
-    const { day, monthc, year } = todaysDate()
     const currentDate = new Date
     const hours = currentDate.getHours().toString().padStart(2,"0")
     const minutes = currentDate.getMinutes().toString().padStart(2,"0")
 
     return await database.messages.create({
         data: {
-            date: `${day}/${monthc}/${year}`,
             hour: `${hours}:${minutes}`,
             userId,
             message

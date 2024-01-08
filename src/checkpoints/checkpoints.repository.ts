@@ -1,9 +1,9 @@
 import { database } from "../../prisma/index.js"
 import { todaysDate } from "../functions.js"
-
+export 
 type TCheckpointData = {
     userId: number
-    date: string
+    date: Date
 }
 
 type TMarkCheckPointData = {
@@ -55,12 +55,12 @@ export async function getUserCheckpoints(userId: number) {
 //Pegar o checkpoint do usuário pelo dia atual
 export async function findCheckpointByIdByCurrentDate(userId: number) {
     const { day, year, monthc } = todaysDate()
-    const currentDate = `${day}/${monthc}/${year}`
+    const currantDate = new Date(`${year}-${monthc}-${day}`)
 
     return await database.checkpoint.findFirst({
         where: {
             userId,
-            date: currentDate
+            date: currantDate
         }
     })
 
@@ -68,11 +68,11 @@ export async function findCheckpointByIdByCurrentDate(userId: number) {
 
 export async function findCheckpointdByCurrentDate() {
     const { day, year, monthc } = todaysDate()
-    const currentDate = `${day}/${monthc}/${year}`
+    const currantDate = new Date(`${year}-${monthc}-${day}`)
 
     return await database.checkpoint.findFirst({
         where: {
-            date: currentDate
+            date: currantDate
         }
     })
 
@@ -82,11 +82,11 @@ export async function findCheckpointdByCurrentDate() {
 // PEGAR TODOS OS CHECKPOINTS DO DIA
 export async function findCheckpointByDay() {
     const { day, year, monthc } = todaysDate()
-    const currentDate = `${day}/${monthc}/${year}`
+    const currantDate = new Date(`${year}-${monthc}-${day}`)
 
     return await database.checkpoint.findMany({
         where: {
-            date: currentDate
+            date: currantDate
         },
         select: {
             arrivalTime: true,
@@ -99,7 +99,7 @@ export async function findCheckpointByDay() {
                     entryTime: true
                 }
             }
-        }
+        } 
     })
 
 }
@@ -150,3 +150,4 @@ export async function getCheckpointAgency(agency: string) {
         }
     })
 }
+

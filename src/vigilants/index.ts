@@ -2,6 +2,7 @@ import { Request, Router, Response } from "express"
 import { findAllUsers } from "../signup/signup.repository.js"
 import { deleteMessages, deleteVigilant, getAgencies, vigilantComplete } from "./vigilants.repository.js"
 import { deleteCheckpoints, getAllCheckpoints } from "../checkpoints/checkpoints.repository.js"
+import { deleteStatus } from "../status/status.repository.js"
 
 const route = Router()
 
@@ -21,6 +22,7 @@ route.delete("/vigilants/:id", async (req: Request, res: Response) => {
 
     const sucessM = await deleteMessages(userId)
     const sucessC = await deleteCheckpoints(userId)
+    const sucessS = await deleteStatus(userId)
     const sucess = await deleteVigilant(userId)
         console.log(sucess)
     res.send(sucess)

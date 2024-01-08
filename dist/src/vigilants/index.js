@@ -38,6 +38,7 @@ import { Router } from "express";
 import { findAllUsers } from "../signup/signup.repository.js";
 import { deleteMessages, deleteVigilant, getAgencies, vigilantComplete } from "./vigilants.repository.js";
 import { deleteCheckpoints } from "../checkpoints/checkpoints.repository.js";
+import { deleteStatus } from "../status/status.repository.js";
 var route = Router();
 route.get("/vigilants", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var sucess;
@@ -51,7 +52,7 @@ route.get("/vigilants", function (req, res) { return __awaiter(void 0, void 0, v
     });
 }); });
 route.delete("/vigilants/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, userId, sucessM, sucessC, sucess;
+    var id, userId, sucessM, sucessC, sucessS, sucess;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -65,8 +66,11 @@ route.delete("/vigilants/:id", function (req, res) { return __awaiter(void 0, vo
                 return [4 /*yield*/, deleteCheckpoints(userId)];
             case 2:
                 sucessC = _a.sent();
-                return [4 /*yield*/, deleteVigilant(userId)];
+                return [4 /*yield*/, deleteStatus(userId)];
             case 3:
+                sucessS = _a.sent();
+                return [4 /*yield*/, deleteVigilant(userId)];
+            case 4:
                 sucess = _a.sent();
                 console.log(sucess);
                 res.send(sucess);

@@ -5,6 +5,7 @@ import usersRoute from "./vigilants/index.js"
 import signinRoute from "./signin/index.js"
 import messagesRoute from "./messages/index.js"
 import checkpointsRoute from "./checkpoints/index.js"
+import statusRoute from "./status/index.js"
 
 const server = express()
  
@@ -19,6 +20,7 @@ server.use(usersRoute)
 server.use(signinRoute)
 server.use(messagesRoute)
 server.use(checkpointsRoute)
+server.use(statusRoute)
 
 const port = process.env.PORT || 4000
 
