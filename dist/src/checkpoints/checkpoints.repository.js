@@ -145,7 +145,7 @@ export function findCheckpointByDay() {
             switch (_b.label) {
                 case 0:
                     _a = todaysDate(), day = _a.day, year = _a.year, monthc = _a.monthc;
-                    currantDate = "".concat(year, "-").concat(monthc, "-").concat(day);
+                    currantDate = new Date("".concat(year, "-").concat(monthc, "-").concat(day));
                     return [4 /*yield*/, database.checkpoint.findMany({
                             where: {
                                 date: currantDate
