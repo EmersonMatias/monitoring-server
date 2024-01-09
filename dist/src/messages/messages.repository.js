@@ -133,3 +133,44 @@ export function getMessagesAgency(agency) {
         });
     });
 }
+//PEGAR MENSAGENS POR AGÊNCIA E POR FILTRO DE DATA******
+export function getMessagesAgencyWithFilter(agency, filter) {
+    return __awaiter(this, void 0, void 0, function () {
+        var day, month, year;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    day = filter.day, month = filter.month, year = filter.year;
+                    return [4 /*yield*/, database.messages.findMany({
+                            where: {
+                                user: {
+                                    agency: agency
+                                },
+                                day: {
+                                    gte: Number(day.first),
+                                    lte: Number(day.end)
+                                },
+                                month: {
+                                    gte: Number(month.first),
+                                    lte: Number(month.end)
+                                },
+                                year: {
+                                    gte: Number(year.first),
+                                    lte: Number(year.end)
+                                }
+                            },
+                            include: {
+                                user: {
+                                    select: {
+                                        name: true,
+                                        entryTime: true,
+                                        departureTime: true
+                                    }
+                                }
+                            }
+                        })];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}

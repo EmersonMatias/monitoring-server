@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express"
-import { createCheckPoints, findCheckpointByDay, findCheckpointByIdByCurrentDate, getAllCheckpoints, getCheckpointAgency, getUserCheckpoints, markCheckPoint } from "./checkpoints.repository.js"
+import { createCheckPoints, findCheckpointByDay, findCheckpointByIdByCurrentDate, getAllCheckpoints, getCheckpointAgency, getCheckpointAgencyWithFilter, getCheckpointByIDByDate, getUserCheckpoints, markCheckPoint } from "./checkpoints.repository.js"
 import { findAllUsers } from "../signup/signup.repository.js"
 import { dateTime } from "../functions.js"
 
@@ -12,7 +12,7 @@ route.post("/checkpoints/createall", async (req: Request, res: Response) => {
     try {
         const checkpointsExist = await findCheckpointByDay()
 
-        if (checkpointsExist) return res.sendStatus(400)
+        if (checkpointsExist.length !== 0) return res.sendStatus(400)
 
         const allUsers = await findAllUsers()
 
@@ -90,38 +90,90 @@ route.get("/checkpointss/:agency", async (req: Request, res: Response) => {
     try {
         const sucess = await getCheckpointAgency(agency)
         res.send(sucess)
-    }catch(error){
+    } catch (error) {
         console.log(error)
         res.send(error)
     }
 
-   
+
 })
+
+
+//PEGAR CHECKPOINTS COM FILTRO DE DATA *****
+route.post("/checkpointsfilter=:agency", async (req: Request, res: Response) => {
+    const { agency } = req.params
+    const { filter } = req.body as TFilterCheckpoints
+
+    try {
+        const sucess = await getCheckpointAgencyWithFilter(agency, filter)
+        res.send(sucess)
+    } catch (error) {
+        console.log(error)
+        res.send(error)
+    }
+
+
+})
+
+
 
 //PEGAR O CHECKPOINT DO VIGILANTE DO DIA ATUAL *****
 route.get("/checkpoints/currentday/:userId", async (req: Request, res: Response) => {
     const userId = req.params.userId
 
-    try{
+    try {
         const sucess = await findCheckpointByIdByCurrentDate(Number(userId))
         res.send(sucess)
-    }catch(error){
+    } catch (error) {
         console.log(error)
         res.send(error)
     }
-  
+
 })
 
 //PEGAR TODOS OS CHECKPOINTS DO DIA ATUAL *****
 route.get("/checkpoints=today", async (req: Request, res: Response) => {
-    try{
+    try {
         const response = await findCheckpointByDay()
         res.send(response)
-    }catch(error){
+    } catch (error) {
         console.log(error)
         res.send(error)
     }
- 
+
+})
+
+route.get("/filtercheckpoints", async (req: Request, res: Response) => {
+    const { filter } = req.body as TFilterCheckpoints
+
+    try {
+        const sucess = await getCheckpointByIDByDate(filter)
+        res.send(sucess)
+
+    } catch (error) {
+        console.log(error)
+        res.send(error)
+    }
+
 })
 
 export default route
+
+
+type TFilterCheckpoints = {
+    filter: {
+        day: {
+            first: number,
+            end: number
+        },
+        month: {
+            first: number,
+            end: number
+        },
+        year: {
+            first: number,
+            end: number
+        }
+    }
+
+}

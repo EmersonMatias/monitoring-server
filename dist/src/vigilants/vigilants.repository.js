@@ -84,6 +84,60 @@ export function vigilantComplete(id) {
         });
     });
 }
+export function vigilantCompleteWithFilter(id, filter) {
+    return __awaiter(this, void 0, void 0, function () {
+        var day, month, year;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    day = filter.day, month = filter.month, year = filter.year;
+                    return [4 /*yield*/, database.user.findUnique({
+                            where: {
+                                id: id
+                            }, select: {
+                                checkpoint: {
+                                    where: {
+                                        day: {
+                                            gte: Number(day.first),
+                                            lte: Number(day.end)
+                                        },
+                                        month: {
+                                            gte: Number(month.first),
+                                            lte: Number(month.end)
+                                        },
+                                        year: {
+                                            gte: Number(year.first),
+                                            lte: Number(year.end)
+                                        }
+                                    }
+                                },
+                                messages: {
+                                    where: {
+                                        day: {
+                                            gte: Number(day.first),
+                                            lte: Number(day.end)
+                                        },
+                                        month: {
+                                            gte: Number(month.first),
+                                            lte: Number(month.end)
+                                        },
+                                        year: {
+                                            gte: Number(year.first),
+                                            lte: Number(year.end)
+                                        }
+                                    }
+                                },
+                                name: true,
+                                agency: true,
+                                entryTime: true,
+                                departureTime: true
+                            }
+                        })];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
 export function getAgencies(agency) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {

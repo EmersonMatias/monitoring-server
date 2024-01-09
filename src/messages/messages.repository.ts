@@ -77,3 +77,53 @@ export async function getMessagesAgency(agency: string) {
         }
     })
 }
+
+//PEGAR MENSAGENS POR AGÊNCIA E POR FILTRO DE DATA******
+export async function getMessagesAgencyWithFilter(agency: string,filter: TFilterCheckpoints) {
+    const { day, month, year } = filter
+
+
+    return await database.messages.findMany({
+        where: {
+            user: {
+                agency
+            },
+            day: {
+                gte: Number(day.first),
+                lte: Number(day.end)
+            },
+            month: {
+                gte: Number(month.first),
+                lte: Number(month.end)
+            },
+            year: {
+                gte: Number(year.first),
+                lte: Number(year.end)
+            }
+        },
+        include: {
+            user: {
+                select: {
+                    name: true,
+                    entryTime: true,
+                    departureTime: true
+                }
+            }
+        }
+    })
+}
+
+type TFilterCheckpoints = {
+    day: {
+        first: number,
+        end: number
+    },
+    month: {
+        first: number,
+        end: number
+    },
+    year: {
+        first: number,
+        end: number
+    }
+}

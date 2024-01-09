@@ -1,6 +1,6 @@
 import { Request, Router, Response } from "express"
 import { findAllUsers } from "../signup/signup.repository.js"
-import { deleteMessages, deleteVigilant, getAgencies, vigilantComplete } from "./vigilants.repository.js"
+import { deleteMessages, deleteVigilant, getAgencies, vigilantComplete, vigilantCompleteWithFilter } from "./vigilants.repository.js"
 import { deleteCheckpoints } from "../checkpoints/checkpoints.repository.js"
 import { deleteStatus } from "../status/status.repository.js"
 
@@ -40,6 +40,41 @@ route.get("/vigilants/:id", async (req: Request, res: Response) => {
     res.send(sucess)
 
 })
+
+route.post("/vigilantsfilter=:id", async (req: Request, res: Response) => {
+    const { id } = req.params
+    const {filter} = req.body as TFilterCheckpoints
+    const userId = Number(id)
+    console.log(id)
+    console.log(filter)
+
+ 
+    if (isNaN(userId)) return (
+        res.status(400).send("String is invalid!")
+    )
+ 
+    const sucess = await vigilantCompleteWithFilter(userId, filter)
+    res.send(sucess)
+
+})
+
+type TFilterCheckpoints = {
+    filter: {
+        day: {
+            first: number,
+            end: number
+        },
+        month: {
+            first: number,
+            end: number
+        },
+        year: {
+            first: number,
+            end: number
+        }
+    }
+
+}
 
 route.get("/agency/:agency", async (req: Request, res: Response) => {
     const { agency } = req.params

@@ -35,7 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { Router } from "express";
-import { createMessage, findAllMensagens, getMessagesAgency, viewedMessage } from "./messages.repository.js";
+import { createMessage, findAllMensagens, getMessagesAgency, getMessagesAgencyWithFilter, viewedMessage } from "./messages.repository.js";
 var route = Router();
 route.post("/criarmensagem", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, userId, message, sucess, error_1;
@@ -109,15 +109,47 @@ route.get("/mensagens", function (req, res) { return __awaiter(void 0, void 0, v
     });
 }); });
 route.get("/messages/:agency", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var agency, sucess;
+    var agency, sucess, error_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 agency = req.params.agency;
-                return [4 /*yield*/, getMessagesAgency(agency)];
+                _a.label = 1;
             case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, getMessagesAgency(agency)];
+            case 2:
                 sucess = _a.sent();
                 return [2 /*return*/, res.send(sucess)];
+            case 3:
+                error_4 = _a.sent();
+                console.log(error_4);
+                res.send(error_4);
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); });
+route.post("/messages/:agency", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var agency, filter, sucess, error_5;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                agency = req.params.agency;
+                filter = req.body.filter;
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, getMessagesAgencyWithFilter(agency, filter)];
+            case 2:
+                sucess = _a.sent();
+                return [2 /*return*/, res.send(sucess)];
+            case 3:
+                error_5 = _a.sent();
+                console.log(error_5);
+                res.send(error_5);
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); });

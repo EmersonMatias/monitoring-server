@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { createMessage, findAllMensagens, getMessagesAgency, viewedMessage } from "./messages.repository.js";
+import { createMessage, findAllMensagens, getMessagesAgency, getMessagesAgencyWithFilter, viewedMessage } from "./messages.repository.js";
 
 const route = Router()
 
@@ -47,9 +47,49 @@ route.get("/mensagens", async (req: Request, res: Response) => {
 route.get("/messages/:agency", async  (req: Request, res: Response) => {
     const {agency} = req.params
 
-    const sucess = await getMessagesAgency(agency)
-    return res.send(sucess)
+    try{
+        const sucess = await getMessagesAgency(agency)
+        return res.send(sucess)
+    }catch(error){
+        console.log(error)
+        res.send(error)
+    }
+
+  
 })
+
+route.post("/messages/:agency", async  (req: Request, res: Response) => {
+    const {agency} = req.params
+    const {filter} = req.body as TFilterCheckpoints
+
+    try{
+        const sucess = await getMessagesAgencyWithFilter(agency, filter)
+        return res.send(sucess)
+    }catch(error){
+        console.log(error)
+        res.send(error)
+    }
+
+  
+})
+
+type TFilterCheckpoints = {
+    filter: {
+        day: {
+            first: number,
+            end: number
+        },
+        month: {
+            first: number,
+            end: number
+        },
+        year: {
+            first: number,
+            end: number
+        }
+    }
+
+}
 
 
 export default route

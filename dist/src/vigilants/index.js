@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { Router } from "express";
 import { findAllUsers } from "../signup/signup.repository.js";
-import { deleteMessages, deleteVigilant, getAgencies, vigilantComplete } from "./vigilants.repository.js";
+import { deleteMessages, deleteVigilant, getAgencies, vigilantComplete, vigilantCompleteWithFilter } from "./vigilants.repository.js";
 import { deleteCheckpoints } from "../checkpoints/checkpoints.repository.js";
 import { deleteStatus } from "../status/status.repository.js";
 var route = Router();
@@ -88,6 +88,26 @@ route.get("/vigilants/:id", function (req, res) { return __awaiter(void 0, void 
                 if (isNaN(userId))
                     return [2 /*return*/, (res.status(400).send("String is invalid!"))];
                 return [4 /*yield*/, vigilantComplete(userId)];
+            case 1:
+                sucess = _a.sent();
+                res.send(sucess);
+                return [2 /*return*/];
+        }
+    });
+}); });
+route.post("/vigilantsfilter=:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, filter, userId, sucess;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                id = req.params.id;
+                filter = req.body.filter;
+                userId = Number(id);
+                console.log(id);
+                console.log(filter);
+                if (isNaN(userId))
+                    return [2 /*return*/, (res.status(400).send("String is invalid!"))];
+                return [4 /*yield*/, vigilantCompleteWithFilter(userId, filter)];
             case 1:
                 sucess = _a.sent();
                 res.send(sucess);
