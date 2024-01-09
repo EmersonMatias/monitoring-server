@@ -34,6 +34,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+import { hashSync } from "bcrypt";
 import { database } from "../../prisma/index.js";
 export function deleteMessages(id) {
     return __awaiter(this, void 0, void 0, function () {
@@ -155,6 +156,65 @@ export function getAgencies(agency) {
                             messages: true
                         }
                     })];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+export function vigilantWithStatus(id) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, database.user.findUnique({
+                        where: {
+                            id: id
+                        },
+                        select: {
+                            name: true,
+                            cpf: true,
+                            rg: true,
+                            dateofbirth: true,
+                            entryTime: true,
+                            departureTime: true,
+                            login: true,
+                            agency: true,
+                            password: false,
+                            status: {
+                                select: {
+                                    frequency: true
+                                }
+                            }
+                        }
+                    })];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+export function updateVigilant(updateUserData) {
+    return __awaiter(this, void 0, void 0, function () {
+        var id, agency, cpf, dateofbirth, departureTime, entryTime, login, name, rg, password, encryptedPassword;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    id = updateUserData.id, agency = updateUserData.agency, cpf = updateUserData.cpf, dateofbirth = updateUserData.dateofbirth, departureTime = updateUserData.departureTime, entryTime = updateUserData.entryTime, login = updateUserData.login, name = updateUserData.name, rg = updateUserData.rg, password = updateUserData.password;
+                    encryptedPassword = hashSync(password, 10);
+                    return [4 /*yield*/, database.user.update({
+                            where: {
+                                id: Number(id)
+                            },
+                            data: {
+                                name: name,
+                                agency: agency,
+                                cpf: cpf,
+                                dateofbirth: dateofbirth,
+                                entryTime: entryTime,
+                                departureTime: departureTime,
+                                login: login,
+                                rg: rg,
+                                password: encryptedPassword
+                            }
+                        })];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         });

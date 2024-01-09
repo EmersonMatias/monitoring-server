@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Status` ADD COLUMN `frequency` INTEGER NOT NULL DEFAULT 60;

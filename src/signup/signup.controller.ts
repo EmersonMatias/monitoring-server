@@ -32,7 +32,7 @@ export async function registerVigilant(req: Request, res: Response) {
         }
 
         //CRIA STATUS DO VIGILANTE
-        await createStatus(statusData)
+        await createStatus(statusData, signupData.frequency)
 
         return res.status(201).send({ userId: sucess.id })
     } catch (error) {

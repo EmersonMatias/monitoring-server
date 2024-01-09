@@ -1,3 +1,4 @@
+import { hashSync } from "bcrypt";
 import { database } from "../../prisma/index.js";
 
 export async function deleteMessages(id: number) {
@@ -108,4 +109,66 @@ export async function getAgencies(agency: string) {
             messages: true
         }
     })
+}
+
+export async function vigilantWithStatus(id: number) {
+    return await database.user.findUnique({
+        where: {
+            id
+        },
+        select: {
+            name: true,
+            cpf: true,
+            rg: true,
+            dateofbirth: true,
+            entryTime: true,
+            departureTime: true,
+            login: true,
+            agency: true,
+            password: false,
+            status: {
+                select: {
+                    frequency: true
+                }
+            }
+        }
+
+    })
+}
+
+export async function updateVigilant(updateUserData: UpdateUser) {
+    const { id, agency, cpf, dateofbirth, departureTime, entryTime, login, name, rg, password} = updateUserData
+
+    const encryptedPassword = hashSync(password, 10)
+
+
+    return await database.user.update({
+        where: {
+            id: Number(id)
+        },
+        data: {
+            name,
+            agency,
+            cpf,
+            dateofbirth,
+            entryTime,
+            departureTime,
+            login,
+            rg,
+            password: encryptedPassword
+        }
+    })
+}
+
+type UpdateUser = {
+    id: string,
+    name: string,
+    agency: string,
+    cpf: string,
+    dateofbirth: string,
+    entryTime: string,
+    departureTime: string,
+    login: string,
+    rg: string,
+    password: string
 }

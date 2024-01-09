@@ -69,7 +69,7 @@ export function registerVigilant(req, res) {
                         minute: Number(minute),
                     };
                     //CRIA STATUS DO VIGILANTE
-                    return [4 /*yield*/, createStatus(statusData)];
+                    return [4 /*yield*/, createStatus(statusData, signupData.frequency)];
                 case 4:
                     //CRIA STATUS DO VIGILANTE
                     _b.sent();

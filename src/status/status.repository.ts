@@ -10,7 +10,7 @@ type TStatusData = {
 }
 
 //CRIA STATUS DO VIGILANTE *****
-export async function createStatus(statusData: TStatusData) {
+export async function createStatus(statusData: TStatusData, frequency: number) {
     const status = "OK"
     const { userId, hour, minute } = statusData
 
@@ -19,7 +19,8 @@ export async function createStatus(statusData: TStatusData) {
             status,
             userId,
             hour,
-            minute
+            minute,
+            frequency
         }
     })
 }
@@ -61,6 +62,17 @@ export async function updateById(id: number, status: string) {
             hour: Number(hour),
             minute: Number(minute)
         }
+    })
+}
+
+export async function updateByUserId(userId: string, frequency: number){
+    return await database.status.updateMany({
+        where:{
+            userId: Number(userId)
+        }, 
+         data: {
+            frequency
+         }
     })
 }
 

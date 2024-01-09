@@ -37,7 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 import { database } from "../../prisma/index.js";
 import { dateTime } from "../functions.js";
 //CRIA STATUS DO VIGILANTE *****
-export function createStatus(statusData) {
+export function createStatus(statusData, frequency) {
     return __awaiter(this, void 0, void 0, function () {
         var status, userId, hour, minute;
         return __generator(this, function (_a) {
@@ -50,7 +50,8 @@ export function createStatus(statusData) {
                                 status: status,
                                 userId: userId,
                                 hour: hour,
-                                minute: minute
+                                minute: minute,
+                                frequency: frequency
                             }
                         })];
                 case 1: return [2 /*return*/, _a.sent()];
@@ -113,6 +114,23 @@ export function updateById(id, status) {
                             }
                         })];
                 case 1: return [2 /*return*/, _b.sent()];
+            }
+        });
+    });
+}
+export function updateByUserId(userId, frequency) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, database.status.updateMany({
+                        where: {
+                            userId: Number(userId)
+                        },
+                        data: {
+                            frequency: frequency
+                        }
+                    })];
+                case 1: return [2 /*return*/, _a.sent()];
             }
         });
     });

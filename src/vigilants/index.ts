@@ -1,8 +1,8 @@
 import { Request, Router, Response } from "express"
 import { findAllUsers } from "../signup/signup.repository.js"
-import { deleteMessages, deleteVigilant, getAgencies, vigilantComplete, vigilantCompleteWithFilter } from "./vigilants.repository.js"
+import { deleteMessages, deleteVigilant, getAgencies, updateVigilant, vigilantComplete, vigilantCompleteWithFilter, vigilantWithStatus } from "./vigilants.repository.js"
 import { deleteCheckpoints } from "../checkpoints/checkpoints.repository.js"
-import { deleteStatus } from "../status/status.repository.js"
+import { deleteStatus, updateByUserId } from "../status/status.repository.js"
 
 const route = Router()
 
@@ -41,22 +41,65 @@ route.get("/vigilants/:id", async (req: Request, res: Response) => {
 
 })
 
+route.get("/vigilantwithstatus=:id", async (req: Request, res: Response) => {
+    const { id } = req.params
+
+    try {
+        const sucess = await vigilantWithStatus(Number(id))
+
+        res.send(sucess)
+    } catch (error) {
+        console.log(error)
+        res.send(error)
+    }
+
+})
+
 route.post("/vigilantsfilter=:id", async (req: Request, res: Response) => {
     const { id } = req.params
-    const {filter} = req.body as TFilterCheckpoints
+    const { filter } = req.body as TFilterCheckpoints
     const userId = Number(id)
     console.log(id)
     console.log(filter)
 
- 
+
     if (isNaN(userId)) return (
         res.status(400).send("String is invalid!")
     )
- 
+
     const sucess = await vigilantCompleteWithFilter(userId, filter)
     res.send(sucess)
 
 })
+
+
+route.post("/updatevigilant/:id", async (req: Request, res: Response) => {
+    const { id } = req.params
+    const {agency, cpf, dateofbirth, departureTime, entryTime, login, name, rg, frequency, password} = req.body as TUpdateUser
+
+
+    try {
+        const sucess = await updateVigilant({id, agency, cpf, dateofbirth, departureTime, entryTime, login, name, rg, password})
+        await updateByUserId(id, frequency)
+        res.send(sucess)
+    } catch (error) {
+        console.log(error)
+    }
+
+})
+
+type TUpdateUser = {
+    name: string;
+    dateofbirth?: string ;
+    rg: string ;
+    cpf: string ;
+    agency: string ;
+    entryTime: string ;
+    departureTime: string;
+    login: string;
+    password?: string ;
+    frequency: number ;
+}
 
 type TFilterCheckpoints = {
     filter: {
