@@ -36,33 +36,43 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { signupServices } from "./signup.services.js";
 import { createCheckPoint } from "../checkpoints/checkpoints.repository.js";
-import { todaysDate } from "../functions.js";
 import { createStatus } from "../status/status.repository.js";
+import { dateTime } from "../functions.js";
 export function registerVigilant(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var signupData, sucess, _a, day, monthc, year, date, checkpointData, response, statusCreate, error_1;
+        var signupData, _a, day, month, year, hour, minute, sucess, checkpointData, statusData, error_1;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     signupData = req.body;
+                    _a = dateTime(), day = _a.day, month = _a.month, year = _a.year, hour = _a.hour, minute = _a.minute;
                     _b.label = 1;
                 case 1:
                     _b.trys.push([1, 5, , 6]);
                     return [4 /*yield*/, signupServices.registerVigilant(signupData)];
                 case 2:
                     sucess = _b.sent();
-                    _a = todaysDate(), day = _a.day, monthc = _a.monthc, year = _a.year;
-                    date = new Date("".concat(year, "-").concat(monthc, "-").concat(day));
                     checkpointData = {
                         userId: sucess.id,
-                        date: date
+                        day: Number(day),
+                        month: Number(month),
+                        year: Number(year)
                     };
+                    //CRIA CHECKPOINT DO VIGILANTE
                     return [4 /*yield*/, createCheckPoint(checkpointData)];
                 case 3:
-                    response = _b.sent();
-                    return [4 /*yield*/, createStatus(sucess.id)];
+                    //CRIA CHECKPOINT DO VIGILANTE
+                    _b.sent();
+                    statusData = {
+                        userId: sucess.id,
+                        hour: Number(hour),
+                        minute: Number(hour),
+                    };
+                    //CRIA STATUS DO VIGILANTE
+                    return [4 /*yield*/, createStatus(statusData)];
                 case 4:
-                    statusCreate = _b.sent();
+                    //CRIA STATUS DO VIGILANTE
+                    _b.sent();
                     return [2 /*return*/, res.status(201).send({ userId: sucess.id })];
                 case 5:
                     error_1 = _b.sent();

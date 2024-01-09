@@ -49,7 +49,7 @@ route.post("/criarmensagem", function (req, res) { return __awaiter(void 0, void
                 return [4 /*yield*/, createMessage({ userId: userId, message: message })];
             case 2:
                 sucess = _b.sent();
-                res.sendStatus(201);
+                res.status(201).send("Mensagem criada");
                 return [3 /*break*/, 4];
             case 3:
                 error_1 = _b.sent();

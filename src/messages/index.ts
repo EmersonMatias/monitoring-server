@@ -8,7 +8,7 @@ route.post("/criarmensagem", async (req: Request, res: Response) => {
 
     try {
         const sucess = await createMessage({ userId, message })
-        res.sendStatus(201)
+        res.status(201).send("Mensagem criada")
     } catch (error) {
         console.log(error)
         res.send(error)
@@ -49,7 +49,6 @@ route.get("/messages/:agency", async  (req: Request, res: Response) => {
 
     const sucess = await getMessagesAgency(agency)
     return res.send(sucess)
-
 })
 
 

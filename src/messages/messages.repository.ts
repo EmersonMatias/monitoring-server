@@ -1,25 +1,29 @@
 import { database } from "../../prisma/index.js";
+import { dateTime } from "../functions.js";
 
-
-type TMessage = {
+type TMessageData = {
     message: string,
     userId: number
 }
 
-export async function createMessage({ message, userId }: TMessage) {
-    const currentDate = new Date
-    const hours = currentDate.getHours().toString().padStart(2,"0")
-    const minutes = currentDate.getMinutes().toString().padStart(2,"0")
+//CRIAR UMA MENSAGEM NOVA *****
+export async function createMessage({ message, userId }: TMessageData) {
+    const { day, month, year, hour, minute } = dateTime()
+
 
     return await database.messages.create({
         data: {
-            hour: `${hours}:${minutes}`,
             userId,
-            message
+            message,
+            day: Number(day),
+            month: Number(month),
+            year: Number(year),
+            hour: `${hour}:${minute}`
         }
     })
 }
- 
+
+//ATUALIZAR MENSAGEM COMO VISTA *****
 export async function viewedMessage({ response, messageId }: { response: string, messageId: number }) {
 
     return await database.messages.update({
@@ -32,12 +36,14 @@ export async function viewedMessage({ response, messageId }: { response: string,
     })
 }
 
-
-export async function findAllMensagens(){
+//PEGAR TODAS AS MENSAGENS *****
+export async function findAllMensagens() {
     return await database.messages.findMany({
         select: {
             id: true,
-            date: true,
+            day: true,
+            month: true,
+            year: true,
             hour: true,
             message: true,
             response: true,
@@ -52,12 +58,13 @@ export async function findAllMensagens(){
     })
 }
 
-export async function getMessagesAgency(agency: string){
+//PEGAR MENSAGENS POR AGÊNCIA ******
+export async function getMessagesAgency(agency: string) {
     return await database.messages.findMany({
-        where:{
-          user: {
-            agency
-          }
+        where: {
+            user: {
+                agency
+            }
         },
         include: {
             user: {

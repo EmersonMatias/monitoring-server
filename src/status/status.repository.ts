@@ -1,19 +1,33 @@
 import { database } from "../../prisma/index.js";
+import { dateTime } from "../functions.js";
 
-export async  function createStatus(userId: number){
+
+type TStatusData = {
+    userId?: number
+    hour: number
+    minute: number
+    status?: string
+}
+
+//CRIA STATUS DO VIGILANTE *****
+export async function createStatus(statusData: TStatusData) {
     const status = "OK"
+    const { userId, hour, minute } = statusData
 
     return await database.status.create({
-        data:{
-         status,
-         userId
+        data: {
+            status,
+            userId,
+            hour,
+            minute
         }
     })
 }
 
-export async function findAllStatus(){
+//PEGAR TODOS OS STATUS *****
+export async function findAllStatus() {
     return await database.status.findMany({
-        include:{
+        include: {
             user: {
                 select: {
                     name: true,
@@ -26,30 +40,34 @@ export async function findAllStatus(){
     })
 }
 
-
-export async function findStatusById(userId: number){
+//PEGAR TODOS OS STATUS DO USUARIO ******
+export async function findStatusById(userId: number) {
     return await database.status.findMany({
         where: {
             userId
         }
-    }) 
-} 
+    })
+}
 
+//ATUALIZAR STATUS PELO ID *****
+export async function updateById(id: number, status: string) {
+    const {hour, minute} = dateTime()
 
-export async function updateById(id: number, status: string){
     return await database.status.update({
         where: {
             id
-        },data: {
+        }, data: {
             status,
-            time: new Date()
+            hour: Number(hour),
+            minute: Number(minute)
         }
     })
 }
 
-export async function deleteStatus(userId: number){
+//DELETAR UM STATUS *****
+export async function deleteStatus(userId: number) {
     return await database.status.deleteMany({
-        where:{
+        where: {
             userId
         }
     })

@@ -35,8 +35,29 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { database } from "../../prisma/index.js";
-import { todaysDate } from "../functions.js";
-//Criar todos os checkpoints dos usuários
+import { dateTime } from "../functions.js";
+//CRIAR CHECKPOINT DE APENAS UM USUÁRIO *****
+export function createCheckPoint(checkpointData) {
+    return __awaiter(this, void 0, void 0, function () {
+        var userId, day, month, year;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    userId = checkpointData.userId, day = checkpointData.day, month = checkpointData.month, year = checkpointData.year;
+                    return [4 /*yield*/, database.checkpoint.create({
+                            data: {
+                                userId: userId,
+                                day: day,
+                                month: month,
+                                year: year
+                            }
+                        })];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+//CRIAR TODOS OS CHECKPOINTS DOS DOS VIGILANTES *****
 export function createCheckPoints(checkpointData) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -49,20 +70,7 @@ export function createCheckPoints(checkpointData) {
         });
     });
 }
-//Criar apenas o checkpoint de um usuário
-export function createCheckPoint(checkpointData) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, database.checkpoint.create({
-                        data: checkpointData
-                    })];
-                case 1: return [2 /*return*/, _a.sent()];
-            }
-        });
-    });
-}
-//Marcar o checkpoint
+//MARCAR CHECKPOINT *****
 export function markCheckPoint(markCheckPointData) {
     return __awaiter(this, void 0, void 0, function () {
         var arrivalTime, arrived, checkpointId;
@@ -84,7 +92,7 @@ export function markCheckPoint(markCheckPointData) {
         });
     });
 }
-//Pegar o checkpoint do usuário
+//PEGAR TODOS OS CHECKPOINTS DO USUÁRIO
 export function getUserCheckpoints(userId) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -99,19 +107,20 @@ export function getUserCheckpoints(userId) {
         });
     });
 }
-//Pegar o checkpoint do usuário pelo dia atual
+//PEGAR TODOS OS CHECKPOINTS DO USUÁRIO DO DIA
 export function findCheckpointByIdByCurrentDate(userId) {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, day, year, monthc, currantDate;
+        var _a, day, month, year;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    _a = todaysDate(), day = _a.day, year = _a.year, monthc = _a.monthc;
-                    currantDate = new Date("".concat(year, "-").concat(monthc, "-").concat(day));
+                    _a = dateTime(), day = _a.day, month = _a.month, year = _a.year;
                     return [4 /*yield*/, database.checkpoint.findFirst({
                             where: {
                                 userId: userId,
-                                date: currantDate
+                                day: Number(day),
+                                month: Number(month),
+                                year: Number(year)
                             }
                         })];
                 case 1: return [2 /*return*/, _b.sent()];
@@ -119,41 +128,26 @@ export function findCheckpointByIdByCurrentDate(userId) {
         });
     });
 }
-export function findCheckpointdByCurrentDate() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a, day, year, monthc, currantDate;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    _a = todaysDate(), day = _a.day, year = _a.year, monthc = _a.monthc;
-                    currantDate = new Date("".concat(year, "-").concat(monthc, "-").concat(day));
-                    return [4 /*yield*/, database.checkpoint.findFirst({
-                            where: {
-                                date: currantDate
-                            }
-                        })];
-                case 1: return [2 /*return*/, _b.sent()];
-            }
-        });
-    });
-}
-// PEGAR TODOS OS CHECKPOINTS DO DIA
+// PEGAR TODOS OS CHECKPOINTS DO DIA *****
 export function findCheckpointByDay() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, day, year, monthc, currantDate;
+        var _a, day, month, year;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    _a = todaysDate(), day = _a.day, year = _a.year, monthc = _a.monthc;
-                    currantDate = new Date("".concat(year, "-").concat(monthc, "-").concat(day));
+                    _a = dateTime(), day = _a.day, month = _a.month, year = _a.year;
                     return [4 /*yield*/, database.checkpoint.findMany({
                             where: {
-                                date: currantDate
+                                day: Number(day),
+                                month: Number(month),
+                                year: Number(year)
                             },
                             select: {
                                 arrivalTime: true,
                                 arrived: true,
-                                date: true,
+                                day: true,
+                                month: true,
+                                year: true,
                                 user: {
                                     select: {
                                         name: true,
@@ -168,7 +162,7 @@ export function findCheckpointByDay() {
         });
     });
 }
-//Pegar todos os checkpoints
+//PEGAR TODOS OS CHECKPOINTS *****
 export function getAllCheckpoints() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -177,7 +171,9 @@ export function getAllCheckpoints() {
                         select: {
                             arrived: true,
                             arrivalTime: true,
-                            date: true,
+                            day: true,
+                            month: true,
+                            year: true,
                             user: {
                                 select: {
                                     name: true,
@@ -192,7 +188,7 @@ export function getAllCheckpoints() {
         });
     });
 }
-//Excluir um checkpoint
+//EXCLUIR TODOS CHECKPOINTS DO VIGILANTE
 export function deleteCheckpoints(id) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -207,6 +203,7 @@ export function deleteCheckpoints(id) {
         });
     });
 }
+//PEGAR TODOS OS CHECKPOINTS DE UMA AGÊNCIA
 export function getCheckpointAgency(agency) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {

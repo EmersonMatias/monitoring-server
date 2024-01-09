@@ -35,7 +35,9 @@ model User {
 
 model Checkpoint {
   id          Int      @id @default(autoincrement())
-  date        DateTime @default(now()) @db.Date()
+  day         Int
+  month       Int
+  year        Int
   arrived     Boolean? @default(false)
   arrivalTime String?  @default("null") @db.VarChar(5)
   user        User     @relation("UserCheckPoint", fields: [userId], references: [id])
@@ -44,7 +46,9 @@ model Checkpoint {
 
 model Messages {
   id       Int      @id @default(autoincrement())
-  date     DateTime @default(now()) @db.Date()
+  day      Int
+  month    Int
+  year     Int
   hour     String   @db.VarChar(5)
   message  String?  @default("null")
   response String?  @default("null")
@@ -54,9 +58,10 @@ model Messages {
 }
 
 model Status {
-  id     Int      @id @default(autoincrement())
-  time   DateTime @default(now()) @db.Time()
+  id     Int    @id @default(autoincrement())
+  hour   Int
+  minute Int
   status String
-  user   User     @relation("UserStatus", fields: [userId], references: [id])
+  user   User   @relation("UserStatus", fields: [userId], references: [id])
   userId Int
 }

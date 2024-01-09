@@ -1,30 +1,32 @@
 import { Request, Response, Router } from "express"
-import { createCheckPoints, findCheckpointByDay, findCheckpointByIdByCurrentDate, findCheckpointdByCurrentDate, getAllCheckpoints, getCheckpointAgency, getUserCheckpoints, markCheckPoint } from "./checkpoints.repository.js"
+import { createCheckPoints, findCheckpointByDay, findCheckpointByIdByCurrentDate, getAllCheckpoints, getCheckpointAgency, getUserCheckpoints, markCheckPoint } from "./checkpoints.repository.js"
 import { findAllUsers } from "../signup/signup.repository.js"
-import { todaysDate } from "../functions.js"
+import { dateTime } from "../functions.js"
 
 const route = Router()
 
-//Criar todos os checkpoints dos vigilantes
-route.post("/createcheckpoints", async (req: Request, res: Response) => {
-    const { day, year, monthc } = todaysDate()
-    const currantDate = new Date(`${year}-${monthc}-${day}`)
-
-
-    const checkpointsExist = await findCheckpointdByCurrentDate()
-
-    if (checkpointsExist) return res.sendStatus(400)
-
-    const allUsers = await findAllUsers()
-    const checkpointData = allUsers.map((user) => {
-        return {
-            userId: user.id,
-            date: currantDate
-        }
-    })
+//CRIA TODOS OS CHECKPOINTS DOS USUÁRIOS *****
+route.post("/checkpoints/createall", async (req: Request, res: Response) => {
+    const { day, month, year } = dateTime()
 
     try {
+        const checkpointsExist = await findCheckpointByDay()
+
+        if (checkpointsExist) return res.sendStatus(400)
+
+        const allUsers = await findAllUsers()
+
+        const checkpointData = allUsers.map((user) => {
+            return {
+                userId: user.id,
+                day: Number(day),
+                month: Number(month),
+                year: Number(year)
+            }
+        })
+
         await createCheckPoints(checkpointData)
+
         res.status(200).send("Checkpoints Created")
     } catch (error) {
         console.log(error)
@@ -32,90 +34,94 @@ route.post("/createcheckpoints", async (req: Request, res: Response) => {
     }
 })
 
-/*
+//ATUALIZAR O CHECKPOINT *****
+route.put("/checkpoint", async (req: Request, res: Response) => {
+    const { checkpointId } = req.body
+    const { hour, minute } = dateTime()
 
-//Criar apenas checkpoint do vigilante que foi criado apos todos os checkpoints terem sido criados
-route.post("/createcheckpoint", async (req: Request, res: Response) => {
-    const { userId } = req.body
-    const { day, monthc, year } = todaysDate()
-    const date = `${day}/${monthc}/${year}`
-    console.log(day, monthc, year)
-
-    const checkpointData = {
-        userId,
-        date
+    const markCheckPointData = {
+        checkpointId,
+        arrived: true,
+        arrivalTime: `${hour}:${minute}`
     }
 
     try {
-        await createCheckPoint(checkpointData)
-        res.status(200).send("Checkpoint Created")
+        const sucess = await markCheckPoint(markCheckPointData)
+        res.status(200).send({ sucess, message: "Checkpoint atualizado." })
     } catch (error) {
         console.log(error)
         res.send(error)
     }
 })
 
-*/
-
-
-//Atualizar o checkpoint do dia
-route.put("/checkpoint", async (req: Request, res: Response) => {
-    const { checkpointId } = req.body
-    const currentDate = new Date
-    const hour = currentDate.getHours().toString().padStart(2, "0")
-    const minutes = currentDate.getMinutes().toString().padStart(2, "0")
-
-
-    const markCheckPointData = {
-        checkpointId,
-        arrived: true,
-        arrivalTime: `${hour}:${minutes}`
-    }
-
-    const sucess = await markCheckPoint(markCheckPointData)
-
-    res.sendStatus(200)
-})
-
-//Pegar os checkpoints do vigilante
+//PEGAR TODOS OS CHECKPOINTS DO USUÁRIO *****
 route.get("/checkpoints/:userId", async (req: Request, res: Response) => {
     const userId = req.params.userId
 
-    const sucess = await getUserCheckpoints(Number(userId))
-    console.log(sucess)
-    res.send(sucess)
+    try {
+        const sucess = await getUserCheckpoints(Number(userId))
+        console.log(sucess)
+        res.send(sucess)
+    } catch (error) {
+        console.log(error)
+        res.send(error)
+    }
+
 })
 
-//Pegar todos os checkpoints
+//PEGAR TODOS OS CHECKPOINTS *****
 route.get("/checkpoints", async (req: Request, res: Response) => {
 
-    const sucess = await getAllCheckpoints()
-    console.log(sucess)
+    try {
+        const sucess = await getAllCheckpoints()
+        console.log(sucess)
+        res.send(sucess)
+    } catch (error) {
+        console.log(error)
+        res.send(error)
+    }
 
-    res.send(sucess)
 })
 
-//Pegar os checkpoints por agência
+//PEGAR TODOS OS CHECKPOINTS POR AGÊNCIA *****
 route.get("/checkpointss/:agency", async (req: Request, res: Response) => {
     const { agency } = req.params
 
+    try {
+        const sucess = await getCheckpointAgency(agency)
+        res.send(sucess)
+    }catch(error){
+        console.log(error)
+        res.send(error)
+    }
 
-    const sucess = await getCheckpointAgency(agency)
-    res.send(sucess)
+   
 })
 
-//Pegar o checkpoint do usuario do dia atual
+//PEGAR O CHECKPOINT DO VIGILANTE DO DIA ATUAL *****
 route.get("/checkpoints/currentday/:userId", async (req: Request, res: Response) => {
     const userId = req.params.userId
 
-    const sucess = await findCheckpointByIdByCurrentDate(Number(userId))
-    res.send(sucess)
+    try{
+        const sucess = await findCheckpointByIdByCurrentDate(Number(userId))
+        res.send(sucess)
+    }catch(error){
+        console.log(error)
+        res.send(error)
+    }
+  
 })
 
-//PEGAR TODOS OS CHECKPOINTS DO DIA ATUAL
+//PEGAR TODOS OS CHECKPOINTS DO DIA ATUAL *****
 route.get("/checkpoints=today", async (req: Request, res: Response) => {
-    const response = await findCheckpointByDay()
-    res.send(response)
+    try{
+        const response = await findCheckpointByDay()
+        res.send(response)
+    }catch(error){
+        console.log(error)
+        res.send(error)
+    }
+ 
 })
 
 export default route

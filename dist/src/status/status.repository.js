@@ -35,17 +35,22 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { database } from "../../prisma/index.js";
-export function createStatus(userId) {
+import { dateTime } from "../functions.js";
+//CRIA STATUS DO VIGILANTE *****
+export function createStatus(statusData) {
     return __awaiter(this, void 0, void 0, function () {
-        var status;
+        var status, userId, hour, minute;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     status = "OK";
+                    userId = statusData.userId, hour = statusData.hour, minute = statusData.minute;
                     return [4 /*yield*/, database.status.create({
                             data: {
                                 status: status,
-                                userId: userId
+                                userId: userId,
+                                hour: hour,
+                                minute: minute
                             }
                         })];
                 case 1: return [2 /*return*/, _a.sent()];
@@ -53,6 +58,7 @@ export function createStatus(userId) {
         });
     });
 }
+//PEGAR TODOS OS STATUS *****
 export function findAllStatus() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -74,6 +80,7 @@ export function findAllStatus() {
         });
     });
 }
+//PEGAR TODOS OS STATUS DO USUARIO ******
 export function findStatusById(userId) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -88,23 +95,29 @@ export function findStatusById(userId) {
         });
     });
 }
+//ATUALIZAR STATUS PELO ID *****
 export function updateById(id, status) {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, database.status.update({
-                        where: {
-                            id: id
-                        }, data: {
-                            status: status,
-                            time: new Date()
-                        }
-                    })];
-                case 1: return [2 /*return*/, _a.sent()];
+        var _a, hour, minute;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    _a = dateTime(), hour = _a.hour, minute = _a.minute;
+                    return [4 /*yield*/, database.status.update({
+                            where: {
+                                id: id
+                            }, data: {
+                                status: status,
+                                hour: Number(hour),
+                                minute: Number(minute)
+                            }
+                        })];
+                case 1: return [2 /*return*/, _b.sent()];
             }
         });
     });
 }
+//DELETAR UM STATUS *****
 export function deleteStatus(userId) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {

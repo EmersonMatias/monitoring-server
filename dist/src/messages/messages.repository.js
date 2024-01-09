@@ -35,28 +35,32 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { database } from "../../prisma/index.js";
+import { dateTime } from "../functions.js";
+//CRIAR UMA MENSAGEM NOVA *****
 export function createMessage(_a) {
     var message = _a.message, userId = _a.userId;
     return __awaiter(this, void 0, void 0, function () {
-        var currentDate, hours, minutes;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var _b, day, month, year, hour, minute;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
-                    currentDate = new Date;
-                    hours = currentDate.getHours().toString().padStart(2, "0");
-                    minutes = currentDate.getMinutes().toString().padStart(2, "0");
+                    _b = dateTime(), day = _b.day, month = _b.month, year = _b.year, hour = _b.hour, minute = _b.minute;
                     return [4 /*yield*/, database.messages.create({
                             data: {
-                                hour: "".concat(hours, ":").concat(minutes),
                                 userId: userId,
-                                message: message
+                                message: message,
+                                day: Number(day),
+                                month: Number(month),
+                                year: Number(year),
+                                hour: "".concat(hour, ":").concat(minute)
                             }
                         })];
-                case 1: return [2 /*return*/, _b.sent()];
+                case 1: return [2 /*return*/, _c.sent()];
             }
         });
     });
 }
+//ATUALIZAR MENSAGEM COMO VISTA *****
 export function viewedMessage(_a) {
     var response = _a.response, messageId = _a.messageId;
     return __awaiter(this, void 0, void 0, function () {
@@ -75,6 +79,7 @@ export function viewedMessage(_a) {
         });
     });
 }
+//PEGAR TODAS AS MENSAGENS *****
 export function findAllMensagens() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -82,7 +87,9 @@ export function findAllMensagens() {
                 case 0: return [4 /*yield*/, database.messages.findMany({
                         select: {
                             id: true,
-                            date: true,
+                            day: true,
+                            month: true,
+                            year: true,
                             hour: true,
                             message: true,
                             response: true,
@@ -100,6 +107,7 @@ export function findAllMensagens() {
         });
     });
 }
+//PEGAR MENSAGENS POR AGÊNCIA ******
 export function getMessagesAgency(agency) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {

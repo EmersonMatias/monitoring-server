@@ -35,35 +35,36 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { Router } from "express";
-import { createCheckPoints, findCheckpointByDay, findCheckpointByIdByCurrentDate, findCheckpointdByCurrentDate, getAllCheckpoints, getCheckpointAgency, getUserCheckpoints, markCheckPoint } from "./checkpoints.repository.js";
+import { createCheckPoints, findCheckpointByDay, findCheckpointByIdByCurrentDate, getAllCheckpoints, getCheckpointAgency, getUserCheckpoints, markCheckPoint } from "./checkpoints.repository.js";
 import { findAllUsers } from "../signup/signup.repository.js";
-import { todaysDate } from "../functions.js";
+import { dateTime } from "../functions.js";
 var route = Router();
-//Criar todos os checkpoints dos vigilantes
-route.post("/createcheckpoints", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, day, year, monthc, currantDate, checkpointsExist, allUsers, checkpointData, error_1;
+//CRIA TODOS OS CHECKPOINTS DOS USUÁRIOS *****
+route.post("/checkpoints/createall", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, day, month, year, checkpointsExist, allUsers, checkpointData, error_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                _a = todaysDate(), day = _a.day, year = _a.year, monthc = _a.monthc;
-                currantDate = new Date("".concat(year, "-").concat(monthc, "-").concat(day));
-                return [4 /*yield*/, findCheckpointdByCurrentDate()];
+                _a = dateTime(), day = _a.day, month = _a.month, year = _a.year;
+                _b.label = 1;
             case 1:
+                _b.trys.push([1, 5, , 6]);
+                return [4 /*yield*/, findCheckpointByDay()];
+            case 2:
                 checkpointsExist = _b.sent();
                 if (checkpointsExist)
                     return [2 /*return*/, res.sendStatus(400)];
                 return [4 /*yield*/, findAllUsers()];
-            case 2:
+            case 3:
                 allUsers = _b.sent();
                 checkpointData = allUsers.map(function (user) {
                     return {
                         userId: user.id,
-                        date: currantDate
+                        day: Number(day),
+                        month: Number(month),
+                        year: Number(year)
                     };
                 });
-                _b.label = 3;
-            case 3:
-                _b.trys.push([3, 5, , 6]);
                 return [4 /*yield*/, createCheckPoints(checkpointData)];
             case 4:
                 _b.sent();
@@ -78,123 +79,149 @@ route.post("/createcheckpoints", function (req, res) { return __awaiter(void 0, 
         }
     });
 }); });
-/*
-
-//Criar apenas checkpoint do vigilante que foi criado apos todos os checkpoints terem sido criados
-route.post("/createcheckpoint", async (req: Request, res: Response) => {
-    const { userId } = req.body
-    const { day, monthc, year } = todaysDate()
-    const date = `${day}/${monthc}/${year}`
-    console.log(day, monthc, year)
-
-    const checkpointData = {
-        userId,
-        date
-    }
-
-    try {
-        await createCheckPoint(checkpointData)
-        res.status(200).send("Checkpoint Created")
-    } catch (error) {
-        console.log(error)
-        res.send(error)
-    }
-})
-
-*/
-//Atualizar o checkpoint do dia
+//ATUALIZAR O CHECKPOINT *****
 route.put("/checkpoint", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var checkpointId, currentDate, hour, minutes, markCheckPointData, sucess;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var checkpointId, _a, hour, minute, markCheckPointData, sucess, error_2;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
                 checkpointId = req.body.checkpointId;
-                currentDate = new Date;
-                hour = currentDate.getHours().toString().padStart(2, "0");
-                minutes = currentDate.getMinutes().toString().padStart(2, "0");
+                _a = dateTime(), hour = _a.hour, minute = _a.minute;
                 markCheckPointData = {
                     checkpointId: checkpointId,
                     arrived: true,
-                    arrivalTime: "".concat(hour, ":").concat(minutes)
+                    arrivalTime: "".concat(hour, ":").concat(minute)
                 };
-                return [4 /*yield*/, markCheckPoint(markCheckPointData)];
+                _b.label = 1;
             case 1:
-                sucess = _a.sent();
-                res.sendStatus(200);
-                return [2 /*return*/];
+                _b.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, markCheckPoint(markCheckPointData)];
+            case 2:
+                sucess = _b.sent();
+                res.status(200).send({ sucess: sucess, message: "Checkpoint atualizado." });
+                return [3 /*break*/, 4];
+            case 3:
+                error_2 = _b.sent();
+                console.log(error_2);
+                res.send(error_2);
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); });
-//Pegar os checkpoints do vigilante
+//PEGAR TODOS OS CHECKPOINTS DO USUÁRIO *****
 route.get("/checkpoints/:userId", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var userId, sucess;
+    var userId, sucess, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 userId = req.params.userId;
-                return [4 /*yield*/, getUserCheckpoints(Number(userId))];
+                _a.label = 1;
             case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, getUserCheckpoints(Number(userId))];
+            case 2:
                 sucess = _a.sent();
                 console.log(sucess);
                 res.send(sucess);
-                return [2 /*return*/];
+                return [3 /*break*/, 4];
+            case 3:
+                error_3 = _a.sent();
+                console.log(error_3);
+                res.send(error_3);
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); });
-//Pegar todos os checkpoints
+//PEGAR TODOS OS CHECKPOINTS *****
 route.get("/checkpoints", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var sucess;
+    var sucess, error_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, getAllCheckpoints()];
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, getAllCheckpoints()];
             case 1:
                 sucess = _a.sent();
                 console.log(sucess);
                 res.send(sucess);
-                return [2 /*return*/];
+                return [3 /*break*/, 3];
+            case 2:
+                error_4 = _a.sent();
+                console.log(error_4);
+                res.send(error_4);
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
 }); });
-//Pegar os checkpoints por agência
+//PEGAR TODOS OS CHECKPOINTS POR AGÊNCIA *****
 route.get("/checkpointss/:agency", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var agency, sucess;
+    var agency, sucess, error_5;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 agency = req.params.agency;
-                return [4 /*yield*/, getCheckpointAgency(agency)];
+                _a.label = 1;
             case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, getCheckpointAgency(agency)];
+            case 2:
                 sucess = _a.sent();
                 res.send(sucess);
-                return [2 /*return*/];
+                return [3 /*break*/, 4];
+            case 3:
+                error_5 = _a.sent();
+                console.log(error_5);
+                res.send(error_5);
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); });
-//Pegar o checkpoint do usuario do dia atual
+//PEGAR O CHECKPOINT DO VIGILANTE DO DIA ATUAL *****
 route.get("/checkpoints/currentday/:userId", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var userId, sucess;
+    var userId, sucess, error_6;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 userId = req.params.userId;
-                return [4 /*yield*/, findCheckpointByIdByCurrentDate(Number(userId))];
+                _a.label = 1;
             case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, findCheckpointByIdByCurrentDate(Number(userId))];
+            case 2:
                 sucess = _a.sent();
                 res.send(sucess);
-                return [2 /*return*/];
+                return [3 /*break*/, 4];
+            case 3:
+                error_6 = _a.sent();
+                console.log(error_6);
+                res.send(error_6);
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); });
-//PEGAR TODOS OS CHECKPOINTS DO DIA ATUAL
+//PEGAR TODOS OS CHECKPOINTS DO DIA ATUAL *****
 route.get("/checkpoints=today", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var response;
+    var response, error_7;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, findCheckpointByDay()];
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, findCheckpointByDay()];
             case 1:
                 response = _a.sent();
                 res.send(response);
-                return [2 /*return*/];
+                return [3 /*break*/, 3];
+            case 2:
+                error_7 = _a.sent();
+                console.log(error_7);
+                res.send(error_7);
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
 }); });
