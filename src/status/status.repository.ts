@@ -64,7 +64,7 @@ export async function updateById(id: number, status: string) {
         }
     })
 }
-
+ 
 export async function updateByUserId(userId: string, frequency: number){
     return await database.status.updateMany({
         where:{
