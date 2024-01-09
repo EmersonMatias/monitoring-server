@@ -28,7 +28,7 @@ export async function registerVigilant(req: Request, res: Response) {
         const statusData = {
             userId: sucess.id,
             hour: Number(hour),
-            minute: Number(hour),
+            minute: Number(minute),
         }
 
         //CRIA STATUS DO VIGILANTE
