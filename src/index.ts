@@ -6,6 +6,7 @@ import signinRoute from "./signin/index.js"
 import messagesRoute from "./messages/index.js"
 import checkpointsRoute from "./checkpoints/index.js"
 import statusRoute from "./status/index.js"
+import alertRoute from "./alert/index.js"
 
 const server = express()
  
@@ -21,6 +22,7 @@ server.use(signinRoute)
 server.use(messagesRoute)
 server.use(checkpointsRoute)
 server.use(statusRoute)
+server.use(alertRoute)
 
 const port = process.env.PORT || 4000
 
