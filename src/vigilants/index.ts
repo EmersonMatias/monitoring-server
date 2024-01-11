@@ -75,11 +75,11 @@ route.post("/vigilantsfilter=:id", async (req: Request, res: Response) => {
 
 route.post("/updatevigilant/:id", async (req: Request, res: Response) => {
     const { id } = req.params
-    const {agency, cpf, dateofbirth, departureTime, entryTime, login, name, rg, frequency, password} = req.body as TUpdateUser
+    const {agency, cpf, dateofbirth, departureTime, entryTime, login, name, rg, frequency, password,saturday,sunday} = req.body as TUpdateUser
 
 
     try {
-        const sucess = await updateVigilant({id, agency, cpf, dateofbirth, departureTime, entryTime, login, name, rg, password})
+        const sucess = await updateVigilant({id, agency, cpf, dateofbirth, departureTime, entryTime, login, name, rg, password,saturday, sunday})
         await updateByUserId(id, frequency)
         res.send(sucess)
     } catch (error) {
@@ -99,6 +99,8 @@ type TUpdateUser = {
     login: string;
     password?: string ;
     frequency: number ;
+    saturday: string;
+    sunday: string
 }
 
 type TFilterCheckpoints = {

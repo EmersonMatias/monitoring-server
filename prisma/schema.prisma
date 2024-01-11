@@ -27,6 +27,8 @@ model User {
   agency        String       @db.VarChar(150)
   entryTime     String       @db.VarChar(5)
   departureTime String       @db.VarChar(5)
+  saturday      Boolean      @default(false)
+  sunday        Boolean      @default(false)
   accountType   AccountType
   checkpoint    Checkpoint[] @relation("UserCheckPoint")
   messages      Messages[]   @relation("UserMessage")

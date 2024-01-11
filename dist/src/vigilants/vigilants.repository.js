@@ -179,6 +179,8 @@ export function vigilantWithStatus(id) {
                             login: true,
                             agency: true,
                             password: false,
+                            saturday: true,
+                            sunday: true,
                             status: {
                                 select: {
                                     frequency: true
@@ -193,12 +195,14 @@ export function vigilantWithStatus(id) {
 }
 export function updateVigilant(updateUserData) {
     return __awaiter(this, void 0, void 0, function () {
-        var id, agency, cpf, dateofbirth, departureTime, entryTime, login, name, rg, password, encryptedPassword;
+        var id, agency, cpf, dateofbirth, departureTime, entryTime, login, name, rg, password, saturday, sunday, encryptedPassword, saturdayT, sundayT;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    id = updateUserData.id, agency = updateUserData.agency, cpf = updateUserData.cpf, dateofbirth = updateUserData.dateofbirth, departureTime = updateUserData.departureTime, entryTime = updateUserData.entryTime, login = updateUserData.login, name = updateUserData.name, rg = updateUserData.rg, password = updateUserData.password;
+                    id = updateUserData.id, agency = updateUserData.agency, cpf = updateUserData.cpf, dateofbirth = updateUserData.dateofbirth, departureTime = updateUserData.departureTime, entryTime = updateUserData.entryTime, login = updateUserData.login, name = updateUserData.name, rg = updateUserData.rg, password = updateUserData.password, saturday = updateUserData.saturday, sunday = updateUserData.sunday;
                     encryptedPassword = hashSync(password, 10);
+                    saturdayT = saturday === "true" ? true : false;
+                    sundayT = sunday === "true" ? true : false;
                     return [4 /*yield*/, database.user.update({
                             where: {
                                 id: Number(id)
@@ -212,7 +216,9 @@ export function updateVigilant(updateUserData) {
                                 departureTime: departureTime,
                                 login: login,
                                 rg: rg,
-                                password: encryptedPassword
+                                password: encryptedPassword,
+                                saturday: saturdayT,
+                                sunday: sundayT
                             }
                         })];
                 case 1: return [2 /*return*/, _a.sent()];

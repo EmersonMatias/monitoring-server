@@ -37,11 +37,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 import { database } from "../../prisma/index.js";
 export function createNewUser(signupData) {
     return __awaiter(this, void 0, void 0, function () {
-        var name, password, login, rg, cpf, dateofbirth, departureTime, entryTime, agency, accountType;
+        var name, password, login, rg, cpf, dateofbirth, departureTime, entryTime, agency, accountType, saturday, sunday, saturdayT, sundayT;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    name = signupData.name, password = signupData.password, login = signupData.login, rg = signupData.rg, cpf = signupData.cpf, dateofbirth = signupData.dateofbirth, departureTime = signupData.departureTime, entryTime = signupData.entryTime, agency = signupData.agency, accountType = signupData.accountType;
+                    name = signupData.name, password = signupData.password, login = signupData.login, rg = signupData.rg, cpf = signupData.cpf, dateofbirth = signupData.dateofbirth, departureTime = signupData.departureTime, entryTime = signupData.entryTime, agency = signupData.agency, accountType = signupData.accountType, saturday = signupData.saturday, sunday = signupData.sunday;
+                    saturdayT = saturday === "true" ? true : false;
+                    sundayT = sunday === "true" ? true : false;
                     return [4 /*yield*/, database.user.create({
                             data: {
                                 name: name,
@@ -53,7 +55,9 @@ export function createNewUser(signupData) {
                                 agency: agency,
                                 entryTime: entryTime,
                                 departureTime: departureTime,
-                                accountType: accountType
+                                accountType: accountType,
+                                saturday: saturdayT,
+                                sunday: sundayT
                             }
                         })];
                 case 1: return [2 /*return*/, _a.sent()];
@@ -74,7 +78,9 @@ export function findAllUsers() {
                             name: true,
                             entryTime: true,
                             departureTime: true,
-                            agency: true
+                            agency: true,
+                            saturday: true,
+                            sunday: true
                         }
                     })];
                 case 1: return [2 /*return*/, _a.sent()];

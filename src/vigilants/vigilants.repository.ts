@@ -126,6 +126,8 @@ export async function vigilantWithStatus(id: number) {
             login: true,
             agency: true,
             password: false,
+            saturday: true,
+            sunday: true,
             status: {
                 select: {
                     frequency: true
@@ -137,11 +139,11 @@ export async function vigilantWithStatus(id: number) {
 }
 
 export async function updateVigilant(updateUserData: UpdateUser) {
-    const { id, agency, cpf, dateofbirth, departureTime, entryTime, login, name, rg, password} = updateUserData
+    const { id, agency, cpf, dateofbirth, departureTime, entryTime, login, name, rg, password,saturday,sunday} = updateUserData
 
     const encryptedPassword = hashSync(password, 10)
-
-
+    const saturdayT = saturday === "true" ? true : false
+    const sundayT = sunday === "true" ? true : false
     return await database.user.update({
         where: {
             id: Number(id)
@@ -155,7 +157,9 @@ export async function updateVigilant(updateUserData: UpdateUser) {
             departureTime,
             login,
             rg,
-            password: encryptedPassword
+            password: encryptedPassword,
+            saturday: saturdayT,
+            sunday: sundayT
         }
     })
 }
@@ -170,5 +174,7 @@ type UpdateUser = {
     departureTime: string,
     login: string,
     rg: string,
-    password: string
+    password: string,
+    saturday: string,
+    sunday: string
 }

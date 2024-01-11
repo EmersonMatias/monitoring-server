@@ -3,8 +3,12 @@ import { database } from "../../prisma/index.js";
 import { SignUp } from "./signup.types.js";
 
 export async function createNewUser(signupData: SignUp ){
-    const {name, password, login, rg, cpf, dateofbirth,departureTime,entryTime, agency, accountType} = signupData
+    const {name, password, login, rg, cpf, dateofbirth,departureTime,entryTime, agency, accountType,saturday,sunday} = signupData
    
+  const saturdayT = saturday === "true" ? true : false
+  const sundayT = sunday === "true" ? true : false
+
+
     return await database.user.create({ 
         data:{
           name,
@@ -16,7 +20,9 @@ export async function createNewUser(signupData: SignUp ){
           agency,
           entryTime,
           departureTime,
-          accountType
+          accountType,
+          saturday:saturdayT,
+          sunday: sundayT
         }
     })
 }
@@ -31,7 +37,9 @@ export async function findAllUsers(){
       name: true,
       entryTime: true,
       departureTime: true,
-      agency: true
+      agency: true,
+      saturday: true,
+      sunday: true
     }
   })
 }

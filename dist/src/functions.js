@@ -37,9 +37,75 @@ export function dateTime() {
     var day = date.split("/")[0];
     var month = date.split("/")[1];
     var year = date.split("/")[2];
+    var dayOfWeek = new Date().getUTCDay();
     var time = currentDateTime.split(", ")[1];
     var hour = time.split(":")[0];
     var minute = time.split(":")[1];
     var seconds = time.split(":")[2];
-    return { day: day, month: month, year: year, hour: hour, minute: minute, seconds: seconds, date: date, time: time };
+    return { day: day, month: month, year: year, hour: hour, minute: minute, seconds: seconds, date: date, time: time, dayOfWeek: dayOfWeek };
+}
+export function vacation() {
+    var feriados = [
+        {
+            "date": "13/02/2024",
+            "name": "Carnaval",
+            "type": "national"
+        },
+        {
+            "date": "29/03/2024",
+            "name": "Sexta-feira Santa",
+            "type": "national"
+        },
+        {
+            "date": "31/03/2024",
+            "name": "Páscoa",
+            "type": "national"
+        },
+        {
+            "date": "21/04/2024",
+            "name": "Tiradentes",
+            "type": "national"
+        },
+        {
+            "date": "01/05/2024",
+            "name": "Dia do trabalho",
+            "type": "national"
+        },
+        {
+            "date": "30/05/2024",
+            "name": "Corpus Christi",
+            "type": "national"
+        },
+        {
+            "date": "07/09/2024",
+            "name": "Independência do Brasil",
+            "type": "national"
+        },
+        {
+            "date": "12/10/2024",
+            "name": "Nossa Senhora Aparecida",
+            "type": "national"
+        },
+        {
+            "date": "02/11/2024",
+            "name": "Finados",
+            "type": "national"
+        },
+        {
+            "date": "15/11/2024",
+            "name": "Proclamação da República",
+            "type": "national"
+        },
+        {
+            "date": "25/12/2024",
+            "name": "Natal",
+            "type": "national"
+        },
+        {
+            "date": "10/01/2024",
+            "name": "Natal",
+            "type": "national"
+        }
+    ];
+    return feriados;
 }

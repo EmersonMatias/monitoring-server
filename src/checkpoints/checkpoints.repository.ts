@@ -28,6 +28,8 @@ export async function createCheckPoint(checkpointData: TCheckpointData) {
     })
 }
 
+
+
 //CRIAR TODOS OS CHECKPOINTS DOS DOS VIGILANTES *****
 export async function createCheckPoints(checkpointData: TCheckpointData[]) {
 

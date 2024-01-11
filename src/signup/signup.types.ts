@@ -9,6 +9,8 @@ export type SignUp = {
     entryTime: string,
     departureTime: string,
     accountType: "admin" | "user",
-    frequency: number
+    frequency: number,
+    saturday: string,
+    sunday: string
 
 }

@@ -12,7 +12,9 @@ export var signupVigilantSchema = Joi.object({
     entryTime: Joi.string().pattern(/^([01]\d|2[0-3]):?([0-5]\d)$/).required(),
     departureTime: Joi.string().pattern(/^([01]\d|2[0-3]):?([0-5]\d)$/).required(),
     accountType: Joi.string().valid('user', 'admin').required(),
-    frequency: Joi.number()
+    frequency: Joi.number(),
+    saturday: Joi.string().required(),
+    sunday: Joi.string().required()
 });
 export var signupAdminSchema = Joi.object({
     name: Joi.string().required().min(3).max(150),

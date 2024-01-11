@@ -1,13 +1,45 @@
 import { Request, Response, Router } from "express"
-import { createCheckPoints, findCheckpointByDay, findCheckpointByIdByCurrentDate, getAllCheckpoints, getCheckpointAgency, getCheckpointAgencyWithFilter, getCheckpointByIDByDate, getUserCheckpoints, markCheckPoint } from "./checkpoints.repository.js"
+import { createCheckPoint, createCheckPoints, findCheckpointByDay, findCheckpointByIdByCurrentDate, getAllCheckpoints, getCheckpointAgency, getCheckpointAgencyWithFilter, getCheckpointByIDByDate, getUserCheckpoints, markCheckPoint } from "./checkpoints.repository.js"
 import { findAllUsers } from "../signup/signup.repository.js"
-import { dateTime } from "../functions.js"
+import { dateTime, vacation } from "../functions.js"
 
 const route = Router()
 
+route.get("/teste", async (req: Request, res: Response) => {
+    const todayIsHoliday = () => {
+        const { day, month, year, dayOfWeek } = dateTime()
+        const feriados = vacation()
+        const today = `${day}/${month}/${year}`
+
+        const eFeriado = feriados.find((dia) => dia.date === today)
+        const sabado = 6
+        const domingo = 7
+
+        const isHoliday = (eFeriado !== undefined) || (dayOfWeek === domingo) || (dayOfWeek === sabado)
+
+        return isHoliday
+    }
+
+    console.log(todayIsHoliday())
+})
+
+const todayIsHoliday = () => {
+    const { day, month, year, dayOfWeek } = dateTime()
+    const feriados = vacation()
+    const today = `${day}/${month}/${year}`
+
+    const eFeriado = feriados.find((dia) => dia.date === today)
+    const sabado = 6
+    const domingo = 7
+
+    const isHoliday = (eFeriado !== undefined) || (dayOfWeek === domingo) || (dayOfWeek === sabado)
+
+    return isHoliday
+}
+
 //CRIA TODOS OS CHECKPOINTS DOS USUÁRIOS *****
 route.post("/checkpoints/createall", async (req: Request, res: Response) => {
-    const { day, month, year } = dateTime()
+    const { day, month, year, dayOfWeek } = dateTime()
 
     try {
         const checkpointsExist = await findCheckpointByDay()
@@ -15,23 +47,81 @@ route.post("/checkpoints/createall", async (req: Request, res: Response) => {
         if (checkpointsExist.length !== 0) return res.sendStatus(400)
 
         const allUsers = await findAllUsers()
+ 
+        
+        if (!todayIsHoliday() && dayOfWeek !== 6 && dayOfWeek !== 7) {
+            const checkpointData = allUsers.map((user) => {
+                return {
+                    userId: user.id,
+                    day: Number(day),
+                    month: Number(month),
+                    year: Number(year)
+                }
+            })
 
-        const checkpointData = allUsers.map((user) => {
-            return {
-                userId: user.id,
-                day: Number(day),
-                month: Number(month),
-                year: Number(year)
-            }
-        })
+            await createCheckPoints(checkpointData)
 
-        await createCheckPoints(checkpointData)
+            res.status(200).send("Checkpoints Created")
+        } else if (dayOfWeek === 6) {
+            const checkpointData = allUsers.filter((user) =>  user.saturday === true )
+            const checkpointSaturday = checkpointData.map((user) => {
+                return {
+                    userId: user.id,
+                    day: Number(day),
+                    month: Number(month),
+                    year: Number(year)
+                }
+            })
 
-        res.status(200).send("Checkpoints Created")
+            console.log(checkpointSaturday)
+            await createCheckPoints(checkpointSaturday)
+
+            res.status(200).send("Checkpoints Created")
+        } else if (dayOfWeek === 7) {
+            const checkpointData = allUsers.filter((user) =>  user.sunday === true )
+            const checkpointSunday = checkpointData.map((user) => {
+                return {
+                    userId: user.id,
+                    day: Number(day),
+                    month: Number(month),
+                    year: Number(year)
+                }
+            })
+
+            await createCheckPoints(checkpointSunday)
+
+            res.status(200).send("Checkpoints Created")
+        }
+
     } catch (error) {
         console.log(error)
         res.send(error)
     }
+})
+
+//CRIAR CHECKPOINT DO USUÁRIO****
+route.post("/checkpoint/create=:id", async (req: Request, res: Response) => {
+    const checkpointData = req.body as { day: number, month: number, year: number }
+    const { id } = req.params
+
+    const checkpointDateFormated = {
+        userId: Number(id),
+        day: Number(checkpointData.day),
+        month: Number(checkpointData.month),
+        year: Number(checkpointData.year)
+    }
+
+    console.log(checkpointData, id)
+
+    try {
+        const sucess = await createCheckPoint(checkpointDateFormated)
+        res.send(sucess)
+    } catch (error) {
+        console.log(error)
+        res.send(error)
+    }
+
+
 })
 
 //ATUALIZAR O CHECKPOINT *****

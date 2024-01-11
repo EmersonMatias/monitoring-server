@@ -139,16 +139,16 @@ route.post("/vigilantsfilter=:id", function (req, res) { return __awaiter(void 0
     });
 }); });
 route.post("/updatevigilant/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, _a, agency, cpf, dateofbirth, departureTime, entryTime, login, name, rg, frequency, password, sucess, error_2;
+    var id, _a, agency, cpf, dateofbirth, departureTime, entryTime, login, name, rg, frequency, password, saturday, sunday, sucess, error_2;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 id = req.params.id;
-                _a = req.body, agency = _a.agency, cpf = _a.cpf, dateofbirth = _a.dateofbirth, departureTime = _a.departureTime, entryTime = _a.entryTime, login = _a.login, name = _a.name, rg = _a.rg, frequency = _a.frequency, password = _a.password;
+                _a = req.body, agency = _a.agency, cpf = _a.cpf, dateofbirth = _a.dateofbirth, departureTime = _a.departureTime, entryTime = _a.entryTime, login = _a.login, name = _a.name, rg = _a.rg, frequency = _a.frequency, password = _a.password, saturday = _a.saturday, sunday = _a.sunday;
                 _b.label = 1;
             case 1:
                 _b.trys.push([1, 4, , 5]);
-                return [4 /*yield*/, updateVigilant({ id: id, agency: agency, cpf: cpf, dateofbirth: dateofbirth, departureTime: departureTime, entryTime: entryTime, login: login, name: name, rg: rg, password: password })];
+                return [4 /*yield*/, updateVigilant({ id: id, agency: agency, cpf: cpf, dateofbirth: dateofbirth, departureTime: departureTime, entryTime: entryTime, login: login, name: name, rg: rg, password: password, saturday: saturday, sunday: sunday })];
             case 2:
                 sucess = _b.sent();
                 return [4 /*yield*/, updateByUserId(id, frequency)];
