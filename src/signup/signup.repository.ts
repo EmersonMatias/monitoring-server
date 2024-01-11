@@ -8,7 +8,6 @@ export async function createNewUser(signupData: SignUp ){
   const saturdayT = saturday === "true" ? true : false
   const sundayT = sunday === "true" ? true : false
 
-
     return await database.user.create({ 
         data:{
           name,

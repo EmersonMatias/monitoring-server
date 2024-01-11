@@ -10,12 +10,12 @@ export const signupVigilantSchema = Joi.object({
     rg: Joi.string().length(9).required(),
     cpf: Joi.string().length(11).required(),
     agency: Joi.string().required(),
+    saturday: Joi.string().required(),
+    sunday: Joi.string().required(),
     entryTime: Joi.string().pattern(/^([01]\d|2[0-3]):?([0-5]\d)$/).required(),
     departureTime: Joi.string().pattern(/^([01]\d|2[0-3]):?([0-5]\d)$/).required(),
     accountType: Joi.string().valid('user', 'admin').required(),
-    frequency: Joi.number(),
-    saturday: Joi.string().required(),
-    sunday: Joi.string().required()
+    frequency: Joi.number()
 })
 
 export const signupAdminSchema = Joi.object({
