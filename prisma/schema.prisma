@@ -71,6 +71,7 @@ model Status {
 
 model Alert {
   id     Int     @id @default(autoincrement())
+  name   String
   viewed Boolean @default(false)
   day Int
   month Int

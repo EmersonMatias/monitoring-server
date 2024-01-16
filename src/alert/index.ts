@@ -6,9 +6,10 @@ const route = Router()
 
 
 route.post("/alert/create", async (req: Request, res: Response) => {
+    const { name } = req.body
 
     try {
-        const sucess = await AlertRepository.create()
+        const sucess = await AlertRepository.create(name)
         res.send(sucess)
     } catch (error) {
         console.log(error)
@@ -19,10 +20,10 @@ route.post("/alert/create", async (req: Request, res: Response) => {
 
 route.get("/alert/findall", async (req: Request, res: Response) => {
 
-    try{
+    try {
         const sucess = await AlertRepository.findAll()
         res.send(sucess)
-    }catch(error){
+    } catch (error) {
         console.log(error)
         res.send(error)
     }
@@ -30,11 +31,11 @@ route.get("/alert/findall", async (req: Request, res: Response) => {
 })
 
 route.post("/alert/update=:id", async (req: Request, res: Response) => {
-    const {id} = req.params
+    const { id } = req.params
 
-    try{
+    try {
         const sucess = await AlertRepository.update(Number(id))
-    }catch(error){
+    } catch (error) {
         console.log(error)
         res.send(error)
     }
