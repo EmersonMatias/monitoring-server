@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { database } from "../../prisma/index.js";
 import { dateTime } from "../functions.js";
-export function create() {
+export function create(name) {
     return __awaiter(this, void 0, void 0, function () {
         var _a, day, month, year;
         return __generator(this, function (_b) {
@@ -45,6 +45,7 @@ export function create() {
                     _a = dateTime(), day = _a.day, month = _a.month, year = _a.year;
                     return [4 /*yield*/, database.alert.create({
                             data: {
+                                name: name,
                                 day: Number(day),
                                 month: Number(month),
                                 year: Number(year)

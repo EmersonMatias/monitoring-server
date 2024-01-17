@@ -34,7 +34,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { hashSync } from "bcrypt";
 import { database } from "../../prisma/index.js";
 export function deleteMessages(id) {
     return __awaiter(this, void 0, void 0, function () {
@@ -195,14 +194,13 @@ export function vigilantWithStatus(id) {
 }
 export function updateVigilant(updateUserData) {
     return __awaiter(this, void 0, void 0, function () {
-        var id, agency, cpf, dateofbirth, departureTime, entryTime, login, name, rg, password, saturday, sunday, encryptedPassword, saturdayT, sundayT;
+        var id, agency, cpf, dateofbirth, departureTime, entryTime, login, name, rg, saturday, sunday, saturdayT, sundayT;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    id = updateUserData.id, agency = updateUserData.agency, cpf = updateUserData.cpf, dateofbirth = updateUserData.dateofbirth, departureTime = updateUserData.departureTime, entryTime = updateUserData.entryTime, login = updateUserData.login, name = updateUserData.name, rg = updateUserData.rg, password = updateUserData.password, saturday = updateUserData.saturday, sunday = updateUserData.sunday;
-                    encryptedPassword = hashSync(password, 10);
-                    saturdayT = saturday === "true" ? true : false;
-                    sundayT = sunday === "true" ? true : false;
+                    id = updateUserData.id, agency = updateUserData.agency, cpf = updateUserData.cpf, dateofbirth = updateUserData.dateofbirth, departureTime = updateUserData.departureTime, entryTime = updateUserData.entryTime, login = updateUserData.login, name = updateUserData.name, rg = updateUserData.rg, saturday = updateUserData.saturday, sunday = updateUserData.sunday;
+                    saturdayT = saturday === "true";
+                    sundayT = sunday === "true";
                     return [4 /*yield*/, database.user.update({
                             where: {
                                 id: Number(id)
@@ -216,7 +214,6 @@ export function updateVigilant(updateUserData) {
                                 departureTime: departureTime,
                                 login: login,
                                 rg: rg,
-                                password: encryptedPassword,
                                 saturday: saturdayT,
                                 sunday: sundayT
                             }
