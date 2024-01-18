@@ -3,6 +3,7 @@ import { findAllUsers } from "../signup/signup.repository.js"
 import { deleteMessages, deleteVigilant, getAgencies, updateVigilant, vigilantComplete, vigilantCompleteWithFilter, vigilantWithStatus } from "./vigilants.repository.js"
 import { deleteCheckpoints } from "../checkpoints/checkpoints.repository.js"
 import { deleteStatus, updateByUserId } from "../status/status.repository.js"
+import { ContingencyRepository } from "../contingency/contingency.repository.js"
 
 const route = Router()
 
@@ -23,6 +24,7 @@ route.delete("/vigilants/:id", async (req: Request, res: Response) => {
     const sucessM = await deleteMessages(userId)
     const sucessC = await deleteCheckpoints(userId)
     const sucessS = await deleteStatus(userId)
+    const sucessCon = await ContingencyRepository.remove(userId)
     const sucess = await deleteVigilant(userId)
     console.log(sucess)
     res.send(sucess)

@@ -39,6 +39,7 @@ import { findAllUsers } from "../signup/signup.repository.js";
 import { deleteMessages, deleteVigilant, getAgencies, updateVigilant, vigilantComplete, vigilantCompleteWithFilter, vigilantWithStatus } from "./vigilants.repository.js";
 import { deleteCheckpoints } from "../checkpoints/checkpoints.repository.js";
 import { deleteStatus, updateByUserId } from "../status/status.repository.js";
+import { ContingencyRepository } from "../contingency/contingency.repository.js";
 var route = Router();
 route.get("/vigilants", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var sucess;
@@ -52,7 +53,7 @@ route.get("/vigilants", function (req, res) { return __awaiter(void 0, void 0, v
     });
 }); });
 route.delete("/vigilants/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, userId, sucessM, sucessC, sucessS, sucess;
+    var id, userId, sucessM, sucessC, sucessS, sucessCon, sucess;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -69,8 +70,11 @@ route.delete("/vigilants/:id", function (req, res) { return __awaiter(void 0, vo
                 return [4 /*yield*/, deleteStatus(userId)];
             case 3:
                 sucessS = _a.sent();
-                return [4 /*yield*/, deleteVigilant(userId)];
+                return [4 /*yield*/, ContingencyRepository.remove(userId)];
             case 4:
+                sucessCon = _a.sent();
+                return [4 /*yield*/, deleteVigilant(userId)];
+            case 5:
                 sucess = _a.sent();
                 console.log(sucess);
                 res.send(sucess);

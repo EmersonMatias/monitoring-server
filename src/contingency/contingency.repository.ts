@@ -43,7 +43,7 @@ async function create(createContingencyData: TCreateContingencyData) {
 async function activate(activateContingencyData: TActivateContingencyData) {
     const { userId, frequency } = activateContingencyData
     const contigency = true
-    const {hour, minute} = dateTime()
+    const { hour, minute } = dateTime()
 
     return database.contingency.update({
         where: {
@@ -100,13 +100,13 @@ async function getAll() {
         }
     })
 }
- 
+
 async function getByUserID(userId: number) {
     return await database.contingency.findUnique({
         where: {
             userId
         },
-        include:{
+        include: {
             user: {
                 select: {
                     name: true
@@ -116,9 +116,17 @@ async function getByUserID(userId: number) {
     })
 }
 
+async function remove(userId: number) {
+    return database.contingency.delete({
+        where: {
+            userId
+        }
+    })
+}
+
 
 export const ContingencyRepository = {
-    create, activate, deactivate, checkpoint, getAll, getByUserID
+    create, activate, deactivate, checkpoint, getAll, getByUserID, remove
 }
 
 

@@ -163,11 +163,23 @@ function getByUserID(userId) {
         });
     });
 }
+function remove(userId) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            return [2 /*return*/, database.contingency.delete({
+                    where: {
+                        userId: userId
+                    }
+                })];
+        });
+    });
+}
 export var ContingencyRepository = {
     create: create,
     activate: activate,
     deactivate: deactivate,
     checkpoint: checkpoint,
     getAll: getAll,
-    getByUserID: getByUserID
+    getByUserID: getByUserID,
+    remove: remove
 };
