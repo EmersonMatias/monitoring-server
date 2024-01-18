@@ -7,7 +7,7 @@ route.post("/criarmensagem", async (req: Request, res: Response) => {
     const { userId, message } = req.body
 
     try {
-        const sucess = await createMessage({ userId, message })
+        await createMessage({ userId, message })
         res.status(201).send("Mensagem criada")
     } catch (error) {
         console.log(error)

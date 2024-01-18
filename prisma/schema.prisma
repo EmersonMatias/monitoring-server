@@ -32,6 +32,7 @@ model User {
   accountType   AccountType
   checkpoint    Checkpoint[] @relation("UserCheckPoint")
   messages      Messages[]   @relation("UserMessage")
+  contigency    Contingency?  @relation("UserContigency")
   status        Status[]     @relation("UserStatus")
 }
 
@@ -73,7 +74,18 @@ model Alert {
   id     Int     @id @default(autoincrement())
   name   String
   viewed Boolean @default(false)
-  day Int
-  month Int
-  year Int
+  day    Int
+  month  Int
+  year   Int
+}
+
+model Contingency {
+  id         Int     @id @default(autoincrement())
+  contigency Boolean @default(false)
+  frequency  Int     @default(60)
+  hour       Int?
+  minute     Int?
+  status     String  @default("OK")
+  user       User    @relation("UserContigency", fields: [userId], references: [id])
+  userId     Int     @unique
 }

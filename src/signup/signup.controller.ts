@@ -4,6 +4,7 @@ import { signupServices } from "./signup.services.js";
 import { createCheckPoint } from "../checkpoints/checkpoints.repository.js";
 import { createStatus } from "../status/status.repository.js";
 import { dateTime } from "../functions.js";
+import { ContingencyRepository as Contingency } from "../contingency/contingency.repository.js";
 
 
 export async function registerVigilant(req: Request, res: Response) {
@@ -33,6 +34,14 @@ export async function registerVigilant(req: Request, res: Response) {
 
         //CRIA STATUS DO VIGILANTE
         await createStatus(statusData, signupData.frequency)
+
+
+        //CRIA CONTINGÊNCIA
+        const createContingencyData = {
+            userId: sucess.id
+        }
+
+        await Contingency.create(createContingencyData)
 
         return res.status(201).send({ userId: sucess.id })
     } catch (error) {

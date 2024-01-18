@@ -38,9 +38,10 @@ import { signupServices } from "./signup.services.js";
 import { createCheckPoint } from "../checkpoints/checkpoints.repository.js";
 import { createStatus } from "../status/status.repository.js";
 import { dateTime } from "../functions.js";
+import { ContingencyRepository as Contingency } from "../contingency/contingency.repository.js";
 export function registerVigilant(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var signupData, _a, day, month, year, hour, minute, sucess, checkpointData, statusData, error_1;
+        var signupData, _a, day, month, year, hour, minute, sucess, checkpointData, statusData, createContingencyData, error_1;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -48,7 +49,7 @@ export function registerVigilant(req, res) {
                     _a = dateTime(), day = _a.day, month = _a.month, year = _a.year, hour = _a.hour, minute = _a.minute;
                     _b.label = 1;
                 case 1:
-                    _b.trys.push([1, 5, , 6]);
+                    _b.trys.push([1, 6, , 7]);
                     return [4 /*yield*/, signupServices.registerVigilant(signupData)];
                 case 2:
                     sucess = _b.sent();
@@ -69,17 +70,25 @@ export function registerVigilant(req, res) {
                         minute: Number(minute),
                     };
                     //CRIA STATUS DO VIGILANTE
-                    return [4 /*yield*/, createStatus(statusData, signupData.frequency)];
+                    return [4 /*yield*/, createStatus(statusData, signupData.frequency)
+                        //CRIA CONTINGÊNCIA
+                    ];
                 case 4:
                     //CRIA STATUS DO VIGILANTE
                     _b.sent();
-                    return [2 /*return*/, res.status(201).send({ userId: sucess.id })];
+                    createContingencyData = {
+                        userId: sucess.id
+                    };
+                    return [4 /*yield*/, Contingency.create(createContingencyData)];
                 case 5:
+                    _b.sent();
+                    return [2 /*return*/, res.status(201).send({ userId: sucess.id })];
+                case 6:
                     error_1 = _b.sent();
                     console.log(error_1);
                     res.status(400).send(error_1);
-                    return [3 /*break*/, 6];
-                case 6: return [2 /*return*/];
+                    return [3 /*break*/, 7];
+                case 7: return [2 /*return*/];
             }
         });
     });

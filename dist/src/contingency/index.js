@@ -35,24 +35,25 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { Router } from "express";
-import { createMessage, findAllMensagens, getMessagesAgency, getMessagesAgencyWithFilter, viewedMessage } from "./messages.repository.js";
+import { ContingencyRepository as Contingency } from "./contingency.repository.js";
 var route = Router();
-route.post("/criarmensagem", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, userId, message, error_1;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+route.post("/contingency/create", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var data, sucess, error_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
             case 0:
-                _a = req.body, userId = _a.userId, message = _a.message;
-                _b.label = 1;
+                data = req.body;
+                console.log(data);
+                _a.label = 1;
             case 1:
-                _b.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, createMessage({ userId: userId, message: message })];
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, Contingency.create(data)];
             case 2:
-                _b.sent();
-                res.status(201).send("Mensagem criada");
+                sucess = _a.sent();
+                res.send(sucess);
                 return [3 /*break*/, 4];
             case 3:
-                error_1 = _b.sent();
+                error_1 = _a.sent();
                 console.log(error_1);
                 res.send(error_1);
                 return [3 /*break*/, 4];
@@ -60,27 +61,22 @@ route.post("/criarmensagem", function (req, res) { return __awaiter(void 0, void
         }
     });
 }); });
-route.put("/visualizarmensagem", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, response, messageId, viewdData, sucess, error_2;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+route.post("/contingency/activate", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var data, sucess, error_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
             case 0:
-                _a = req.body, response = _a.response, messageId = _a.messageId;
-                viewdData = {
-                    response: response,
-                    messageId: Number(messageId)
-                };
-                _b.label = 1;
+                data = req.body;
+                _a.label = 1;
             case 1:
-                _b.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, viewedMessage(viewdData)];
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, Contingency.activate(data)];
             case 2:
-                sucess = _b.sent();
-                console.log(sucess);
-                res.sendStatus(200);
+                sucess = _a.sent();
+                res.send(sucess);
                 return [3 /*break*/, 4];
             case 3:
-                error_2 = _b.sent();
+                error_2 = _a.sent();
                 console.log(error_2);
                 res.send(error_2);
                 return [3 /*break*/, 4];
@@ -88,39 +84,43 @@ route.put("/visualizarmensagem", function (req, res) { return __awaiter(void 0, 
         }
     });
 }); });
-route.get("/mensagens", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var sucess, error_3;
+route.post("/contingency/deactivate", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var data, sucess, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, findAllMensagens()];
-            case 1:
-                sucess = _a.sent();
-                res.send(sucess);
-                return [3 /*break*/, 3];
-            case 2:
-                error_3 = _a.sent();
-                console.log(error_3);
-                res.send(error_3);
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); });
-route.get("/messages/:agency", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var agency, sucess, error_4;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                agency = req.params.agency;
+                data = req.body;
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, getMessagesAgency(agency)];
+                return [4 /*yield*/, Contingency.deactivate(data)];
             case 2:
                 sucess = _a.sent();
-                return [2 /*return*/, res.send(sucess)];
+                res.send(sucess);
+                return [3 /*break*/, 4];
+            case 3:
+                error_3 = _a.sent();
+                console.log(error_3);
+                res.send(error_3);
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); });
+route.post("/contingency/checkpoint", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var data, sucess, error_4;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                data = req.body;
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, Contingency.checkpoint(data)];
+            case 2:
+                sucess = _a.sent();
+                res.send(sucess);
+                return [3 /*break*/, 4];
             case 3:
                 error_4 = _a.sent();
                 console.log(error_4);
@@ -130,24 +130,44 @@ route.get("/messages/:agency", function (req, res) { return __awaiter(void 0, vo
         }
     });
 }); });
-route.post("/messages/:agency", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var agency, filter, sucess, error_5;
+route.get("/contingency/getall", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var sucess, error_5;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                agency = req.params.agency;
-                filter = req.body.filter;
-                _a.label = 1;
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, Contingency.getAll()];
             case 1:
-                _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, getMessagesAgencyWithFilter(agency, filter)];
-            case 2:
                 sucess = _a.sent();
-                return [2 /*return*/, res.send(sucess)];
-            case 3:
+                res.send(sucess);
+                return [3 /*break*/, 3];
+            case 2:
                 error_5 = _a.sent();
                 console.log(error_5);
                 res.send(error_5);
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
+route.get("/contingency/getbyuserid=:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, sucess, error_6;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                id = req.params.id;
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, Contingency.getByUserID(Number(id))];
+            case 2:
+                sucess = _a.sent();
+                res.send(sucess);
+                return [3 /*break*/, 4];
+            case 3:
+                error_6 = _a.sent();
+                console.log(error_6);
+                res.send(error_6);
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
