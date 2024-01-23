@@ -32,17 +32,18 @@ export function dateTime() {
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit',
+        weekday: "long"
     });
-    var date = currentDateTime.split(", ")[0];
+    var dayOfWeek = currentDateTime.split(", ")[0];
+    var date = currentDateTime.split(", ")[1];
     var day = date.split("/")[0];
     var month = date.split("/")[1];
     var year = date.split("/")[2];
-    var dayOfWeek = new Date().getUTCDay();
-    var time = currentDateTime.split(", ")[1];
+    var time = currentDateTime.split(", ")[2];
     var hour = time.split(":")[0];
     var minute = time.split(":")[1];
     var seconds = time.split(":")[2];
-    return { day: day, month: month, year: year, hour: hour, minute: minute, seconds: seconds, date: date, time: time, dayOfWeek: dayOfWeek };
+    return { day: day, month: month, year: year, hour: hour, minute: minute, seconds: seconds, date: date, time: time, dayOfWeek: dayOfWeek, currentDateTime: currentDateTime };
 }
 export function vacation() {
     var feriados = [

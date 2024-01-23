@@ -1,9 +1,9 @@
 import { Request, Router, Response } from "express"
 import { findAllUsers } from "../signup/signup.repository.js"
 import { deleteMessages, deleteVigilant, getAgencies, updateVigilant, vigilantComplete, vigilantCompleteWithFilter, vigilantWithStatus } from "./vigilants.repository.js"
-import { deleteCheckpoints } from "../checkpoints/checkpoints.repository.js"
 import { deleteStatus, updateByUserId } from "../status/status.repository.js"
-import { ContingencyRepository } from "../contingency/contingency.repository.js"
+import { ContingencyRepository as Contingency } from "../contingency/contingency.repository.js"
+import { CheckpointsRepository as Checkpoints } from "../checkpoints/checkpoints.repository.js"
 
 const route = Router()
 
@@ -22,9 +22,9 @@ route.delete("/vigilants/:id", async (req: Request, res: Response) => {
     )
 
     const sucessM = await deleteMessages(userId)
-    const sucessC = await deleteCheckpoints(userId)
+    const sucessC = await Checkpoints.deleteAll(userId)
     const sucessS = await deleteStatus(userId)
-    const sucessCon = await ContingencyRepository.remove(userId)
+    const sucessCon = await Contingency.deleteOne(userId)
     const sucess = await deleteVigilant(userId)
     console.log(sucess)
     res.send(sucess)

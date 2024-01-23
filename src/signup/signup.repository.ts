@@ -38,7 +38,8 @@ export async function findAllUsers(){
       departureTime: true,
       agency: true,
       saturday: true,
-      sunday: true
+      sunday: true,
+      contigency: true
     }
   })
 }

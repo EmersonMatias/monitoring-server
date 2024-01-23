@@ -37,19 +37,22 @@ export function dateTime() {
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit',
+        weekday: "long"
     })
-    const date = currentDateTime.split(", ")[0]
+
+    const dayOfWeek = currentDateTime.split(", ")[0]
+
+    const date = currentDateTime.split(", ")[1]
     const day = date.split("/")[0]
     const month = date.split("/")[1]
     const year = date.split("/")[2]
-    const dayOfWeek = new Date().getUTCDay()
 
-    const time = currentDateTime.split(", ")[1]
+    const time = currentDateTime.split(", ")[2]
     const hour = time.split(":")[0]
     const minute = time.split(":")[1]
     const seconds = time.split(":")[2]
 
-    return { day, month, year, hour, minute, seconds, date, time,dayOfWeek }
+    return { day, month, year, hour, minute, seconds, date, time,dayOfWeek,currentDateTime }
 }
 
 export function vacation() {

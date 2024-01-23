@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { SignUp } from "./signup.types";
 import { signupServices } from "./signup.services.js";
-import { createCheckPoint } from "../checkpoints/checkpoints.repository.js";
+import { CheckpointsRepository as Checkpoints } from "../checkpoints/checkpoints.repository.js";
 import { createStatus } from "../status/status.repository.js";
 import { dateTime } from "../functions.js";
 import { ContingencyRepository as Contingency } from "../contingency/contingency.repository.js";
@@ -24,7 +24,7 @@ export async function registerVigilant(req: Request, res: Response) {
         }
 
         //CRIA CHECKPOINT DO VIGILANTE
-        await createCheckPoint(checkpointData)
+        await Checkpoints.create(checkpointData)
 
         const statusData = {
             userId: sucess.id,

@@ -116,7 +116,7 @@ async function getByUserID(userId: number) {
     })
 }
 
-async function remove(userId: number) {
+async function deleteOne(userId: number) {
     return database.contingency.delete({
         where: {
             userId
@@ -126,7 +126,7 @@ async function remove(userId: number) {
 
 
 export const ContingencyRepository = {
-    create, activate, deactivate, checkpoint, getAll, getByUserID, remove
+    create, activate, deactivate, checkpoint, getAll, getByUserID, deleteOne
 }
 
 

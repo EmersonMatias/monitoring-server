@@ -80,7 +80,8 @@ export function findAllUsers() {
                             departureTime: true,
                             agency: true,
                             saturday: true,
-                            sunday: true
+                            sunday: true,
+                            contigency: true
                         }
                     })];
                 case 1: return [2 /*return*/, _a.sent()];

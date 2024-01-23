@@ -14,8 +14,7 @@ type TMarkCheckPointData = {
     arrivalTime: string
 }
 
-//CRIAR CHECKPOINT DE APENAS UM USUÁRIO *****
-export async function createCheckPoint(checkpointData: TCheckpointData) {
+async function create(checkpointData: TCheckpointData) {
     const { userId, day, month, year } = checkpointData
 
     return await database.checkpoint.create({
@@ -28,10 +27,7 @@ export async function createCheckPoint(checkpointData: TCheckpointData) {
     })
 }
 
-
-
-//CRIAR TODOS OS CHECKPOINTS DOS DOS VIGILANTES *****
-export async function createCheckPoints(checkpointData: TCheckpointData[]) {
+async function createAll(checkpointData: TCheckpointData[]) {
 
 
     return await database.checkpoint.createMany({
@@ -39,23 +35,27 @@ export async function createCheckPoints(checkpointData: TCheckpointData[]) {
     })
 }
 
-//MARCAR CHECKPOINT *****
-export async function markCheckPoint(markCheckPointData: TMarkCheckPointData) {
-    const { arrivalTime, arrived, checkpointId } = markCheckPointData
+async function findAll() {
 
-    return await database.checkpoint.update({
-        where: {
-            id: checkpointId
-        },
-        data: {
-            arrivalTime,
-            arrived
+    return await database.checkpoint.findMany({
+        select: {
+            arrived: true,
+            arrivalTime: true,
+            day: true,
+            month: true,
+            year: true,
+            user: {
+                select: {
+                    name: true,
+                    agency: true,
+                    entryTime: true
+                }
+            }
         }
     })
 }
 
-//PEGAR TODOS OS CHECKPOINTS DO USUÁRIO
-export async function getUserCheckpoints(userId: number) {
+async function findAllCheckpointsByUserId(userId: number) {
 
     return await database.checkpoint.findMany({
         where: {
@@ -64,8 +64,34 @@ export async function getUserCheckpoints(userId: number) {
     })
 }
 
-//PEGAR TODOS OS CHECKPOINTS DO USUÁRIO DO DIA
-export async function findCheckpointByIdByCurrentDate(userId: number) {
+async function findAllCheckpointsOfTheDay() {
+    const { day, month, year } = dateTime()
+
+    return await database.checkpoint.findMany({
+        where: {
+            day: Number(day),
+            month: Number(month),
+            year: Number(year)
+        },
+        select: {
+            arrivalTime: true,
+            arrived: true,
+            day: true,
+            month: true,
+            year: true,
+            user: {
+                select: {
+                    name: true,
+                    agency: true,
+                    entryTime: true
+                }
+            }
+        }
+    })
+
+}
+
+async function findAllCheckpointsOfTheDayByUserId(userId: number) {
     const { day, month, year } = dateTime()
 
     return await database.checkpoint.findFirst({
@@ -79,66 +105,7 @@ export async function findCheckpointByIdByCurrentDate(userId: number) {
 
 }
 
-// PEGAR TODOS OS CHECKPOINTS DO DIA *****
-export async function findCheckpointByDay() {
-    const { day, month, year } = dateTime()
-
-    return await database.checkpoint.findMany({
-        where: {
-            day: Number(day),
-            month: Number(month),
-            year: Number(year)
-        },
-        select: {
-            arrivalTime: true,
-            arrived: true,
-            day: true,
-            month: true,
-            year: true,
-            user: {
-                select: {
-                    name: true,
-                    agency: true,
-                    entryTime: true
-                }
-            }
-        }
-    })
-
-}
-
-//PEGAR TODOS OS CHECKPOINTS *****
-export async function getAllCheckpoints() {
-
-    return await database.checkpoint.findMany({
-        select: {
-            arrived: true,
-            arrivalTime: true,
-            day: true,
-            month: true,
-            year: true,
-            user: {
-                select: {
-                    name: true,
-                    agency: true,
-                    entryTime: true
-                }
-            }
-        }
-    })
-}
-
-//EXCLUIR TODOS CHECKPOINTS DO VIGILANTE
-export async function deleteCheckpoints(id: number) {
-    return await database.checkpoint.deleteMany({
-        where: {
-            userId: id
-        }
-    })
-}
-
-//PEGAR TODOS OS CHECKPOINTS DE UMA AGÊNCIA
-export async function getCheckpointAgency(agency: string) {
+async function findAllCheckpointsByAgency(agency: string) {
     return await database.checkpoint.findMany({
         where: {
             user: {
@@ -157,8 +124,28 @@ export async function getCheckpointAgency(agency: string) {
     })
 }
 
-//PEGAR TODOS OS CHECKPOINTS DE UMA AGÊNCIA COM FILTRO DE DATA ***
-export async function getCheckpointAgencyWithFilter(agency: string, filter: TFilterCheckpoints) {
+async function findAllCheckpointsByDate(filter: TFilterCheckpoints) {
+    const { day, month, year } = filter
+
+    return await database.checkpoint.findMany({
+        where: {
+            day: {
+                gte: day.first,
+                lte: day.end
+            },
+            month: {
+                gte: month.first,
+                lte: month.end
+            },
+            year: {
+                gte: year.first,
+                lte: year.end
+            }
+        }
+    })
+}
+
+async function findAllCheckpointsByAgencyByDate(agency: string, filter: TFilterCheckpoints) {
     const { day, month, year } = filter
 
     return await database.checkpoint.findMany({
@@ -191,26 +178,32 @@ export async function getCheckpointAgencyWithFilter(agency: string, filter: TFil
     })
 }
 
-//PEGAR Checkpoints pela Data
-export async function getCheckpointByIDByDate( filter: TFilterCheckpoints) {
-    const { day, month, year } = filter
-
-    return await database.checkpoint.findMany({
+async function deleteAll(id: number) {
+    return await database.checkpoint.deleteMany({
         where: {
-            day: {
-                gte: day.first,
-                lte: day.end
-            },
-            month: {
-                gte: month.first,
-                lte: month.end
-            },
-            year: {
-                gte: year.first,
-                lte: year.end
-            }
+            userId: id
         }
     })
+}
+
+async function updateCheckpoint(markCheckPointData: TMarkCheckPointData) {
+    const { arrivalTime, arrived, checkpointId } = markCheckPointData
+
+    return await database.checkpoint.update({
+        where: {
+            id: checkpointId
+        },
+        data: {
+            arrivalTime,
+            arrived
+        }
+    })
+}
+
+export const CheckpointsRepository = {
+    create, findAllCheckpointsOfTheDay, createAll, findAllCheckpointsByUserId,
+    findAllCheckpointsOfTheDayByUserId, findAll, deleteAll, findAllCheckpointsByAgency,
+    findAllCheckpointsByAgencyByDate, findAllCheckpointsByDate,updateCheckpoint
 }
 
 type TFilterCheckpoints = {

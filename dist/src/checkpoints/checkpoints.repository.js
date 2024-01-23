@@ -36,8 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { database } from "../../prisma/index.js";
 import { dateTime } from "../functions.js";
-//CRIAR CHECKPOINT DE APENAS UM USUÁRIO *****
-export function createCheckPoint(checkpointData) {
+function create(checkpointData) {
     return __awaiter(this, void 0, void 0, function () {
         var userId, day, month, year;
         return __generator(this, function (_a) {
@@ -57,8 +56,7 @@ export function createCheckPoint(checkpointData) {
         });
     });
 }
-//CRIAR TODOS OS CHECKPOINTS DOS DOS VIGILANTES *****
-export function createCheckPoints(checkpointData) {
+function createAll(checkpointData) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -70,30 +68,32 @@ export function createCheckPoints(checkpointData) {
         });
     });
 }
-//MARCAR CHECKPOINT *****
-export function markCheckPoint(markCheckPointData) {
+function findAll() {
     return __awaiter(this, void 0, void 0, function () {
-        var arrivalTime, arrived, checkpointId;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    arrivalTime = markCheckPointData.arrivalTime, arrived = markCheckPointData.arrived, checkpointId = markCheckPointData.checkpointId;
-                    return [4 /*yield*/, database.checkpoint.update({
-                            where: {
-                                id: checkpointId
-                            },
-                            data: {
-                                arrivalTime: arrivalTime,
-                                arrived: arrived
+                case 0: return [4 /*yield*/, database.checkpoint.findMany({
+                        select: {
+                            arrived: true,
+                            arrivalTime: true,
+                            day: true,
+                            month: true,
+                            year: true,
+                            user: {
+                                select: {
+                                    name: true,
+                                    agency: true,
+                                    entryTime: true
+                                }
                             }
-                        })];
+                        }
+                    })];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         });
     });
 }
-//PEGAR TODOS OS CHECKPOINTS DO USUÁRIO
-export function getUserCheckpoints(userId) {
+function findAllCheckpointsByUserId(userId) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -107,29 +107,7 @@ export function getUserCheckpoints(userId) {
         });
     });
 }
-//PEGAR TODOS OS CHECKPOINTS DO USUÁRIO DO DIA
-export function findCheckpointByIdByCurrentDate(userId) {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a, day, month, year;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    _a = dateTime(), day = _a.day, month = _a.month, year = _a.year;
-                    return [4 /*yield*/, database.checkpoint.findFirst({
-                            where: {
-                                userId: userId,
-                                day: Number(day),
-                                month: Number(month),
-                                year: Number(year)
-                            }
-                        })];
-                case 1: return [2 /*return*/, _b.sent()];
-            }
-        });
-    });
-}
-// PEGAR TODOS OS CHECKPOINTS DO DIA *****
-export function findCheckpointByDay() {
+function findAllCheckpointsOfTheDay() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, day, month, year;
         return __generator(this, function (_b) {
@@ -162,49 +140,27 @@ export function findCheckpointByDay() {
         });
     });
 }
-//PEGAR TODOS OS CHECKPOINTS *****
-export function getAllCheckpoints() {
+function findAllCheckpointsOfTheDayByUserId(userId) {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, database.checkpoint.findMany({
-                        select: {
-                            arrived: true,
-                            arrivalTime: true,
-                            day: true,
-                            month: true,
-                            year: true,
-                            user: {
-                                select: {
-                                    name: true,
-                                    agency: true,
-                                    entryTime: true
-                                }
+        var _a, day, month, year;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    _a = dateTime(), day = _a.day, month = _a.month, year = _a.year;
+                    return [4 /*yield*/, database.checkpoint.findFirst({
+                            where: {
+                                userId: userId,
+                                day: Number(day),
+                                month: Number(month),
+                                year: Number(year)
                             }
-                        }
-                    })];
-                case 1: return [2 /*return*/, _a.sent()];
+                        })];
+                case 1: return [2 /*return*/, _b.sent()];
             }
         });
     });
 }
-//EXCLUIR TODOS CHECKPOINTS DO VIGILANTE
-export function deleteCheckpoints(id) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, database.checkpoint.deleteMany({
-                        where: {
-                            userId: id
-                        }
-                    })];
-                case 1: return [2 /*return*/, _a.sent()];
-            }
-        });
-    });
-}
-//PEGAR TODOS OS CHECKPOINTS DE UMA AGÊNCIA
-export function getCheckpointAgency(agency) {
+function findAllCheckpointsByAgency(agency) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -229,8 +185,35 @@ export function getCheckpointAgency(agency) {
         });
     });
 }
-//PEGAR TODOS OS CHECKPOINTS DE UMA AGÊNCIA COM FILTRO DE DATA ***
-export function getCheckpointAgencyWithFilter(agency, filter) {
+function findAllCheckpointsByDate(filter) {
+    return __awaiter(this, void 0, void 0, function () {
+        var day, month, year;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    day = filter.day, month = filter.month, year = filter.year;
+                    return [4 /*yield*/, database.checkpoint.findMany({
+                            where: {
+                                day: {
+                                    gte: day.first,
+                                    lte: day.end
+                                },
+                                month: {
+                                    gte: month.first,
+                                    lte: month.end
+                                },
+                                year: {
+                                    gte: year.first,
+                                    lte: year.end
+                                }
+                            }
+                        })];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+function findAllCheckpointsByAgencyByDate(agency, filter) {
     return __awaiter(this, void 0, void 0, function () {
         var day, month, year;
         return __generator(this, function (_a) {
@@ -270,28 +253,34 @@ export function getCheckpointAgencyWithFilter(agency, filter) {
         });
     });
 }
-//PEGAR Checkpoints pela Data
-export function getCheckpointByIDByDate(filter) {
+function deleteAll(id) {
     return __awaiter(this, void 0, void 0, function () {
-        var day, month, year;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, database.checkpoint.deleteMany({
+                        where: {
+                            userId: id
+                        }
+                    })];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+function updateCheckpoint(markCheckPointData) {
+    return __awaiter(this, void 0, void 0, function () {
+        var arrivalTime, arrived, checkpointId;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    day = filter.day, month = filter.month, year = filter.year;
-                    return [4 /*yield*/, database.checkpoint.findMany({
+                    arrivalTime = markCheckPointData.arrivalTime, arrived = markCheckPointData.arrived, checkpointId = markCheckPointData.checkpointId;
+                    return [4 /*yield*/, database.checkpoint.update({
                             where: {
-                                day: {
-                                    gte: day.first,
-                                    lte: day.end
-                                },
-                                month: {
-                                    gte: month.first,
-                                    lte: month.end
-                                },
-                                year: {
-                                    gte: year.first,
-                                    lte: year.end
-                                }
+                                id: checkpointId
+                            },
+                            data: {
+                                arrivalTime: arrivalTime,
+                                arrived: arrived
                             }
                         })];
                 case 1: return [2 /*return*/, _a.sent()];
@@ -299,3 +288,16 @@ export function getCheckpointByIDByDate(filter) {
         });
     });
 }
+export var CheckpointsRepository = {
+    create: create,
+    findAllCheckpointsOfTheDay: findAllCheckpointsOfTheDay,
+    createAll: createAll,
+    findAllCheckpointsByUserId: findAllCheckpointsByUserId,
+    findAllCheckpointsOfTheDayByUserId: findAllCheckpointsOfTheDayByUserId,
+    findAll: findAll,
+    deleteAll: deleteAll,
+    findAllCheckpointsByAgency: findAllCheckpointsByAgency,
+    findAllCheckpointsByAgencyByDate: findAllCheckpointsByAgencyByDate,
+    findAllCheckpointsByDate: findAllCheckpointsByDate,
+    updateCheckpoint: updateCheckpoint
+};

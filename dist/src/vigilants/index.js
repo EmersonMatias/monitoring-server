@@ -37,9 +37,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 import { Router } from "express";
 import { findAllUsers } from "../signup/signup.repository.js";
 import { deleteMessages, deleteVigilant, getAgencies, updateVigilant, vigilantComplete, vigilantCompleteWithFilter, vigilantWithStatus } from "./vigilants.repository.js";
-import { deleteCheckpoints } from "../checkpoints/checkpoints.repository.js";
 import { deleteStatus, updateByUserId } from "../status/status.repository.js";
-import { ContingencyRepository } from "../contingency/contingency.repository.js";
+import { ContingencyRepository as Contingency } from "../contingency/contingency.repository.js";
+import { CheckpointsRepository as Checkpoints } from "../checkpoints/checkpoints.repository.js";
 var route = Router();
 route.get("/vigilants", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var sucess;
@@ -64,13 +64,13 @@ route.delete("/vigilants/:id", function (req, res) { return __awaiter(void 0, vo
                 return [4 /*yield*/, deleteMessages(userId)];
             case 1:
                 sucessM = _a.sent();
-                return [4 /*yield*/, deleteCheckpoints(userId)];
+                return [4 /*yield*/, Checkpoints.deleteAll(userId)];
             case 2:
                 sucessC = _a.sent();
                 return [4 /*yield*/, deleteStatus(userId)];
             case 3:
                 sucessS = _a.sent();
-                return [4 /*yield*/, ContingencyRepository.remove(userId)];
+                return [4 /*yield*/, Contingency.deleteOne(userId)];
             case 4:
                 sucessCon = _a.sent();
                 return [4 /*yield*/, deleteVigilant(userId)];

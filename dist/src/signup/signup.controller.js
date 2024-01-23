@@ -35,7 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { signupServices } from "./signup.services.js";
-import { createCheckPoint } from "../checkpoints/checkpoints.repository.js";
+import { CheckpointsRepository as Checkpoints } from "../checkpoints/checkpoints.repository.js";
 import { createStatus } from "../status/status.repository.js";
 import { dateTime } from "../functions.js";
 import { ContingencyRepository as Contingency } from "../contingency/contingency.repository.js";
@@ -60,7 +60,7 @@ export function registerVigilant(req, res) {
                         year: Number(year)
                     };
                     //CRIA CHECKPOINT DO VIGILANTE
-                    return [4 /*yield*/, createCheckPoint(checkpointData)];
+                    return [4 /*yield*/, Checkpoints.create(checkpointData)];
                 case 3:
                     //CRIA CHECKPOINT DO VIGILANTE
                     _b.sent();
