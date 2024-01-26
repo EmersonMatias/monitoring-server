@@ -35,7 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { Router } from "express";
-import { createMessage, findAllMensagens, getMessagesAgency, getMessagesAgencyWithFilter, viewedMessage } from "./messages.repository.js";
+import { MessagesRepository as Messages, createMessage, getMessagesAgency, getMessagesAgencyWithFilter, viewedMessage } from "./messages.repository.js";
 var route = Router();
 route.post("/criarmensagem", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, userId, message, error_1;
@@ -88,13 +88,13 @@ route.put("/visualizarmensagem", function (req, res) { return __awaiter(void 0, 
         }
     });
 }); });
-route.get("/mensagens", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+route.get("/messages", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var sucess, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, findAllMensagens()];
+                return [4 /*yield*/, Messages.findAll()];
             case 1:
                 sucess = _a.sent();
                 res.send(sucess);

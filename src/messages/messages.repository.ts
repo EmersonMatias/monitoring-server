@@ -36,28 +36,6 @@ export async function viewedMessage({ response, messageId }: { response: string,
     })
 }
 
-//PEGAR TODAS AS MENSAGENS *****
-export async function findAllMensagens() {
-    return await database.messages.findMany({
-        select: {
-            id: true,
-            day: true,
-            month: true,
-            year: true,
-            hour: true,
-            message: true,
-            response: true,
-            viewed: true,
-            user: {
-                select: {
-                    name: true,
-                    agency: true
-                }
-            }
-        }
-    })
-}
-
 //PEGAR MENSAGENS POR AGÊNCIA ******
 export async function getMessagesAgency(agencyId: number) {
     return await database.messages.findMany({
@@ -126,4 +104,29 @@ type TFilterCheckpoints = {
         first: number,
         end: number
     }
+}
+
+async function findAll() {
+    return await database.messages.findMany({
+        select: {
+            id: true,
+            day: true,
+            month: true,
+            year: true,
+            hour: true,
+            message: true,
+            response: true,
+            viewed: true,
+            user: {
+                select: {
+                    name: true,
+                    agency: true
+                }
+            }
+        }
+    })
+}
+
+export const MessagesRepository = {
+    findAll
 }

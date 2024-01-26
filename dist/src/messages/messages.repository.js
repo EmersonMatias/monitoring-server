@@ -79,34 +79,6 @@ export function viewedMessage(_a) {
         });
     });
 }
-//PEGAR TODAS AS MENSAGENS *****
-export function findAllMensagens() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, database.messages.findMany({
-                        select: {
-                            id: true,
-                            day: true,
-                            month: true,
-                            year: true,
-                            hour: true,
-                            message: true,
-                            response: true,
-                            viewed: true,
-                            user: {
-                                select: {
-                                    name: true,
-                                    agency: true
-                                }
-                            }
-                        }
-                    })];
-                case 1: return [2 /*return*/, _a.sent()];
-            }
-        });
-    });
-}
 //PEGAR MENSAGENS POR AGÊNCIA ******
 export function getMessagesAgency(agencyId) {
     return __awaiter(this, void 0, void 0, function () {
@@ -174,3 +146,33 @@ export function getMessagesAgencyWithFilter(agencyId, filter) {
         });
     });
 }
+function findAll() {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, database.messages.findMany({
+                        select: {
+                            id: true,
+                            day: true,
+                            month: true,
+                            year: true,
+                            hour: true,
+                            message: true,
+                            response: true,
+                            viewed: true,
+                            user: {
+                                select: {
+                                    name: true,
+                                    agency: true
+                                }
+                            }
+                        }
+                    })];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+export var MessagesRepository = {
+    findAll: findAll
+};

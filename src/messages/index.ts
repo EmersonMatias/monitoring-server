@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { createMessage, findAllMensagens, getMessagesAgency, getMessagesAgencyWithFilter, viewedMessage } from "./messages.repository.js";
+import { MessagesRepository as Messages, createMessage, getMessagesAgency, getMessagesAgencyWithFilter, viewedMessage } from "./messages.repository.js";
 
 const route = Router()
 
@@ -33,10 +33,10 @@ route.put("/visualizarmensagem", async (req: Request, res: Response) => {
     }
 })
 
-route.get("/mensagens", async (req: Request, res: Response) => {
+route.get("/messages", async (req: Request, res: Response) => {
 
     try {
-        const sucess = await findAllMensagens()
+        const sucess = await Messages.findAll()
         res.send(sucess)
     } catch (error) {
         console.log(error)
