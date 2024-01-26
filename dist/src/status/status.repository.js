@@ -127,7 +127,7 @@ export function updateByUserId(userId, frequency) {
                             userId: Number(userId)
                         },
                         data: {
-                            frequency: frequency
+                            frequency: Number(frequency)
                         }
                     })];
                 case 1: return [2 /*return*/, _a.sent()];

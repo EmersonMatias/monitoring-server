@@ -35,55 +35,87 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { Router } from "express";
-import { findAllUsers } from "../signup/signup.repository.js";
-import { deleteMessages, deleteVigilant, getAgencies, updateVigilant, vigilantComplete, vigilantCompleteWithFilter, vigilantWithStatus } from "./vigilants.repository.js";
+import { VigilantsRepository as Vigilants, deleteMessages, vigilantCompleteWithFilter, vigilantWithStatus } from "./vigilants.repository.js";
 import { deleteStatus, updateByUserId } from "../status/status.repository.js";
 import { ContingencyRepository as Contingency } from "../contingency/contingency.repository.js";
 import { CheckpointsRepository as Checkpoints } from "../checkpoints/checkpoints.repository.js";
 var route = Router();
 route.get("/vigilants", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var sucess;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, findAllUsers()];
-            case 1:
-                sucess = _a.sent();
-                return [2 /*return*/, res.status(200).send(sucess)];
-        }
-    });
-}); });
-route.delete("/vigilants/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, userId, sucessM, sucessC, sucessS, sucessCon, sucess;
+    var agencyId, agencyIda, sucess, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                id = req.params.id;
-                userId = Number(id);
-                if (isNaN(userId))
-                    return [2 /*return*/, (res.status(400).send("String is invalid!"))];
-                return [4 /*yield*/, deleteMessages(userId)];
+                agencyId = req.query.agencyId;
+                agencyIda = agencyId ? Number(agencyId) : undefined;
+                _a.label = 1;
             case 1:
-                sucessM = _a.sent();
-                return [4 /*yield*/, Checkpoints.deleteAll(userId)];
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, Vigilants.findAll(agencyIda)];
             case 2:
-                sucessC = _a.sent();
-                return [4 /*yield*/, deleteStatus(userId)];
-            case 3:
-                sucessS = _a.sent();
-                return [4 /*yield*/, Contingency.deleteOne(userId)];
-            case 4:
-                sucessCon = _a.sent();
-                return [4 /*yield*/, deleteVigilant(userId)];
-            case 5:
                 sucess = _a.sent();
-                console.log(sucess);
-                res.send(sucess);
-                return [2 /*return*/];
+                return [2 /*return*/, res.status(200).send(sucess)];
+            case 3:
+                error_1 = _a.sent();
+                console.log(error_1);
+                res.send(error_1);
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); });
 route.get("/vigilants/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, userId, sucess;
+    var id, sucess, error_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                id = req.params.id;
+                console.log("vigilants/id");
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, Vigilants.findOneById(Number(id))];
+            case 2:
+                sucess = _a.sent();
+                res.send(sucess);
+                return [3 /*break*/, 4];
+            case 3:
+                error_2 = _a.sent();
+                console.log(error_2);
+                res.send(error_2);
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); });
+route.post("/vigilants/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, updateUserData, sucess, error_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                id = req.params.id;
+                updateUserData = req.body;
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 4, , 5]);
+                return [4 /*yield*/, Vigilants.update(updateUserData)];
+            case 2:
+                sucess = _a.sent();
+                return [4 /*yield*/, updateByUserId(id, updateUserData.frequency)];
+            case 3:
+                _a.sent();
+                res.send(sucess);
+                return [3 /*break*/, 5];
+            case 4:
+                error_3 = _a.sent();
+                console.log(error_3);
+                res.send(error_3);
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
+        }
+    });
+}); });
+route.delete("/vigilants/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, userId, sucess, error_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -91,16 +123,37 @@ route.get("/vigilants/:id", function (req, res) { return __awaiter(void 0, void 
                 userId = Number(id);
                 if (isNaN(userId))
                     return [2 /*return*/, (res.status(400).send("String is invalid!"))];
-                return [4 /*yield*/, vigilantComplete(userId)];
+                _a.label = 1;
             case 1:
+                _a.trys.push([1, 7, , 8]);
+                return [4 /*yield*/, deleteMessages(userId)];
+            case 2:
+                _a.sent();
+                return [4 /*yield*/, Checkpoints.deleteAll(userId)];
+            case 3:
+                _a.sent();
+                return [4 /*yield*/, deleteStatus(userId)];
+            case 4:
+                _a.sent();
+                return [4 /*yield*/, Contingency.deleteOne(userId)];
+            case 5:
+                _a.sent();
+                return [4 /*yield*/, Vigilants.deleteOne(userId)];
+            case 6:
                 sucess = _a.sent();
                 res.send(sucess);
-                return [2 /*return*/];
+                return [3 /*break*/, 8];
+            case 7:
+                error_4 = _a.sent();
+                console.log(error_4);
+                res.send(error_4);
+                return [3 /*break*/, 8];
+            case 8: return [2 /*return*/];
         }
     });
 }); });
 route.get("/vigilantwithstatus=:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, sucess, error_1;
+    var id, sucess, error_5;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -114,9 +167,9 @@ route.get("/vigilantwithstatus=:id", function (req, res) { return __awaiter(void
                 res.send(sucess);
                 return [3 /*break*/, 4];
             case 3:
-                error_1 = _a.sent();
-                console.log(error_1);
-                res.send(error_1);
+                error_5 = _a.sent();
+                console.log(error_5);
+                res.send(error_5);
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
@@ -135,47 +188,6 @@ route.post("/vigilantsfilter=:id", function (req, res) { return __awaiter(void 0
                 if (isNaN(userId))
                     return [2 /*return*/, (res.status(400).send("String is invalid!"))];
                 return [4 /*yield*/, vigilantCompleteWithFilter(userId, filter)];
-            case 1:
-                sucess = _a.sent();
-                res.send(sucess);
-                return [2 /*return*/];
-        }
-    });
-}); });
-route.post("/updatevigilant/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, _a, agency, cpf, dateofbirth, departureTime, entryTime, login, name, rg, frequency, saturday, sunday, sucess, error_2;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                id = req.params.id;
-                _a = req.body, agency = _a.agency, cpf = _a.cpf, dateofbirth = _a.dateofbirth, departureTime = _a.departureTime, entryTime = _a.entryTime, login = _a.login, name = _a.name, rg = _a.rg, frequency = _a.frequency, saturday = _a.saturday, sunday = _a.sunday;
-                _b.label = 1;
-            case 1:
-                _b.trys.push([1, 4, , 5]);
-                return [4 /*yield*/, updateVigilant({ id: id, agency: agency, cpf: cpf, dateofbirth: dateofbirth, departureTime: departureTime, entryTime: entryTime, login: login, name: name, rg: rg, saturday: saturday, sunday: sunday })];
-            case 2:
-                sucess = _b.sent();
-                return [4 /*yield*/, updateByUserId(id, frequency)];
-            case 3:
-                _b.sent();
-                res.send(sucess);
-                return [3 /*break*/, 5];
-            case 4:
-                error_2 = _b.sent();
-                console.log(error_2);
-                res.send(error_2);
-                return [3 /*break*/, 5];
-            case 5: return [2 /*return*/];
-        }
-    });
-}); });
-route.get("/agency/:agency", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var agency, sucess;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                agency = req.params.agency;
-                return [4 /*yield*/, getAgencies(agency)];
             case 1:
                 sucess = _a.sent();
                 res.send(sucess);

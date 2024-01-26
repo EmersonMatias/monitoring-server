@@ -71,7 +71,7 @@ export async function updateByUserId(userId: string, frequency: number){
             userId: Number(userId)
         }, 
          data: {
-            frequency
+            frequency: Number(frequency)
          }
     })
 }

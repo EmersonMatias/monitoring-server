@@ -1,6 +1,5 @@
 import { Request, Router, Response } from "express"
-import { findAllUsers } from "../signup/signup.repository.js"
-import { deleteMessages, deleteVigilant, getAgencies, updateVigilant, vigilantComplete, vigilantCompleteWithFilter, vigilantWithStatus } from "./vigilants.repository.js"
+import { VigilantsRepository as Vigilants, deleteMessages, vigilantCompleteWithFilter, vigilantWithStatus } from "./vigilants.repository.js"
 import { deleteStatus, updateByUserId } from "../status/status.repository.js"
 import { ContingencyRepository as Contingency } from "../contingency/contingency.repository.js"
 import { CheckpointsRepository as Checkpoints } from "../checkpoints/checkpoints.repository.js"
@@ -8,9 +7,50 @@ import { CheckpointsRepository as Checkpoints } from "../checkpoints/checkpoints
 const route = Router()
 
 route.get("/vigilants", async (req: Request, res: Response) => {
-    const sucess = await findAllUsers()
+    const agencyId = req.query.agencyId
+   
+    const agencyIda  = agencyId ? Number(agencyId) : undefined
 
-    return res.status(200).send(sucess)
+    try {
+        const sucess = await Vigilants.findAll(agencyIda)
+
+        return res.status(200).send(sucess)
+    } catch (error) {
+        console.log(error)
+        res.send(error)
+    }
+
+})
+
+route.get("/vigilants/:id", async (req: Request, res: Response) => {
+    const { id } = req.params
+    console.log("vigilants/id")
+
+
+    try {
+        const sucess = await Vigilants.findOneById(Number(id))
+        res.send(sucess)
+    } catch (error) {
+        console.log(error)
+        res.send(error)
+    }
+
+})
+
+route.post("/vigilants/:id", async (req: Request, res: Response) => {
+    const { id } = req.params
+    const updateUserData = req.body as TUpdateUser
+
+
+    try {
+        const sucess = await Vigilants.update(updateUserData)
+        await updateByUserId(id, updateUserData.frequency)
+        res.send(sucess)
+    } catch (error) {
+        console.log(error)
+        res.send(error)
+    }
+
 })
 
 route.delete("/vigilants/:id", async (req: Request, res: Response) => {
@@ -21,25 +61,19 @@ route.delete("/vigilants/:id", async (req: Request, res: Response) => {
         res.status(400).send("String is invalid!")
     )
 
-    const sucessM = await deleteMessages(userId)
-    const sucessC = await Checkpoints.deleteAll(userId)
-    const sucessS = await deleteStatus(userId)
-    const sucessCon = await Contingency.deleteOne(userId)
-    const sucess = await deleteVigilant(userId)
-    console.log(sucess)
-    res.send(sucess)
-})
+    try {
+        await deleteMessages(userId)
+        await Checkpoints.deleteAll(userId)
+        await deleteStatus(userId)
+        await Contingency.deleteOne(userId)
 
-route.get("/vigilants/:id", async (req: Request, res: Response) => {
-    const { id } = req.params
-    const userId = Number(id)
+        const sucess = await Vigilants.deleteOne(userId)
+        res.send(sucess)
+    } catch (error) {
+        console.log(error)
+        res.send(error)
+    }
 
-    if (isNaN(userId)) return (
-        res.status(400).send("String is invalid!")
-    )
-
-    const sucess = await vigilantComplete(userId)
-    res.send(sucess)
 
 })
 
@@ -75,35 +109,21 @@ route.post("/vigilantsfilter=:id", async (req: Request, res: Response) => {
 })
 
 
-route.post("/updatevigilant/:id", async (req: Request, res: Response) => {
-    const { id } = req.params
-    const {agency, cpf, dateofbirth, departureTime, entryTime, login, name, rg, frequency,saturday,sunday} = req.body as TUpdateUser
 
 
-    try {
-        const sucess = await updateVigilant({id, agency, cpf, dateofbirth, departureTime, entryTime, login, name, rg,saturday, sunday})
-        await updateByUserId(id, frequency)
-        res.send(sucess)
-    } catch (error) {
-        console.log(error)
-        res.send(error)
-    }
-
-})
-
-type TUpdateUser = {
-    name: string;
-    dateofbirth?: string ;
-    rg: string ;
-    cpf: string ;
-    agency: string ;
-    entryTime: string ;
-    departureTime: string;
-    login: string;
-    password?: string ;
-    frequency: number ;
-    saturday: string;
+export type TUpdateUser = {
+    id: string,
+    name: string,
+    agencyId: number,
+    cpf: string,
+    dateofbirth: string,
+    entryTime: string,
+    departureTime: string,
+    login: string,
+    rg: string,
+    saturday: string,
     sunday: string
+    frequency: number
 }
 
 type TFilterCheckpoints = {
@@ -123,13 +143,6 @@ type TFilterCheckpoints = {
     }
 
 }
-
-route.get("/agency/:agency", async (req: Request, res: Response) => {
-    const { agency } = req.params
-
-    const sucess = await getAgencies(agency)
-    res.send(sucess)
-})
 
 export default route
 

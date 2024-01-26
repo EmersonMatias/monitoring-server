@@ -49,34 +49,31 @@ export function deleteMessages(id) {
         });
     });
 }
-export function deleteVigilant(id) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, database.user.delete({
-                        where: {
-                            id: id
-                        }
-                    })];
-                case 1: return [2 /*return*/, _a.sent()];
-            }
-        });
-    });
-}
-export function vigilantComplete(id) {
+export function vigilantWithStatus(id) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, database.user.findUnique({
                         where: {
                             id: id
-                        }, select: {
-                            checkpoint: true,
-                            messages: true,
+                        },
+                        select: {
                             name: true,
-                            agency: true,
+                            cpf: true,
+                            rg: true,
+                            dateofbirth: true,
                             entryTime: true,
-                            departureTime: true
+                            departureTime: true,
+                            login: true,
+                            agency: true,
+                            password: false,
+                            saturday: true,
+                            sunday: true,
+                            status: {
+                                select: {
+                                    frequency: true
+                                }
+                            }
                         }
                     })];
                 case 1: return [2 /*return*/, _a.sent()];
@@ -138,48 +135,24 @@ export function vigilantCompleteWithFilter(id, filter) {
         });
     });
 }
-export function getAgencies(agency) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, database.user.findMany({
-                        where: {
-                            agency: agency
-                        },
-                        select: {
-                            name: true,
-                            agency: true,
-                            entryTime: true,
-                            departureTime: true,
-                            checkpoint: true,
-                            messages: true
-                        }
-                    })];
-                case 1: return [2 /*return*/, _a.sent()];
-            }
-        });
-    });
-}
-export function vigilantWithStatus(id) {
+function findOneById(id) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, database.user.findUnique({
                         where: {
                             id: id
-                        },
-                        select: {
+                        }, select: {
                             name: true,
-                            cpf: true,
-                            rg: true,
                             dateofbirth: true,
+                            login: true,
+                            rg: true,
+                            cpf: true,
                             entryTime: true,
                             departureTime: true,
-                            login: true,
-                            agency: true,
-                            password: false,
                             saturday: true,
                             sunday: true,
+                            agency: true,
                             status: {
                                 select: {
                                     frequency: true
@@ -192,13 +165,38 @@ export function vigilantWithStatus(id) {
         });
     });
 }
-export function updateVigilant(updateUserData) {
+function findAll(agencyId) {
     return __awaiter(this, void 0, void 0, function () {
-        var id, agency, cpf, dateofbirth, departureTime, entryTime, login, name, rg, saturday, sunday, saturdayT, sundayT;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, database.user.findMany({
+                        where: {
+                            accountType: "user",
+                            agencyId: agencyId
+                        },
+                        select: {
+                            id: true,
+                            name: true,
+                            entryTime: true,
+                            departureTime: true,
+                            agency: true,
+                            saturday: true,
+                            sunday: true,
+                            contigency: true,
+                        }
+                    })];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+function update(updateUserData) {
+    return __awaiter(this, void 0, void 0, function () {
+        var id, agencyId, cpf, dateofbirth, departureTime, entryTime, login, name, rg, saturday, sunday, saturdayT, sundayT;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    id = updateUserData.id, agency = updateUserData.agency, cpf = updateUserData.cpf, dateofbirth = updateUserData.dateofbirth, departureTime = updateUserData.departureTime, entryTime = updateUserData.entryTime, login = updateUserData.login, name = updateUserData.name, rg = updateUserData.rg, saturday = updateUserData.saturday, sunday = updateUserData.sunday;
+                    id = updateUserData.id, agencyId = updateUserData.agencyId, cpf = updateUserData.cpf, dateofbirth = updateUserData.dateofbirth, departureTime = updateUserData.departureTime, entryTime = updateUserData.entryTime, login = updateUserData.login, name = updateUserData.name, rg = updateUserData.rg, saturday = updateUserData.saturday, sunday = updateUserData.sunday;
                     saturdayT = saturday === "true";
                     sundayT = sunday === "true";
                     return [4 /*yield*/, database.user.update({
@@ -207,7 +205,7 @@ export function updateVigilant(updateUserData) {
                             },
                             data: {
                                 name: name,
-                                agency: agency,
+                                agencyId: Number(agencyId),
                                 cpf: cpf,
                                 dateofbirth: dateofbirth,
                                 entryTime: entryTime,
@@ -223,3 +221,23 @@ export function updateVigilant(updateUserData) {
         });
     });
 }
+function deleteOne(id) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, database.user.delete({
+                        where: {
+                            id: id
+                        }
+                    })];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+export var VigilantsRepository = {
+    findAll: findAll,
+    findOneById: findOneById,
+    update: update,
+    deleteOne: deleteOne
+};

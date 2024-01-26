@@ -36,24 +36,27 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { Router } from "express";
 import { CheckpointsRepository as Checkpoints } from "./checkpoints.repository.js";
-import { findAllUsers } from "../signup/signup.repository.js";
 import { dateTime, vacation } from "../functions.js";
+import { VigilantsRepository as Vigilants } from "../vigilants/vigilants.repository.js";
 var route = Router();
 route.get("/teste", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var todayIsHoliday;
+    var sucess, error_1;
     return __generator(this, function (_a) {
-        todayIsHoliday = function () {
-            var _a = dateTime(), day = _a.day, month = _a.month, year = _a.year, dayOfWeek = _a.dayOfWeek;
-            var feriados = vacation();
-            var today = "".concat(day, "/").concat(month, "/").concat(year);
-            var eFeriado = feriados.find(function (dia) { return dia.date === today; });
-            var sabado = 6;
-            var domingo = 7;
-            var isHoliday = (eFeriado !== undefined) || (dayOfWeek === "domingo") || (dayOfWeek === "sabado");
-            return isHoliday;
-        };
-        console.log(todayIsHoliday());
-        return [2 /*return*/];
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, Checkpoints.findAlltest()];
+            case 1:
+                sucess = _a.sent();
+                res.send(sucess);
+                return [3 /*break*/, 3];
+            case 2:
+                error_1 = _a.sent();
+                console.log(error_1);
+                res.send(error_1);
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
     });
 }); });
 var todayIsHoliday = function () {
@@ -66,7 +69,7 @@ var todayIsHoliday = function () {
 };
 //CRIA TODOS OS CHECKPOINTS DOS USUÁRIOS *****
 route.post("/checkpoints/createall", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, day, month, year, dayOfWeek, checkpointsExist, allUsers, checkpointData, checkpointData, checkpointSaturday, checkpointData, checkpointSunday, error_1;
+    var _a, day, month, year, dayOfWeek, checkpointsExist, allUsers, checkpointData, checkpointData, checkpointSaturday, checkpointData, checkpointSunday, error_2;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -79,7 +82,7 @@ route.post("/checkpoints/createall", function (req, res) { return __awaiter(void
                 checkpointsExist = _b.sent();
                 if (checkpointsExist.length !== 0)
                     return [2 /*return*/, res.sendStatus(400)];
-                return [4 /*yield*/, findAllUsers()];
+                return [4 /*yield*/, Vigilants.findAll()];
             case 3:
                 allUsers = _b.sent();
                 console.log(dayOfWeek);
@@ -132,40 +135,40 @@ route.post("/checkpoints/createall", function (req, res) { return __awaiter(void
                 _b.label = 9;
             case 9: return [3 /*break*/, 11];
             case 10:
-                error_1 = _b.sent();
-                console.log(error_1);
-                res.send(error_1);
+                error_2 = _b.sent();
+                console.log(error_2);
+                res.send(error_2);
                 return [3 /*break*/, 11];
             case 11: return [2 /*return*/];
         }
     });
 }); });
-//CRIAR CHECKPOINT DO USUÁRIO****
-route.post("/checkpoint/create", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var checkpointData, id, checkpointDateFormated, sucess, error_2;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+// ? CHECKED
+route.post("/checkpoint/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, day, month, year, id, createCheckpointData, sucess, error_3;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
-                checkpointData = req.body;
+                _a = req.body, day = _a.day, month = _a.month, year = _a.year;
                 id = req.params.id;
-                checkpointDateFormated = {
-                    userId: Number(checkpointData.userId),
-                    day: Number(checkpointData.day),
-                    month: Number(checkpointData.month),
-                    year: Number(checkpointData.year)
+                createCheckpointData = {
+                    userId: Number(id),
+                    day: day,
+                    month: month,
+                    year: year
                 };
-                _a.label = 1;
+                _b.label = 1;
             case 1:
-                _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, Checkpoints.create(checkpointDateFormated)];
+                _b.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, Checkpoints.create(createCheckpointData)];
             case 2:
-                sucess = _a.sent();
+                sucess = _b.sent();
                 res.send(sucess);
                 return [3 /*break*/, 4];
             case 3:
-                error_2 = _a.sent();
-                console.log(error_2);
-                res.send(error_2);
+                error_3 = _b.sent();
+                console.log(error_3);
+                res.send(error_3);
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
@@ -173,7 +176,7 @@ route.post("/checkpoint/create", function (req, res) { return __awaiter(void 0, 
 }); });
 //ATUALIZAR O CHECKPOINT *****
 route.put("/checkpoint", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var checkpointId, _a, hour, minute, markCheckPointData, sucess, error_3;
+    var checkpointId, _a, hour, minute, markCheckPointData, sucess, error_4;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -193,9 +196,9 @@ route.put("/checkpoint", function (req, res) { return __awaiter(void 0, void 0, 
                 res.status(200).send({ sucess: sucess, message: "Checkpoint atualizado." });
                 return [3 /*break*/, 4];
             case 3:
-                error_3 = _b.sent();
-                console.log(error_3);
-                res.send(error_3);
+                error_4 = _b.sent();
+                console.log(error_4);
+                res.send(error_4);
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
@@ -203,7 +206,7 @@ route.put("/checkpoint", function (req, res) { return __awaiter(void 0, void 0, 
 }); });
 //PEGAR TODOS OS CHECKPOINTS DO USUÁRIO *****
 route.get("/checkpoints/:userId", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var userId, sucess, error_4;
+    var userId, sucess, error_5;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -218,9 +221,9 @@ route.get("/checkpoints/:userId", function (req, res) { return __awaiter(void 0,
                 res.send(sucess);
                 return [3 /*break*/, 4];
             case 3:
-                error_4 = _a.sent();
-                console.log(error_4);
-                res.send(error_4);
+                error_5 = _a.sent();
+                console.log(error_5);
+                res.send(error_5);
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
@@ -228,7 +231,7 @@ route.get("/checkpoints/:userId", function (req, res) { return __awaiter(void 0,
 }); });
 //PEGAR TODOS OS CHECKPOINTS *****
 route.get("/checkpoints", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var sucess, error_5;
+    var sucess, error_6;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -240,9 +243,9 @@ route.get("/checkpoints", function (req, res) { return __awaiter(void 0, void 0,
                 res.send(sucess);
                 return [3 /*break*/, 3];
             case 2:
-                error_5 = _a.sent();
-                console.log(error_5);
-                res.send(error_5);
+                error_6 = _a.sent();
+                console.log(error_6);
+                res.send(error_6);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
@@ -250,40 +253,15 @@ route.get("/checkpoints", function (req, res) { return __awaiter(void 0, void 0,
 }); });
 //PEGAR TODOS OS CHECKPOINTS POR AGÊNCIA *****
 route.get("/checkpointss/:agency", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var agency, sucess, error_6;
+    var agencyId, sucess, error_7;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                agency = req.params.agency;
+                agencyId = req.params.agencyId;
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, Checkpoints.findAllCheckpointsByAgency(agency)];
-            case 2:
-                sucess = _a.sent();
-                res.send(sucess);
-                return [3 /*break*/, 4];
-            case 3:
-                error_6 = _a.sent();
-                console.log(error_6);
-                res.send(error_6);
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
-        }
-    });
-}); });
-//PEGAR CHECKPOINTS COM FILTRO DE DATA *****
-route.post("/checkpointsfilter=:agency", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var agency, filter, sucess, error_7;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                agency = req.params.agency;
-                filter = req.body.filter;
-                _a.label = 1;
-            case 1:
-                _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, Checkpoints.findAllCheckpointsByAgencyByDate(agency, filter)];
+                return [4 /*yield*/, Checkpoints.findAllCheckpointsByAgency(Number(agencyId))];
             case 2:
                 sucess = _a.sent();
                 res.send(sucess);
@@ -297,17 +275,18 @@ route.post("/checkpointsfilter=:agency", function (req, res) { return __awaiter(
         }
     });
 }); });
-//PEGAR O CHECKPOINT DO VIGILANTE DO DIA ATUAL *****
-route.get("/checkpoints/currentday/:userId", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var userId, sucess, error_8;
+//PEGAR CHECKPOINTS COM FILTRO DE DATA *****
+route.post("/checkpointsfilter=:agency", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var agencyId, filter, sucess, error_8;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                userId = req.params.userId;
+                agencyId = req.params.agencyId;
+                filter = req.body.filter;
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, Checkpoints.findAllCheckpointsOfTheDayByUserId(Number(userId))];
+                return [4 /*yield*/, Checkpoints.findAllCheckpointsByAgencyByDate(Number(agencyId), filter)];
             case 2:
                 sucess = _a.sent();
                 res.send(sucess);
@@ -321,9 +300,33 @@ route.get("/checkpoints/currentday/:userId", function (req, res) { return __awai
         }
     });
 }); });
+//PEGAR O CHECKPOINT DO VIGILANTE DO DIA ATUAL *****
+route.get("/checkpoints/currentday/:userId", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var userId, sucess, error_9;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                userId = req.params.userId;
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, Checkpoints.findAllCheckpointsOfTheDayByUserId(Number(userId))];
+            case 2:
+                sucess = _a.sent();
+                res.send(sucess);
+                return [3 /*break*/, 4];
+            case 3:
+                error_9 = _a.sent();
+                console.log(error_9);
+                res.send(error_9);
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); });
 //PEGAR TODOS OS CHECKPOINTS DO DIA ATUAL *****
 route.get("/checkpoints=today", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var response, error_9;
+    var response, error_10;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -334,16 +337,16 @@ route.get("/checkpoints=today", function (req, res) { return __awaiter(void 0, v
                 res.send(response);
                 return [3 /*break*/, 3];
             case 2:
-                error_9 = _a.sent();
-                console.log(error_9);
-                res.send(error_9);
+                error_10 = _a.sent();
+                console.log(error_10);
+                res.send(error_10);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
     });
 }); });
 route.get("/filtercheckpoints", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var filter, sucess, error_10;
+    var filter, sucess, error_11;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -357,9 +360,9 @@ route.get("/filtercheckpoints", function (req, res) { return __awaiter(void 0, v
                 res.send(sucess);
                 return [3 /*break*/, 4];
             case 3:
-                error_10 = _a.sent();
-                console.log(error_10);
-                res.send(error_10);
+                error_11 = _a.sent();
+                console.log(error_11);
+                res.send(error_11);
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }

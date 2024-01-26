@@ -8,26 +8,30 @@ export async function deleteMessages(id: number) {
     })
 }
 
-export async function deleteVigilant(id: number) {
-    return await database.user.delete({
-        where: {
-            id
-        }
-    })
-}
-
-export async function vigilantComplete(id: number) {
+export async function vigilantWithStatus(id: number) {
     return await database.user.findUnique({
         where: {
             id
-        }, select: {
-            checkpoint: true,
-            messages: true,
+        },
+        select: {
             name: true,
-            agency: true,
+            cpf: true,
+            rg: true,
+            dateofbirth: true,
             entryTime: true,
-            departureTime: true
+            departureTime: true,
+            login: true,
+            agency: true,
+            password: false,
+            saturday: true,
+            sunday: true,
+            status: {
+                select: {
+                    frequency: true
+                }
+            }
         }
+
     })
 }
 
@@ -94,51 +98,51 @@ type TFilterCheckpoints = {
 }
 
 
-export async function getAgencies(agency: string) {
-    return await database.user.findMany({
-        where: {
-            agency
-        },
-        select: {
-            name: true,
-            agency: true,
-            entryTime: true,
-            departureTime: true,
-            checkpoint: true,
-            messages: true
-        }
-    })
-}
-
-export async function vigilantWithStatus(id: number) {
+async function findOneById(id: number) {
     return await database.user.findUnique({
         where: {
             id
-        },
-        select: {
+        }, select: {
             name: true,
-            cpf: true,
-            rg: true,
             dateofbirth: true,
+            login: true,
+            rg: true,
+            cpf: true,
             entryTime: true,
             departureTime: true,
-            login: true,
-            agency: true,
-            password: false,
             saturday: true,
             sunday: true,
+            agency: true,
             status: {
                 select: {
                     frequency: true
                 }
             }
         }
+    })
+} 
 
+async function findAll(agencyId?: number | undefined){
+    return await database.user.findMany({
+        where: {
+            accountType: "user",
+            agencyId
+        },
+        select: {
+            id: true,
+            name: true,
+            entryTime: true,
+            departureTime: true,
+            agency: true,
+            saturday: true,
+            sunday: true,
+            contigency: true,
+        }
     })
 }
 
-export async function updateVigilant(updateUserData: UpdateUser) {
-    const { id, agency, cpf, dateofbirth, departureTime, entryTime, login, name, rg,saturday,sunday} = updateUserData
+async function update(updateUserData: UpdateUser) {
+    const { id, agencyId, cpf, dateofbirth, departureTime, entryTime, login, name, rg, saturday, sunday } = updateUserData
 
     const saturdayT = saturday === "true"
     const sundayT = sunday === "true"
@@ -148,7 +152,7 @@ export async function updateVigilant(updateUserData: UpdateUser) {
         },
         data: {
             name,
-            agency,
+            agencyId: Number(agencyId),
             cpf,
             dateofbirth,
             entryTime,
@@ -159,12 +163,27 @@ export async function updateVigilant(updateUserData: UpdateUser) {
             sunday: sundayT
         }
     })
+} 
+
+async function deleteOne(id: number) {
+    return await database.user.delete({
+        where: {
+            id
+        }
+    })
+}
+
+
+
+
+export const VigilantsRepository = {
+    findAll, findOneById, update, deleteOne
 }
 
 type UpdateUser = {
     id: string,
     name: string,
-    agency: string,
+    agencyId: number,
     cpf: string,
     dateofbirth: string,
     entryTime: string,

@@ -24,7 +24,7 @@ async function connectUser(signinData: TSignInData) {
         userId: loginExist.id,
         accountType: loginExist.accountType,
         entryTime: loginExist.entryTime,
-        agency: loginExist.agency,
+        agency: loginExist.agencyId,
         token: acessToken
     }
  

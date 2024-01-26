@@ -11,6 +11,8 @@ export async function registerVigilant(req: Request, res: Response) {
     const signupData = req.body as SignUp
     const { day, month, year, hour, minute } = dateTime()
 
+    console.log(signupData)
+
     try {
 
         //REGISTRA VIGILANTE

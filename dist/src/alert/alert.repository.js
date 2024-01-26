@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { database } from "../../prisma/index.js";
 import { dateTime } from "../functions.js";
-export function create(name) {
+function create(name) {
     return __awaiter(this, void 0, void 0, function () {
         var _a, day, month, year;
         return __generator(this, function (_b) {
@@ -56,7 +56,7 @@ export function create(name) {
         });
     });
 }
-export function findAll() {
+function findAll() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -66,7 +66,7 @@ export function findAll() {
         });
     });
 }
-export function update(id) {
+function update(id) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {

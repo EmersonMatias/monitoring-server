@@ -1,8 +1,7 @@
 import { database } from "../../prisma/index.js";
 import { dateTime } from "../functions.js";
 
-
-export async function create(name: string){
+async function create(name: string){
    const {day,month,year} = dateTime()
    
     return await database.alert.create({
@@ -15,11 +14,11 @@ export async function create(name: string){
     })
 }
 
-export async function findAll(){
+async function findAll(){
     return await database.alert.findMany({})
 }
 
-export async function update(id: number){
+async function update(id: number){
     return await database.alert.update({
         where: {
             id

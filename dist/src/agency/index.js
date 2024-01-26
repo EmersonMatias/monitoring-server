@@ -35,52 +35,44 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { Router } from "express";
-import { createMessage, findAllMensagens, getMessagesAgency, getMessagesAgencyWithFilter, viewedMessage } from "./messages.repository.js";
-var route = Router();
-route.post("/criarmensagem", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, userId, message, error_1;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+import { AgencyRepository as Agency } from "./agency.repository.js";
+var router = Router();
+router.get("/agency", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var sucess, error_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
             case 0:
-                _a = req.body, userId = _a.userId, message = _a.message;
-                _b.label = 1;
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, Agency.findAll()];
             case 1:
-                _b.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, createMessage({ userId: userId, message: message })];
+                sucess = _a.sent();
+                res.send(sucess);
+                return [3 /*break*/, 3];
             case 2:
-                _b.sent();
-                res.status(201).send("Mensagem criada");
-                return [3 /*break*/, 4];
-            case 3:
-                error_1 = _b.sent();
+                error_1 = _a.sent();
                 console.log(error_1);
                 res.send(error_1);
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
 }); });
-route.put("/visualizarmensagem", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, response, messageId, viewdData, sucess, error_2;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+router.get("/agency/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, sucess, error_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
             case 0:
-                _a = req.body, response = _a.response, messageId = _a.messageId;
-                viewdData = {
-                    response: response,
-                    messageId: Number(messageId)
-                };
-                _b.label = 1;
+                id = req.params.id;
+                _a.label = 1;
             case 1:
-                _b.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, viewedMessage(viewdData)];
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, Agency.findOne(Number(id))];
             case 2:
-                sucess = _b.sent();
-                console.log(sucess);
-                res.sendStatus(200);
+                sucess = _a.sent();
+                res.send(sucess);
                 return [3 /*break*/, 4];
             case 3:
-                error_2 = _b.sent();
+                error_2 = _a.sent();
                 console.log(error_2);
                 res.send(error_2);
                 return [3 /*break*/, 4];
@@ -88,39 +80,44 @@ route.put("/visualizarmensagem", function (req, res) { return __awaiter(void 0, 
         }
     });
 }); });
-route.get("/mensagens", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var sucess, error_3;
+router.post("/agency", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var name, sucess, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, findAllMensagens()];
-            case 1:
-                sucess = _a.sent();
-                res.send(sucess);
-                return [3 /*break*/, 3];
-            case 2:
-                error_3 = _a.sent();
-                console.log(error_3);
-                res.send(error_3);
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); });
-route.get("/messages/:agencyId", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var agencyId, sucess, error_4;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                agencyId = req.params.agencyId;
+                name = req.body.name;
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, getMessagesAgency(Number(agencyId))];
+                return [4 /*yield*/, Agency.create(name)];
             case 2:
                 sucess = _a.sent();
-                return [2 /*return*/, res.send(sucess)];
+                res.send(sucess);
+                return [3 /*break*/, 4];
+            case 3:
+                error_3 = _a.sent();
+                console.log(error_3);
+                res.send(error_3);
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); });
+router.delete("/agency/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, sucess, error_4;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                id = req.params.id;
+                console.log(id);
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, Agency.deleteOne(Number(id))];
+            case 2:
+                sucess = _a.sent();
+                res.send(sucess);
+                return [3 /*break*/, 4];
             case 3:
                 error_4 = _a.sent();
                 console.log(error_4);
@@ -130,27 +127,4 @@ route.get("/messages/:agencyId", function (req, res) { return __awaiter(void 0, 
         }
     });
 }); });
-route.post("/messages/:agencyId", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var agencyId, filter, sucess, error_5;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                agencyId = req.params.agencyId;
-                filter = req.body.filter;
-                _a.label = 1;
-            case 1:
-                _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, getMessagesAgencyWithFilter(Number(agencyId), filter)];
-            case 2:
-                sucess = _a.sent();
-                return [2 /*return*/, res.send(sucess)];
-            case 3:
-                error_5 = _a.sent();
-                console.log(error_5);
-                res.send(error_5);
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
-        }
-    });
-}); });
-export default route;
+export default router;

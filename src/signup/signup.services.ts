@@ -12,8 +12,7 @@ export async function registerVigilant(signupData: SignUp) {
 
     const encryptedPassword = hashSync(signupData.password, 10)
 
-    const newSignupData = { ...signupData, password: encryptedPassword }
-
+    const newSignupData = { ...signupData, password: encryptedPassword,agencyId: Number(signupData.agencyId) }
 
     const newUser =  await createNewUser(newSignupData)
 

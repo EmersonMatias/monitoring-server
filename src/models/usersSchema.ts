@@ -9,7 +9,7 @@ export const signupVigilantSchema = Joi.object({
     password: Joi.string().required().min(8).max(150),
     rg: Joi.string().length(9).required(),
     cpf: Joi.string().length(11).required(),
-    agency: Joi.string().required(),
+    agencyId: Joi.string().required(),
     saturday: Joi.string().required(),
     sunday: Joi.string().required(),
     entryTime: Joi.string().pattern(/^([01]\d|2[0-3]):?([0-5]\d)$/).required(),

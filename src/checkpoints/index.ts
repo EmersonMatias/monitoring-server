@@ -1,26 +1,18 @@
 import { Request, Response, Router } from "express"
 import { CheckpointsRepository as Checkpoints} from "./checkpoints.repository.js"
-import { findAllUsers } from "../signup/signup.repository.js"
 import { dateTime, vacation } from "../functions.js"
+import { VigilantsRepository as Vigilants } from "../vigilants/vigilants.repository.js"
 
 const route = Router()
 
 route.get("/teste", async (req: Request, res: Response) => {
-    const todayIsHoliday = () => {
-        const { day, month, year, dayOfWeek } = dateTime()
-        const feriados = vacation()
-        const today = `${day}/${month}/${year}`
-
-        const eFeriado = feriados.find((dia) => dia.date === today)
-        const sabado = 6
-        const domingo = 7
-
-        const isHoliday = (eFeriado !== undefined) || (dayOfWeek === "domingo") || (dayOfWeek === "sabado")
-
-        return isHoliday
+    try{
+        const sucess = await Checkpoints.findAlltest()
+        res.send(sucess)
+    }catch(error){
+        console.log(error)
+        res.send(error)
     }
-
-    console.log(todayIsHoliday())
 })
  
 const todayIsHoliday = () => {
@@ -45,7 +37,7 @@ route.post("/checkpoints/createall", async (req: Request, res: Response) => {
 
         if (checkpointsExist.length !== 0) return res.sendStatus(400)
 
-        const allUsers = await findAllUsers()
+        const allUsers = await Vigilants.findAll()
  
         console.log(dayOfWeek)
         
@@ -99,28 +91,25 @@ route.post("/checkpoints/createall", async (req: Request, res: Response) => {
     }
 })
 
-//CRIAR CHECKPOINT DO USUÁRIO****
-route.post("/checkpoint/create", async (req: Request, res: Response) => {
-    const checkpointData = req.body as { day: number, month: number, year: number, userId: number }
+// ? CHECKED
+route.post("/checkpoint/:id", async (req: Request, res: Response) => {
+    const {day, month, year} = req.body as TCreateCheckpointBody
     const { id } = req.params
 
-    const checkpointDateFormated = {
-        userId: Number(checkpointData.userId),
-        day: Number(checkpointData.day),
-        month: Number(checkpointData.month),
-        year: Number(checkpointData.year)
+    const createCheckpointData = {
+        userId: Number(id),
+        day,
+        month,
+        year
     }
 
-
     try {
-        const sucess = await Checkpoints.create(checkpointDateFormated)
+        const sucess = await Checkpoints.create(createCheckpointData)
         res.send(sucess)
     } catch (error) {
         console.log(error)
         res.send(error)
     }
-
-
 })
 
 //ATUALIZAR O CHECKPOINT *****
@@ -174,10 +163,10 @@ route.get("/checkpoints", async (req: Request, res: Response) => {
 
 //PEGAR TODOS OS CHECKPOINTS POR AGÊNCIA *****
 route.get("/checkpointss/:agency", async (req: Request, res: Response) => {
-    const { agency } = req.params
+    const { agencyId } = req.params
 
     try {
-        const sucess = await Checkpoints.findAllCheckpointsByAgency(agency)
+        const sucess = await Checkpoints.findAllCheckpointsByAgency(Number(agencyId))
         res.send(sucess)
     } catch (error) {
         console.log(error)
@@ -190,11 +179,11 @@ route.get("/checkpointss/:agency", async (req: Request, res: Response) => {
 
 //PEGAR CHECKPOINTS COM FILTRO DE DATA *****
 route.post("/checkpointsfilter=:agency", async (req: Request, res: Response) => {
-    const { agency } = req.params
+    const { agencyId } = req.params
     const { filter } = req.body as TFilterCheckpoints
 
     try {
-        const sucess = await Checkpoints.findAllCheckpointsByAgencyByDate(agency, filter)
+        const sucess = await Checkpoints.findAllCheckpointsByAgencyByDate(Number(agencyId), filter)
         res.send(sucess)
     } catch (error) {
         console.log(error)
@@ -267,4 +256,10 @@ type TFilterCheckpoints = {
         }
     }
 
+}
+
+type TCreateCheckpointBody = {
+    day: number
+    month: number
+    year: number
 }

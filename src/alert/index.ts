@@ -4,7 +4,6 @@ import { AlertRepository } from "./alert.repository.js";
 
 const route = Router()
 
-
 route.post("/alert/create", async (req: Request, res: Response) => {
     const { name } = req.body
 

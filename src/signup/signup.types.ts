@@ -4,7 +4,7 @@ export type SignUp = {
     login: string,
     password: string
     rg: string,
-    agency: string,
+    agencyId: number,
     cpf: string,
     entryTime: string,
     departureTime: string,

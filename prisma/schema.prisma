@@ -24,16 +24,17 @@ model User {
   password      String       @db.VarChar(150)
   rg            String       @db.VarChar(9)
   cpf           String       @db.VarChar(11)
-  agency        String       @db.VarChar(150)
   entryTime     String       @db.VarChar(5)
   departureTime String       @db.VarChar(5)
   saturday      Boolean      @default(false)
   sunday        Boolean      @default(false)
+  agencyId      Int          @default(1)
   accountType   AccountType
   checkpoint    Checkpoint[] @relation("UserCheckPoint")
   messages      Messages[]   @relation("UserMessage")
-  contigency    Contingency?  @relation("UserContigency")
+  contigency    Contingency? @relation("UserContigency")
   status        Status[]     @relation("UserStatus")
+  agency        Agency?      @relation("UserAgency", fields: [agencyId], references: [id])
 }
 
 model Checkpoint {
@@ -88,4 +89,10 @@ model Contingency {
   status     String  @default("OK")
   user       User    @relation("UserContigency", fields: [userId], references: [id])
   userId     Int     @unique
+}
+
+model Agency {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+  user User[] @relation("UserAgency")
 }

@@ -108,14 +108,14 @@ export function findAllMensagens() {
     });
 }
 //PEGAR MENSAGENS POR AGÊNCIA ******
-export function getMessagesAgency(agency) {
+export function getMessagesAgency(agencyId) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, database.messages.findMany({
                         where: {
                             user: {
-                                agency: agency
+                                agencyId: agencyId
                             }
                         },
                         include: {
@@ -134,7 +134,7 @@ export function getMessagesAgency(agency) {
     });
 }
 //PEGAR MENSAGENS POR AGÊNCIA E POR FILTRO DE DATA******
-export function getMessagesAgencyWithFilter(agency, filter) {
+export function getMessagesAgencyWithFilter(agencyId, filter) {
     return __awaiter(this, void 0, void 0, function () {
         var day, month, year;
         return __generator(this, function (_a) {
@@ -144,7 +144,7 @@ export function getMessagesAgencyWithFilter(agency, filter) {
                     return [4 /*yield*/, database.messages.findMany({
                             where: {
                                 user: {
-                                    agency: agency
+                                    agencyId: agencyId
                                 },
                                 day: {
                                     gte: Number(day.first),

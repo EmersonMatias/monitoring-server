@@ -1,7 +1,7 @@
 import { database } from "../../prisma/index.js"
 import { dateTime } from "../functions.js"
 
-type TCheckpointData = {
+type TCreateCheckpointData = {
     userId: number
     day: number,
     month: number,
@@ -14,8 +14,8 @@ type TMarkCheckPointData = {
     arrivalTime: string
 }
 
-async function create(checkpointData: TCheckpointData) {
-    const { userId, day, month, year } = checkpointData
+async function create(createCheckpointData: TCreateCheckpointData) {
+    const { userId, day, month, year } = createCheckpointData
 
     return await database.checkpoint.create({
         data: {
@@ -27,9 +27,7 @@ async function create(checkpointData: TCheckpointData) {
     })
 }
 
-async function createAll(checkpointData: TCheckpointData[]) {
-
-
+async function createAll(checkpointData: TCreateCheckpointData[]) {
     return await database.checkpoint.createMany({
         data: checkpointData
     })
@@ -105,11 +103,11 @@ async function findAllCheckpointsOfTheDayByUserId(userId: number) {
 
 }
 
-async function findAllCheckpointsByAgency(agency: string) {
+async function findAllCheckpointsByAgency(agencyId: number) {
     return await database.checkpoint.findMany({
         where: {
             user: {
-                agency
+                agencyId
             }
         },
         include: {
@@ -145,13 +143,13 @@ async function findAllCheckpointsByDate(filter: TFilterCheckpoints) {
     })
 }
 
-async function findAllCheckpointsByAgencyByDate(agency: string, filter: TFilterCheckpoints) {
+async function findAllCheckpointsByAgencyByDate(agencyId: number, filter: TFilterCheckpoints) {
     const { day, month, year } = filter
 
     return await database.checkpoint.findMany({
         where: {
             user: {
-                agency
+                agencyId
             },
             day: {
                 gte: Number(day.first),
@@ -200,10 +198,14 @@ async function updateCheckpoint(markCheckPointData: TMarkCheckPointData) {
     })
 }
 
+async function findAlltest(){
+    return await database.checkpoint.findMany()
+}
+
 export const CheckpointsRepository = {
     create, findAllCheckpointsOfTheDay, createAll, findAllCheckpointsByUserId,
     findAllCheckpointsOfTheDayByUserId, findAll, deleteAll, findAllCheckpointsByAgency,
-    findAllCheckpointsByAgencyByDate, findAllCheckpointsByDate,updateCheckpoint
+    findAllCheckpointsByAgencyByDate, findAllCheckpointsByDate,updateCheckpoint, findAlltest
 }
 
 type TFilterCheckpoints = {

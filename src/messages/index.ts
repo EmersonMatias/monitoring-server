@@ -44,11 +44,11 @@ route.get("/mensagens", async (req: Request, res: Response) => {
     }
 })
 
-route.get("/messages/:agency", async  (req: Request, res: Response) => {
-    const {agency} = req.params
+route.get("/messages/:agencyId", async  (req: Request, res: Response) => {
+    const {agencyId} = req.params
 
     try{
-        const sucess = await getMessagesAgency(agency)
+        const sucess = await getMessagesAgency(Number(agencyId))
         return res.send(sucess)
     }catch(error){
         console.log(error)
@@ -58,12 +58,12 @@ route.get("/messages/:agency", async  (req: Request, res: Response) => {
   
 })
 
-route.post("/messages/:agency", async  (req: Request, res: Response) => {
-    const {agency} = req.params
+route.post("/messages/:agencyId", async  (req: Request, res: Response) => {
+    const {agencyId} = req.params
     const {filter} = req.body as TFilterCheckpoints
 
     try{
-        const sucess = await getMessagesAgencyWithFilter(agency, filter)
+        const sucess = await getMessagesAgencyWithFilter(Number(agencyId), filter)
         return res.send(sucess)
     }catch(error){
         console.log(error)

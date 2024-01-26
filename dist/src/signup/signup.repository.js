@@ -37,13 +37,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 import { database } from "../../prisma/index.js";
 export function createNewUser(signupData) {
     return __awaiter(this, void 0, void 0, function () {
-        var name, password, login, rg, cpf, dateofbirth, departureTime, entryTime, agency, accountType, saturday, sunday, saturdayT, sundayT;
+        var name, password, login, rg, cpf, dateofbirth, departureTime, entryTime, agencyId, accountType, saturday, sunday, saturdayT, sundayT;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    name = signupData.name, password = signupData.password, login = signupData.login, rg = signupData.rg, cpf = signupData.cpf, dateofbirth = signupData.dateofbirth, departureTime = signupData.departureTime, entryTime = signupData.entryTime, agency = signupData.agency, accountType = signupData.accountType, saturday = signupData.saturday, sunday = signupData.sunday;
-                    saturdayT = saturday === "true" ? true : false;
-                    sundayT = sunday === "true" ? true : false;
+                    name = signupData.name, password = signupData.password, login = signupData.login, rg = signupData.rg, cpf = signupData.cpf, dateofbirth = signupData.dateofbirth, departureTime = signupData.departureTime, entryTime = signupData.entryTime, agencyId = signupData.agencyId, accountType = signupData.accountType, saturday = signupData.saturday, sunday = signupData.sunday;
+                    saturdayT = saturday === "true";
+                    sundayT = sunday === "true";
                     return [4 /*yield*/, database.user.create({
                             data: {
                                 name: name,
@@ -52,7 +52,7 @@ export function createNewUser(signupData) {
                                 password: password,
                                 rg: rg,
                                 cpf: cpf,
-                                agency: agency,
+                                agencyId: agencyId,
                                 entryTime: entryTime,
                                 departureTime: departureTime,
                                 accountType: accountType,
@@ -60,30 +60,6 @@ export function createNewUser(signupData) {
                                 sunday: sundayT
                             }
                         })];
-                case 1: return [2 /*return*/, _a.sent()];
-            }
-        });
-    });
-}
-export function findAllUsers() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, database.user.findMany({
-                        where: {
-                            accountType: "user",
-                        },
-                        select: {
-                            id: true,
-                            name: true,
-                            entryTime: true,
-                            departureTime: true,
-                            agency: true,
-                            saturday: true,
-                            sunday: true,
-                            contigency: true
-                        }
-                    })];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         });

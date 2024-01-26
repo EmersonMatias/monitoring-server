@@ -47,6 +47,7 @@ export function registerVigilant(req, res) {
                 case 0:
                     signupData = req.body;
                     _a = dateTime(), day = _a.day, month = _a.month, year = _a.year, hour = _a.hour, minute = _a.minute;
+                    console.log(signupData);
                     _b.label = 1;
                 case 1:
                     _b.trys.push([1, 6, , 7]);

@@ -59,11 +59,11 @@ export async function findAllMensagens() {
 }
 
 //PEGAR MENSAGENS POR AGÊNCIA ******
-export async function getMessagesAgency(agency: string) {
+export async function getMessagesAgency(agencyId: number) {
     return await database.messages.findMany({
         where: {
             user: {
-                agency
+                agencyId
             }
         },
         include: {
@@ -79,14 +79,14 @@ export async function getMessagesAgency(agency: string) {
 }
 
 //PEGAR MENSAGENS POR AGÊNCIA E POR FILTRO DE DATA******
-export async function getMessagesAgencyWithFilter(agency: string,filter: TFilterCheckpoints) {
+export async function getMessagesAgencyWithFilter(agencyId: number,filter: TFilterCheckpoints) {
     const { day, month, year } = filter
 
 
     return await database.messages.findMany({
         where: {
             user: {
-                agency
+                agencyId
             },
             day: {
                 gte: Number(day.first),

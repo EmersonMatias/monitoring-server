@@ -36,13 +36,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { database } from "../../prisma/index.js";
 import { dateTime } from "../functions.js";
-function create(checkpointData) {
+function create(createCheckpointData) {
     return __awaiter(this, void 0, void 0, function () {
         var userId, day, month, year;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    userId = checkpointData.userId, day = checkpointData.day, month = checkpointData.month, year = checkpointData.year;
+                    userId = createCheckpointData.userId, day = createCheckpointData.day, month = createCheckpointData.month, year = createCheckpointData.year;
                     return [4 /*yield*/, database.checkpoint.create({
                             data: {
                                 userId: userId,
@@ -160,14 +160,14 @@ function findAllCheckpointsOfTheDayByUserId(userId) {
         });
     });
 }
-function findAllCheckpointsByAgency(agency) {
+function findAllCheckpointsByAgency(agencyId) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, database.checkpoint.findMany({
                         where: {
                             user: {
-                                agency: agency
+                                agencyId: agencyId
                             }
                         },
                         include: {
@@ -213,7 +213,7 @@ function findAllCheckpointsByDate(filter) {
         });
     });
 }
-function findAllCheckpointsByAgencyByDate(agency, filter) {
+function findAllCheckpointsByAgencyByDate(agencyId, filter) {
     return __awaiter(this, void 0, void 0, function () {
         var day, month, year;
         return __generator(this, function (_a) {
@@ -223,7 +223,7 @@ function findAllCheckpointsByAgencyByDate(agency, filter) {
                     return [4 /*yield*/, database.checkpoint.findMany({
                             where: {
                                 user: {
-                                    agency: agency
+                                    agencyId: agencyId
                                 },
                                 day: {
                                     gte: Number(day.first),
@@ -288,6 +288,16 @@ function updateCheckpoint(markCheckPointData) {
         });
     });
 }
+function findAlltest() {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, database.checkpoint.findMany()];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
 export var CheckpointsRepository = {
     create: create,
     findAllCheckpointsOfTheDay: findAllCheckpointsOfTheDay,
@@ -299,5 +309,6 @@ export var CheckpointsRepository = {
     findAllCheckpointsByAgency: findAllCheckpointsByAgency,
     findAllCheckpointsByAgencyByDate: findAllCheckpointsByAgencyByDate,
     findAllCheckpointsByDate: findAllCheckpointsByDate,
-    updateCheckpoint: updateCheckpoint
+    updateCheckpoint: updateCheckpoint,
+    findAlltest: findAlltest
 };
