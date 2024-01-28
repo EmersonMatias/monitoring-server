@@ -267,23 +267,24 @@ function deleteAll(id) {
         });
     });
 }
-function updateCheckpoint(markCheckPointData) {
+function update(checkpointId) {
     return __awaiter(this, void 0, void 0, function () {
-        var arrivalTime, arrived, checkpointId;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var _a, hour, minute, arrivalTime;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
-                    arrivalTime = markCheckPointData.arrivalTime, arrived = markCheckPointData.arrived, checkpointId = markCheckPointData.checkpointId;
+                    _a = dateTime(), hour = _a.hour, minute = _a.minute;
+                    arrivalTime = "".concat(hour, ":").concat(minute);
                     return [4 /*yield*/, database.checkpoint.update({
                             where: {
                                 id: checkpointId
                             },
                             data: {
                                 arrivalTime: arrivalTime,
-                                arrived: arrived
+                                arrived: true
                             }
                         })];
-                case 1: return [2 /*return*/, _a.sent()];
+                case 1: return [2 /*return*/, _b.sent()];
             }
         });
     });
@@ -309,6 +310,6 @@ export var CheckpointsRepository = {
     findAllCheckpointsByAgency: findAllCheckpointsByAgency,
     findAllCheckpointsByAgencyByDate: findAllCheckpointsByAgencyByDate,
     findAllCheckpointsByDate: findAllCheckpointsByDate,
-    updateCheckpoint: updateCheckpoint,
+    update: update,
     findAlltest: findAlltest
 };

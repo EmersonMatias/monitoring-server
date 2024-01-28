@@ -67,8 +67,7 @@ var todayIsHoliday = function () {
     var isHoliday = (eFeriado !== undefined) || (dayOfWeek === "domingo") || (dayOfWeek === "sabado");
     return isHoliday;
 };
-//CRIA TODOS OS CHECKPOINTS DOS USUÁRIOS *****
-route.post("/checkpoints/createall", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+route.post("/checkpoints", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, day, month, year, dayOfWeek, checkpointsExist, allUsers, checkpointData, checkpointData, checkpointSaturday, checkpointData, checkpointSunday, error_2;
     return __generator(this, function (_b) {
         switch (_b.label) {
@@ -85,7 +84,6 @@ route.post("/checkpoints/createall", function (req, res) { return __awaiter(void
                 return [4 /*yield*/, Vigilants.findAll()];
             case 3:
                 allUsers = _b.sent();
-                console.log(dayOfWeek);
                 if (!(!todayIsHoliday() && dayOfWeek !== "sabado" && dayOfWeek !== "domingo")) return [3 /*break*/, 5];
                 checkpointData = allUsers.map(function (user) {
                     return {
@@ -143,7 +141,6 @@ route.post("/checkpoints/createall", function (req, res) { return __awaiter(void
         }
     });
 }); });
-// ? CHECKED
 route.post("/checkpoint/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, day, month, year, id, createCheckpointData, sucess, error_3;
     return __generator(this, function (_b) {
@@ -175,28 +172,23 @@ route.post("/checkpoint/:id", function (req, res) { return __awaiter(void 0, voi
     });
 }); });
 //ATUALIZAR O CHECKPOINT *****
-route.put("/checkpoint", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var checkpointId, _a, hour, minute, markCheckPointData, sucess, error_4;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+route.put("/checkpoint/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, sucess, error_4;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
             case 0:
-                checkpointId = req.body.checkpointId;
-                _a = dateTime(), hour = _a.hour, minute = _a.minute;
-                markCheckPointData = {
-                    checkpointId: checkpointId,
-                    arrived: true,
-                    arrivalTime: "".concat(hour, ":").concat(minute)
-                };
-                _b.label = 1;
+                id = req.params.id;
+                console.log(id);
+                _a.label = 1;
             case 1:
-                _b.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, Checkpoints.updateCheckpoint(markCheckPointData)];
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, Checkpoints.update(Number(id))];
             case 2:
-                sucess = _b.sent();
-                res.status(200).send({ sucess: sucess, message: "Checkpoint atualizado." });
+                sucess = _a.sent();
+                res.status(200).send(sucess);
                 return [3 /*break*/, 4];
             case 3:
-                error_4 = _b.sent();
+                error_4 = _a.sent();
                 console.log(error_4);
                 res.send(error_4);
                 return [3 /*break*/, 4];
@@ -301,7 +293,7 @@ route.post("/checkpointsfilter=:agency", function (req, res) { return __awaiter(
     });
 }); });
 //PEGAR O CHECKPOINT DO VIGILANTE DO DIA ATUAL *****
-route.get("/checkpoints/currentday/:userId", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+route.get("/checkpoint/:userId", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var userId, sucess, error_9;
     return __generator(this, function (_a) {
         switch (_a.label) {

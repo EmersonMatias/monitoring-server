@@ -28,8 +28,7 @@ const todayIsHoliday = () => {
     return isHoliday
 }
 
-//CRIA TODOS OS CHECKPOINTS DOS USUÁRIOS *****
-route.post("/checkpoints/createall", async (req: Request, res: Response) => {
+route.post("/checkpoints", async (req: Request, res: Response) => {
     const { day, month, year, dayOfWeek } = dateTime()
 
     try {
@@ -39,7 +38,6 @@ route.post("/checkpoints/createall", async (req: Request, res: Response) => {
 
         const allUsers = await Vigilants.findAll()
  
-        console.log(dayOfWeek)
         
         if (!todayIsHoliday() && dayOfWeek !== "sabado" && dayOfWeek !== "domingo") {
             const checkpointData = allUsers.map((user) => {
@@ -91,7 +89,6 @@ route.post("/checkpoints/createall", async (req: Request, res: Response) => {
     }
 })
 
-// ? CHECKED
 route.post("/checkpoint/:id", async (req: Request, res: Response) => {
     const {day, month, year} = req.body as TCreateCheckpointBody
     const { id } = req.params
@@ -113,19 +110,12 @@ route.post("/checkpoint/:id", async (req: Request, res: Response) => {
 })
 
 //ATUALIZAR O CHECKPOINT *****
-route.put("/checkpoint", async (req: Request, res: Response) => {
-    const { checkpointId } = req.body
-    const { hour, minute } = dateTime()
-
-    const markCheckPointData = {
-        checkpointId,
-        arrived: true,
-        arrivalTime: `${hour}:${minute}`
-    }
-
+route.put("/checkpoint/:id", async (req: Request, res: Response) => {
+    const { id } = req.params
+    console.log(id)
     try {
-        const sucess = await Checkpoints.updateCheckpoint(markCheckPointData)
-        res.status(200).send({ sucess, message: "Checkpoint atualizado." })
+        const sucess = await Checkpoints.update(Number(id))
+        res.status(200).send(sucess)
     } catch (error) {
         console.log(error)
         res.send(error)
@@ -196,7 +186,7 @@ route.post("/checkpointsfilter=:agency", async (req: Request, res: Response) => 
 
 
 //PEGAR O CHECKPOINT DO VIGILANTE DO DIA ATUAL *****
-route.get("/checkpoints/currentday/:userId", async (req: Request, res: Response) => {
+route.get("/checkpoint/:userId", async (req: Request, res: Response) => {
     const userId = req.params.userId
 
     try {

@@ -184,8 +184,9 @@ async function deleteAll(id: number) {
     })
 }
 
-async function updateCheckpoint(markCheckPointData: TMarkCheckPointData) {
-    const { arrivalTime, arrived, checkpointId } = markCheckPointData
+async function update(checkpointId: number) {
+    const { hour, minute } = dateTime()
+    const arrivalTime = `${hour}:${minute}`
 
     return await database.checkpoint.update({
         where: {
@@ -193,19 +194,19 @@ async function updateCheckpoint(markCheckPointData: TMarkCheckPointData) {
         },
         data: {
             arrivalTime,
-            arrived
+            arrived: true
         }
     })
 }
 
-async function findAlltest(){
+async function findAlltest() {
     return await database.checkpoint.findMany()
 }
 
 export const CheckpointsRepository = {
     create, findAllCheckpointsOfTheDay, createAll, findAllCheckpointsByUserId,
     findAllCheckpointsOfTheDayByUserId, findAll, deleteAll, findAllCheckpointsByAgency,
-    findAllCheckpointsByAgencyByDate, findAllCheckpointsByDate,updateCheckpoint, findAlltest
+    findAllCheckpointsByAgencyByDate, findAllCheckpointsByDate, update, findAlltest
 }
 
 type TFilterCheckpoints = {
