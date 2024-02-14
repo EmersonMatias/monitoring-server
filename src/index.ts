@@ -1,14 +1,13 @@
 import express, { urlencoded } from "express"
 import cors from "cors"
-import signupRoute from "./signup/index.js"
-import usersRoute from "./vigilants/index.js"
-import signinRoute from "./signin/index.js"
-import messagesRoute from "./messages/index.js"
-import checkpointsRoute from "./checkpoints/index.js"
-import statusRoute from "./status/index.js"
-import alertRoute from "./alert/index.js"
-import contigencyRoute from "./contingency/index.js"
-import agencyRoute from "./agency/index.js"
+import usersRoute from "./routes/vigilants/index.js"
+import signinRoute from "./routes/signin/index.js"
+import messagesRoute from "./routes/messages/index.js"
+import checkpointsRoute from "./routes/checkpoints/index.js"
+import statusRoute from "./routes/status/index.js"
+import alertRoute from "./routes/alert/index.js"
+import contigencyRoute from "./routes/contingency/index.js"
+import agencyRoute from "./routes/agency/index.js"
 
 const server = express()
  
@@ -18,7 +17,6 @@ server.use(urlencoded({extended: true}))
 
 
 
-server.use(signupRoute)
 server.use(usersRoute)
 server.use(signinRoute)
 server.use(messagesRoute)

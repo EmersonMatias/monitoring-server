@@ -1,32 +1,5 @@
 const date = new Date()
 
-
-export function todaysDate() {
-    const day = date.getUTCDate().toString().padStart(2, "0")
-    const month = date.getUTCMonth() + 1
-    const monthc = month.toString().padStart(2, "0")
-    const year = date.getUTCFullYear()
-
-    const todaysDate = {
-        day, monthc, year
-    }
-
-    return todaysDate
-}
-
-
-export function currentTime() {
-    const hours = date.getHours()
-    const minutes = date.getMinutes()
-    const seconds = date.getSeconds()
-
-    const currentTime = {
-        hours, minutes, seconds
-    }
-
-    return currentTime
-}
-
 export function dateTime() {
     const currentDateTime = new Date().toLocaleString("pt-BR", {
         timeZone: 'America/Sao_Paulo',
@@ -43,20 +16,20 @@ export function dateTime() {
     const dayOfWeek = currentDateTime.split(", ")[0]
 
     const date = currentDateTime.split(", ")[1]
-    const day = date.split("/")[0]
-    const month = date.split("/")[1]
-    const year = date.split("/")[2]
+    const day = Number(date.split("/")[0])
+    const month = Number(date.split("/")[1])
+    const year = Number(date.split("/")[2])
 
     const time = currentDateTime.split(", ")[2]
-    const hour = time.split(":")[0]
-    const minute = time.split(":")[1]
-    const seconds = time.split(":")[2]
+    const hour = Number(time.split(":")[0])
+    const minute = Number(time.split(":")[1])
+    const seconds = Number(time.split(":")[2])
 
-    return { day, month, year, hour, minute, seconds, date, time,dayOfWeek,currentDateTime }
+    return { day, month, year, hour, minute, seconds, date, time, dayOfWeek, currentDateTime }
 }
 
 export function vacation() {
-    const feriados =  [
+    const feriados = [
         {
             "date": "13/02/2024",
             "name": "Carnaval",
@@ -120,5 +93,52 @@ export function vacation() {
     ]
 
     return feriados
-   
+
+}
+
+export function convertTimeToUTC(time: string) {
+    const timeUTC = new Date('1971-01-01');
+    const [hours, minutes, seconds] = time.split(':').map(Number);
+    timeUTC.setHours(hours);
+    timeUTC.setMinutes(minutes);
+    timeUTC.setSeconds(seconds);
+
+    return timeUTC
+}
+
+export function convertDateToUTC(date: string) {
+    const [day, month, year] = date.split('/').map(Number);
+
+    const dateUTC = new Date(`${year}-${month}-${day}`);
+    dateUTC.setUTCHours(0);
+    dateUTC.setUTCMinutes(0);
+    dateUTC.setUTCSeconds(0);
+
+    return dateUTC
+}
+
+export function convertTimeToBrasilia(time?: Date) {
+    const timeBrasilia = new Date(time).toLocaleString('pt-BR', {
+        timeZone: 'America/Sao_Paulo',
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+    });
+
+    return timeBrasilia
+}
+
+export function convertDateToBrasilia(date: Date){
+    const [year, month, day] = date.toISOString().split('T')[0].split('-');
+
+    const dateBrasilia = `${day}/${month}/${year}`;
+
+    return dateBrasilia
+}
+
+export function convertTimestampToDateTime(timestamp: number){
+    const dateTime = new Date(timestamp).toLocaleString('pt-BR', {timeZone: 'America/Sao_Paulo'})
+
+    return dateTime
 }

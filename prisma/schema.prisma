@@ -6,9 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider          = "mysql"
+  provider          = "postgresql"
   url               = env("DATABASE_URL")
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 enum AccountType {
@@ -16,83 +15,85 @@ enum AccountType {
   admin
 }
 
+enum Situation {
+  OK
+  PANIC
+}
+
 model User {
-  id            Int          @id @default(autoincrement())
-  name          String       @db.VarChar(150)
-  dateofbirth   String       @db.VarChar(10)
-  login         String       @unique @db.VarChar(150)
-  password      String       @db.VarChar(150)
-  rg            String       @db.VarChar(9)
-  cpf           String       @db.VarChar(11)
-  entryTime     String       @db.VarChar(5)
-  departureTime String       @db.VarChar(5)
-  saturday      Boolean      @default(false)
-  sunday        Boolean      @default(false)
-  agencyId      Int          @default(1)
-  accountType   AccountType
-  checkpoint    Checkpoint[] @relation("UserCheckPoint")
-  messages      Messages[]   @relation("UserMessage")
-  contigency    Contingency? @relation("UserContigency")
-  status        Status[]     @relation("UserStatus")
-  agency        Agency?      @relation("UserAgency", fields: [agencyId], references: [id])
+  id             Int          @id @default(autoincrement())
+  name           String       @db.VarChar(150)
+  dateOfBirth    DateTime     @db.Date
+  rg             String       @db.VarChar(9)
+  cpf            String       @db.VarChar(11)
+  entryTime      DateTime     @db.Time()
+  departureTime  DateTime     @db.Time()
+  workOnSaturday Boolean      @default(false)
+  workOnSunday   Boolean      @default(false)
+  agencyId       Int
+  login          String       @db.VarChar(100) @unique
+  password       String       @db.VarChar(150)
+  accountType    AccountType  @default(user)
+  contigency     Contingency? @relation("UserContigency")
+  status         Status?      @relation("UserStatus")
+  checkpoint     Checkpoint[] @relation("UserCheckPoint")
+  messages       Messages[]   @relation("UserMessage")
+  agency         Agency       @relation("UserAgency", fields: [agencyId], references: [id])
+}
+
+model Agency {
+  id         Int          @id @default(autoincrement())
+  name       String       @unique
+  User       User[]       @relation("UserAgency")
+  Checkpoint Checkpoint[] @relation("UserAgency")
+  Messages   Messages[]   @relation("UserAgency")
 }
 
 model Checkpoint {
-  id          Int      @id @default(autoincrement())
-  day         Int
-  month       Int
-  year        Int
-  arrived     Boolean? @default(false)
-  arrivalTime String?  @default("null") @db.VarChar(5)
-  user        User     @relation("UserCheckPoint", fields: [userId], references: [id])
+  id          Int       @id @default(autoincrement())
+  date        DateTime  @db.Date
+  arrived     Boolean?  @default(false)
+  arrivalTime DateTime? @db.Time()
   userId      Int
+  agencyId    Int
+  agency      Agency    @relation("UserAgency", fields: [agencyId], references: [id])
+  user        User      @relation("UserCheckPoint", fields: [userId], references: [id])
 }
 
 model Messages {
   id       Int      @id @default(autoincrement())
-  day      Int
-  month    Int
-  year     Int
-  hour     String   @db.VarChar(5)
-  message  String?  @default("null")
-  response String?  @default("null")
+  dateTime DateTime 
+  message  String   @default("")
+  response String   @default("")
   viewed   Boolean? @default(false)
-  user     User     @relation("UserMessage", fields: [userId], references: [id])
   userId   Int
+  agencyId Int
+  user     User     @relation("UserMessage", fields: [userId], references: [id])
+  agency   Agency   @relation("UserAgency", fields: [agencyId], references: [id])
 }
 
 model Status {
-  id        Int    @id @default(autoincrement())
-  hour      Int
-  minute    Int
-  status    String
-  frequency Int    @default(60)
-  user      User   @relation("UserStatus", fields: [userId], references: [id])
-  userId    Int
-}
-
-model Alert {
-  id     Int     @id @default(autoincrement())
-  name   String
-  viewed Boolean @default(false)
-  day    Int
-  month  Int
-  year   Int
+  id        Int       @id @default(autoincrement())
+  timestamp DateTime  @db.Timestamp()
+  situation Situation @default(OK)
+  frequency Int       @default(60)
+  userId    Int       @unique
+  user      User      @relation("UserStatus", fields: [userId], references: [id])
 }
 
 model Contingency {
-  id         Int     @id @default(autoincrement())
-  contigency Boolean @default(false)
-  frequency  Int     @default(60)
-  hour       Int?
-  minute     Int?
-  status     String  @default("OK")
-  user       User    @relation("UserContigency", fields: [userId], references: [id])
-  userId     Int     @unique
+  id        Int       @id @default(autoincrement())
+  active    Boolean   @default(false)
+  timestamp DateTime  @db.Timestamp()
+  frequency Int       @default(60)
+  situation Situation @default(OK)
+  userId    Int       @unique
+  user      User      @relation("UserContigency", fields: [userId], references: [id])
 }
 
-model Agency {
-  id   Int    @id @default(autoincrement())
-  name String @unique
-  user User[] @relation("UserAgency")
+model Alert {
+  id       Int      @id @default(autoincrement())
+  name     String
+  dateTime DateTime
+  viewed   Boolean  @default(false)
 }

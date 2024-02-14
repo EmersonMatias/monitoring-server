@@ -2,26 +2,32 @@ import Joi from "joi";
 
 export const signupVigilantSchema = Joi.object({
     name: Joi.string().required().min(3).max(150),
-    dateofbirth:Joi.string().regex(/^\d{2}\/\d{2}\/\d{4}$/).messages({
-        'string.pattern.base': 'A data deve estar no formato DD/MM/AAAA',
-    }).required(),
-    login: Joi.string().required().min(5).max(150),
-    password: Joi.string().required().min(8).max(150),
+    dateOfBirth:Joi.date().required(),
     rg: Joi.string().length(9).required(),
     cpf: Joi.string().length(11).required(),
-    agencyId: Joi.string().required(),
-    saturday: Joi.string().required(),
-    sunday: Joi.string().required(),
-    entryTime: Joi.string().pattern(/^([01]\d|2[0-3]):?([0-5]\d)$/).required(),
-    departureTime: Joi.string().pattern(/^([01]\d|2[0-3]):?([0-5]\d)$/).required(),
-    accountType: Joi.string().valid('user', 'admin').required(),
-    frequency: Joi.number()
-})
-
-export const signupAdminSchema = Joi.object({
-    name: Joi.string().required().min(3).max(150),
+    entryTime: Joi.date().required(),
+    departureTime: Joi.date().required(),
+    workOnSaturday: Joi.boolean().required(),
+    workOnSunday: Joi.boolean().required(),
+    agencyId: Joi.number().required(),
+    frequency: Joi.number().required(),
     login: Joi.string().required().min(5).max(150),
     password: Joi.string().required().min(8).max(150),
+    accountType: Joi.string().valid('user', 'admin').required(),
+})
+
+export const updateVigilantScema = Joi.object({
+    name: Joi.string().required().min(3).max(150),
+    dateOfBirth:Joi.date().required(),
+    rg: Joi.string().length(9).required(),
+    cpf: Joi.string().length(11).required(),
+    entryTime: Joi.date().required(),
+    departureTime: Joi.date().required(),
+    workOnSaturday: Joi.boolean().required(),
+    workOnSunday: Joi.boolean().required(),
+    agencyId: Joi.number().required(),
+    frequency: Joi.number().required(),
+    login: Joi.string().required().min(5).max(150),
 })
 
 export const signinVigilantSchema = Joi.object({
@@ -29,4 +35,7 @@ export const signinVigilantSchema = Joi.object({
     password: Joi.string().required().min(8).max(150),
 })
 
+export const dateSchema = Joi.date().required()
+
+export const dateTimeSchema = Joi.date()
 

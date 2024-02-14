@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE `User` ADD COLUMN `saturday` BOOLEAN NOT NULL DEFAULT false,
-    ADD COLUMN `sunday` BOOLEAN NOT NULL DEFAULT false;
