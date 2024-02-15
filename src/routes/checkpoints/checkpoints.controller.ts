@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import { handleError } from "../../errors/errors.js";
 import { CheckpointsService as CheckpointsS } from "./checkpoints.service.js";
-import { CheckpointQueries } from "./type.js";
+import { ParamID, ReqDate } from "../../middlewares/types.js";
 
 
-async function findMany(req: Request & CheckpointQueries, res: Response) {
+async function findMany(req: Request & ReqDate, res: Response) {
     const date = req.date
 
     try {
@@ -16,10 +16,20 @@ async function findMany(req: Request & CheckpointQueries, res: Response) {
     }
 }
 
-async function create(req: Request, res: Response){
-    
-} 
+async function create(req: Request & ReqDate & ParamID, res: Response) {
+    const date = req.date
+    const id = req.id
+
+    try {
+        const sucess = await CheckpointsS.create2(id, date)
+        res.status(201).send(sucess)
+    } catch (error) {
+        console.log(error)
+        handleError(error, res)
+    }
+
+}
 
 export const CheckpointsController = {
-    findMany
+    findMany, create
 }

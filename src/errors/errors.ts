@@ -25,6 +25,11 @@ export const ErrorVigilantDoesntExist = {
     status: 404
 }
 
+export const ErrorPasswordIncorrect = {
+    message: "Senha incorreta!",
+    status: 400
+}
+
 export class CustomError extends Error {
     status: number;
 

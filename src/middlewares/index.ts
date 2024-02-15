@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express"
-import {  ParamID, QueryDate } from "./types"
+import {  ParamID, ReqDate, ReqDates } from "./types"
 import { dateSchema } from "../models/usersSchema.js"
 
 function ParamIDValidation(req: Request & ParamID, res: Response, next: NextFunction) {
@@ -11,7 +11,7 @@ function ParamIDValidation(req: Request & ParamID, res: Response, next: NextFunc
     next()
 }
 
-function QueryDateValidation(req: Request & QueryDate, res: Response, next: NextFunction){
+function QueryDateValidation(req: Request & ReqDate, res: Response, next: NextFunction){
     const dateString = req.query.date as string
 
     if (dateString) {
@@ -25,12 +25,26 @@ function QueryDateValidation(req: Request & QueryDate, res: Response, next: Next
     next()
 }
 
-function BodyDateValidation(req: Request, res: Response, next: NextFunction){
-    const date = req.body.date
+function QueryDatesValidation(req: Request & ReqDates, res: Response, next: NextFunction){
+    const initialDateString = req.query.initialDate as string
+    const finalDateString = req.query.finalDate as string
 
-    
+    if (initialDateString && finalDateString) {
+        const { error } = dateSchema.validate(initialDateString, { abortEarly: false })
+        const { error: error2 } = dateSchema.validate(finalDateString, { abortEarly: false })
+
+        if (error) return res.status(400).send(error.details[0].message)
+        if (error2) return res.status(400).send(error2.details[0].message)
+
+
+        req.initialDate = new Date(initialDateString)
+        req.finalDate = new Date(finalDateString)
+    }
+
+    next()
+
 }
 
 export const Middlewares = {
-    ParamIDValidation,QueryDateValidation
+    ParamIDValidation,QueryDateValidation,QueryDatesValidation
 }

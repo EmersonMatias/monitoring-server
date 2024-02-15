@@ -1,23 +1,25 @@
+import { compareSync } from "bcrypt";
+import { CustomError, ErrorPasswordIncorrect, ErrorVigilantDoesntExist } from "../../errors/errors.js";
+import { VigilantRepository } from "../vigilants/vigilants.repository.js";
 import { TSignInData } from "./signin.middlewares.js";
+import jwt from 'jsonwebtoken'
 
 async function connectUser(signinData: TSignInData) {
-    //const loginExist = await findUserByLogin(signinData.login)
 
-    //if(!loginExist) throw Errors.EmailDoesntExist
+    const loginExist = await VigilantRepository.findUnique({login: signinData.login})
 
-    //const passwordIsCorrect = compareSync(signinData.password, loginExist.password)
+    if(!loginExist) throw new CustomError(ErrorVigilantDoesntExist.message, ErrorVigilantDoesntExist.status)
 
-    //if(!passwordIsCorrect) throw Errors.IncorrectPassword
+    const passwordIsCorrect = compareSync(signinData.password, loginExist.password)
 
-    /*
+    if(!passwordIsCorrect) throw new CustomError(ErrorPasswordIncorrect.message, ErrorPasswordIncorrect.status)
+
     const dataToken = {
         userId: loginExist.id,
     }
-    */
+    
 
-  /**
-   * 
-   *   const acessToken = jwt.sign(dataToken, process.env.ACESS_TOKEN_SECRET)
+    const acessToken = jwt.sign(dataToken, process.env.ACESS_TOKEN_SECRET)
 
     const userData = {
         name: loginExist.name,
@@ -27,9 +29,8 @@ async function connectUser(signinData: TSignInData) {
         agency: loginExist.agencyId,
         token: acessToken
     }
-   */
- 
-    return "userData"
+   
+    return userData
 }
 
 

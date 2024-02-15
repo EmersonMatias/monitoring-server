@@ -4,6 +4,10 @@ export type CreateCheckpoint = {
     agencyId: number
 }
 
-export type CheckpointQueries = {
+export type QueryDate = {
+    date: Date
+}
+
+export type BodyDate = {
     date: Date
 }
