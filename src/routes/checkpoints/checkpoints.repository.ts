@@ -7,30 +7,23 @@ async function create(data: CreateCheckpoint) {
     })
 }
 
-
-async function createMany(data: CreateCheckpoint[]){
+async function createMany(data: CreateCheckpoint[]) {
     return await database.checkpoint.createMany({
         data
     })
 }
 
-async function createT(data:CreateCheckpoint){
-    return await database.checkpoint.create({
-        data
-    })
-}
-
-async function findManyT(){
-    return await database.checkpoint.findMany()
-}
-
-async function updateT(id: number, arrivalTime: Date){
-    return await database.checkpoint.update({
-        where:{
-            id
+async function findUnique({ userId, date }: { userId: number, date: Date }) {
+    return await database.checkpoint.findMany({
+        where: {
+            userId,
+            date
         },
-        data: {
-            arrivalTime
+        select: {
+            id: true,
+            date: true,
+            arrived: true,
+            arrivalTime: true
         }
     })
 }
@@ -42,7 +35,7 @@ async function findMany({ date }: { date?: Date }) {
             user: {
                 accountType: "user"
             }
-        }, 
+        },
         select: {
             id: true,
             date: true,
@@ -52,7 +45,7 @@ async function findMany({ date }: { date?: Date }) {
             userId: false,
             agency: true,
             user: {
-                select:{
+                select: {
                     id: true,
                     name: true,
                     entryTime: true,
@@ -65,14 +58,26 @@ async function findMany({ date }: { date?: Date }) {
     })
 }
 
-async function deleteMany(userId: number){
+async function deleteMany(userId: number) {
     return await database.checkpoint.deleteMany({
-        where:{
+        where: {
             userId
         }
     })
 }
 
+async function update(id: number, arrivalTime: Date) {
+    return await database.checkpoint.update({
+        where: {
+            id
+        },
+        data: {
+            arrivalTime,
+            arrived: true
+        }
+    })
+}
+
 export const CheckpointsRepository = {
-    create, findMany,deleteMany,createT,findManyT,updateT,createMany
+    create, findMany, deleteMany, createMany, findUnique, update
 }

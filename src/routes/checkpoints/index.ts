@@ -12,11 +12,25 @@ route.get(
     Controller.findMany
 )
 
+//id = userId
+route.get(
+    '/checkpoints/:id/:date',
+    Middlewares.ParamIDValidation,
+    Middlewares.ParamDateValidation,
+    Controller.findUnique
+)
+
 route.post(
     "/checkpoints/:id",
     Middlewares.ParamIDValidation,
-    CheckpointsMiddleware.createCheckpointBody,
+    Middlewares.BodyDateValidation,
     CheckpointsController.create
+)
+
+route.put('/checkpoints/:id',
+    Middlewares.ParamIDValidation,
+    Middlewares.BodyDateValidation,
+    CheckpointsController.update
 )
 
 export default route

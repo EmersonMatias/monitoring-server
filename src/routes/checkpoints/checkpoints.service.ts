@@ -28,7 +28,6 @@ async function create2(userId: number, date: Date) {
     return await CheckpointsR.create(createCheckpointData)
 }
 
-
 async function findMany({ date }: { date?: Date }) {
     let checkpoints = await CheckpointsR.findMany({ date })
 
@@ -51,13 +50,25 @@ async function findMany({ date }: { date?: Date }) {
     return checkpoints
 }
 
+async function findUnique({ userId, date }: { userId: number, date: Date }) {
+    //Verifica se o vigilante existe
+    await VigilantService.findUnique(userId)
+
+    // ! Fazer lógica de caso não ache o checkpoint criar os checkpoints
+
+    return await CheckpointsR.findUnique({ userId, date })
+}
+
 async function deleteMany(userId: number) {
     return await CheckpointsR.deleteMany(userId)
 }
 
+async function update(id: number, arrivalTime: Date) {
 
+    return await CheckpointsR.update(id, arrivalTime)
+}
 
 
 export const CheckpointsService = {
-    create, findMany, deleteMany, create2
+    create, findMany, deleteMany, create2, findUnique,update
 }

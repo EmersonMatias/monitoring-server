@@ -30,6 +30,32 @@ async function create(req: Request & ReqDate & ParamID, res: Response) {
 
 }
 
+async function findUnique(req: Request & ReqDate & ParamID, res: Response) {
+    const userId = req.id
+    const date = req.date
+
+    try {
+        const sucess = await CheckpointsS.findUnique({ userId, date })
+        res.send(sucess)
+    } catch (error) {
+        console.log(error)
+        handleError(error, res)
+    }
+}
+
+async function update(req: Request & ReqDate & ParamID, res: Response) {
+    const id = req.id
+    const date = req.date
+
+    try {
+        const sucess = await CheckpointsS.update(id, date)
+        res.send(sucess)
+    } catch (error) {
+        console.log(error)
+        handleError(error, res)
+    }
+}
+
 export const CheckpointsController = {
-    findMany, create
+    findMany, create, findUnique, update
 }
