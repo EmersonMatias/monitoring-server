@@ -58,7 +58,6 @@ async function findUniqueFilter({ id, initialDate, finalDate }: { id: number, in
     const dates = (finalDate?.getUTCDate()+1)
     finalDate?.setUTCDate(dates)
     
-    console.log(finalDate)
     return await database.user.findUnique({
         where: {
             id

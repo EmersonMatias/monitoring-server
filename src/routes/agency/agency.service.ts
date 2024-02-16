@@ -15,7 +15,12 @@ async function findMany(){
     return await AgencyR.findMany()
 }
 
+async function findUniqueFilter(id: number, initialDate: Date, finalDate: Date){
+
+    return await AgencyR.findUniqueFilter({ id, initialDate, finalDate })
+}
+
 
 export const AgencyService = {
-    create,findMany
+    create,findMany,findUniqueFilter
 }
