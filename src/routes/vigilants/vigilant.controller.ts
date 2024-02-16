@@ -1,8 +1,8 @@
 import { Request, Response } from "express"
 import { UpdateVigilantBody, VigilantBody } from "./types"
-import { VigilantService as VigilantS } from "./vigilant.service.js"
+import { VigilantService as VigilantS, VigilantService } from "./vigilant.service.js"
 import { handleError } from "../../errors/errors.js"
-import { ParamID } from "../../middlewares/types"
+import { ParamID, ReqDates } from "../../middlewares/types"
 
 async function create(req: Request, res: Response) {
     const data = req.body as VigilantBody
@@ -52,6 +52,21 @@ async function findUnique(req: Request & ParamID, res: Response) {
     }
 }
 
+async function findUniqueFilter(req: Request & ParamID & ReqDates, res: Response){
+    const id = req.id
+    const initialDate = req.initialDate
+    const finalDate = req.finalDate
+
+    try{
+        const sucess = await VigilantService.findUniqueFilter(id, initialDate,finalDate)
+        console.log(sucess)
+        res.send(sucess)
+    }catch(error){
+        console.log(error)
+        handleError(error,res)
+    }
+}
+
 async function deleteUnique(req: Request & ParamID, res: Response) {
     const id: number = req.id
 
@@ -66,5 +81,5 @@ async function deleteUnique(req: Request & ParamID, res: Response) {
 }
 
 export const VigilantController = {
-    create, findMany, findUnique, deleteUnique,update
+    create, findMany, findUnique, deleteUnique,update,findUniqueFilter
 }

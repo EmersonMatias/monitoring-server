@@ -5,19 +5,48 @@ import { Middlewares } from "../../middlewares/index.js"
 
 const route = Router()
 
-//* ROTA PRONTA - CRIA VIGILANTE
-route.post("/vigilants", VigilantMiddleware.createVigilantBody, Controller.create)
+//* CRIAR VIGILANTE
+route.post(
+    "/vigilants",
+    VigilantMiddleware.createVigilantBody,
+    Controller.create
+)
 
-//* ROTA PRONTA
-route.put("/vigilants/:id", Middlewares.ParamIDValidation, VigilantMiddleware.updateVigilantBody, Controller.update)
+//* EDITAR VIGILANTE
+route.put(
+    "/vigilants/:id",
+    Middlewares.ParamIDValidation,
+    VigilantMiddleware.updateVigilantBody,
+    Controller.update
+)
 
-route.get("/vigilants", Controller.findMany)
+//* ENCONTRAR TODOS OS VIGILANTES
+route.get(
+    "/vigilants",
+    Controller.findMany
+)
 
-//* ROTA PRONTA
-route.get("/vigilants/:id",  Middlewares.ParamIDValidation, Controller.findUnique)
+//* ENCONTRAR UM VIGILANTE ATRAVÉS ID
+route.get(
+    "/vigilants/:id",
+    Middlewares.ParamIDValidation,
+    Controller.findUnique
+)
 
-//* ROTA PRONTA
-route.delete("/vigilants/:id",  Middlewares.ParamIDValidation, Controller.deleteUnique)
+//* ENCONTRAR VIGILANTE ATRAVÉS DO ID E FILTRADO POR DATAS
+route.get(
+    "/vigilants/datefilter/:id",
+    Middlewares.ParamIDValidation,
+    Middlewares.QueryDatesValidation,
+    Controller.findUniqueFilter
+)
+
+//* DELETAR VIGILANTE
+route.delete(
+    "/vigilants/:id",
+    Middlewares.ParamIDValidation,
+    Controller.deleteUnique
+)
 
 export default route
 

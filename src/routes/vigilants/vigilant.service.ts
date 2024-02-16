@@ -55,6 +55,13 @@ async function findUnique(id: number) {
     return vigilant
 }
 
+async function findUniqueFilter(id: number, initialDate: Date, finalDate: Date) {
+    await VigilantService.findUnique(id)
+
+    return await VigilantR.findUniqueFilter({ id, initialDate, finalDate })
+
+}
+
 async function deleteUnique(userId: number) {
     const id = userId
     const vigilant = await VigilantR.findUnique({ id })
@@ -69,5 +76,5 @@ async function deleteUnique(userId: number) {
 }
 
 export const VigilantService = {
-    create, findMany, findUnique, deleteUnique, update
+    create, findMany, findUnique, deleteUnique, update,findUniqueFilter
 }

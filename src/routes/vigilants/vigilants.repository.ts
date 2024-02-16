@@ -7,9 +7,9 @@ async function create(data: Vigilant) {
     })
 }
 
-async function update(id: number, data: UpdateVigilantBody){
+async function update(id: number, data: UpdateVigilantBody) {
     return await database.user.update({
-        where:{
+        where: {
             id
         },
         data
@@ -54,12 +54,61 @@ async function findUnique({ login, id }: { login?: string, id?: number }) {
     })
 }
 
+async function findUniqueFilter({ id, initialDate, finalDate }: { id: number, initialDate: Date, finalDate: Date }) {
+    const dates = (finalDate?.getUTCDate()+1)
+    finalDate?.setUTCDate(dates)
+    
+    console.log(finalDate)
+    return await database.user.findUnique({
+        where: {
+            id
+        },
+        select: {
+            name: true,
+            entryTime: true,
+            departureTime: true,
+            agency: true,
+            checkpoint: {
+                where: {
+                    date: {
+                        gte: initialDate,
+                        lt: finalDate
+                    }
+                },
+                select: {
+                    id: true,
+                    date: true,
+                    agency: true,
+                    arrived: true,
+                    arrivalTime: true,
+                }
+            },
+            messages: {
+                where: {
+                    dateTime: {
+                        gte: initialDate,
+                        lte: finalDate
+                    }
+                },
+                select: {
+                    id: true,
+                    message: true,
+                    dateTime: true,
+                    viewed: true,
+                    response: true,
+                    agency: true
+                }
+            }
+        }
+    })
+}
+
 async function findMany() {
     return await database.user.findMany({
         where: {
             accountType: 'user'
         },
-        select:{
+        select: {
             id: true,
             dateOfBirth: true,
             agencyId: true,
@@ -67,7 +116,7 @@ async function findMany() {
             rg: true,
             name: true,
             entryTime: true,
-            departureTime:true,
+            departureTime: true,
             login: true,
             workOnSaturday: true,
             workOnSunday: true,
@@ -92,7 +141,7 @@ async function findMany() {
             },
             agency: true
         },
-      
+
     })
 }
 
@@ -105,7 +154,7 @@ async function deleteUnique(id: number) {
 }
 
 export const VigilantRepository = {
-    create, findUnique, findMany,deleteUnique,update
+    create, findUnique, findMany, deleteUnique, update,findUniqueFilter
 }
 
 
