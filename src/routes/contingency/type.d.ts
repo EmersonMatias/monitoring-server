@@ -3,11 +3,8 @@ export type CreateContingency = {
     timestamp: string | Date
 }
 
-export type ContingencyResponse = {
-    id: number,
+export type UpdateContingencyBody = {
     active: boolean,
-    timestamp: Date,
-    frequency: number,
-    situation: "OK" | "PANIC",
-    userId: number
+    situation: 'OK' | 'PANIC',
+    frequency?: number
 }

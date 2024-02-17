@@ -75,7 +75,15 @@ async function findUniqueFilter({ id, initialDate, finalDate }: { id: number, in
 }
 
 async function findMany(){
-    return await database.agency.findMany()
+    return await database.agency.findMany({
+        where:{
+            User: {
+                every: {
+                    accountType: 'user'
+                }
+            }
+        }
+    })
 }
 
 
